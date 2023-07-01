@@ -5,6 +5,7 @@ aside {
     background-color: aquamarine;
     /* background-image: linear-gradient(to right,#0df2c9,aquamarine); */
     position: fixed;
+    overflow: auto;
 }
 
 aside p {

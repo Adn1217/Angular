@@ -1,0 +1,12 @@
+header {
+    display: flex;
+    align-items: center;
+    /* background-color: #4EC5F1; */
+    background-color:#3efed4 ;
+    height: var(--header-height);
+    padding: 0 1rem;
+}
+
+header h1 {
+    margin: 0
+}

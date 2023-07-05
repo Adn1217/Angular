@@ -7,4 +7,20 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'Desafio1';
+  estudentFontSize = 16;
+  estudiante = [{
+    nombre: "Alan",
+    nota: 2.8
+  },{
+    nombre: "Ruben",
+    nota: 3.1
+  },
+  {
+    nombre: "Josefina",
+    nota: 4.2
+  },
+  {
+    nombre: "Melquiades",
+    nota: 4.0
+  }];
 }

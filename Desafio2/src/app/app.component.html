@@ -2,5 +2,19 @@
 <app-sidebar></app-sidebar>
 <header></header>
 <app-main-wrapper>
-  <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Beatae aperiam, rem voluptatibus quibusdam eius, expedita qui eveniet autem ipsam accusantium harum porro nostrum eos ipsum magni non adipisci quis! Totam!</p>
+  <b>{{title}}</b>
+  <p>Nota final de estudiantes: </p>
+  <div>
+    <ol>
+      <div *ngFor="let alumno of estudiante" [ngStyle]="{'font-size': estudentFontSize}"
+        [ngClass]="alumno.nota > 3 ? 'approved' : 'disaproved'" appRoundedBlockDirective [nota]="alumno.nota">
+        <li>
+          <p>
+            <b>Nombre: </b>{{alumno.nombre}}<br>
+            <b>Nota: </b>{{alumno.nota}}
+          </p>
+        </li>
+      </div>
+    </ol>
+  </div>
 </app-main-wrapper>

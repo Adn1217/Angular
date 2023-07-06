@@ -6,5 +6,21 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'Desafio1';
+  title = 'Desafio2';
+  estudentFontSize = 16;
+  estudiante = [{
+    nombre: "Alan",
+    nota: 2.8
+  },{
+    nombre: "Ruben",
+    nota: 3.1
+  },
+  {
+    nombre: "Josefina",
+    nota: 4.2
+  },
+  {
+    nombre: "Melquiades",
+    nota: 4.0
+  }];
 }

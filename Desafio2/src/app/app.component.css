@@ -1,0 +1,11 @@
+div {
+    text-align: center;
+}
+
+.approved {
+    color: green;
+}
+
+.disaproved {
+    color: orangered;
+}

@@ -12,7 +12,7 @@ export class RoundedBlockDirective implements OnInit {
     console.log(this.nota);
    }
    ngOnInit() {
-    if(this.nota > 3 ){
+    if(this.nota < 3 ){
       console.log(this.nota);
       this.renderer.setStyle(this.elementRef.nativeElement, 'border-color', 'red')
       this.renderer.setStyle(this.elementRef.nativeElement, 'text-decoration', 'underline');

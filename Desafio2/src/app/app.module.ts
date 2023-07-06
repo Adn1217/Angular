@@ -6,13 +6,16 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { MainWrapperComponent } from './main-wrapper/main-wrapper.component';
+import { RoundedBlockDirective } from './directives/roundedBlock/rounded-block-directive.directive';
+
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
     SidebarComponent,
-    MainWrapperComponent
+    MainWrapperComponent,
+    RoundedBlockDirective
   ],
   imports: [
     BrowserModule,

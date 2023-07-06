@@ -3,16 +3,17 @@
 <header></header>
 <app-main-wrapper>
   <b>{{title}}</b>
-  <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Beatae aperiam, rem voluptatibus quibusdam eius, expedita qui eveniet autem ipsam accusantium harum porro nostrum eos ipsum magni non adipisci quis! Totam!</p>
-  <div [ngStyle] = "{'font-size': estudentFontSize}" [ngClass]="estudiante[0].nota > 3 ? 'approved' : 'disaproved'">
+  <p>Nota final de estudiantes: </p>
+  <div [ngStyle]="{'font-size': estudentFontSize}" [ngClass]="estudiante[0].nota > 3 ? 'approved' : 'disaproved'"
+    appRoundedBlockDirective [nota]="estudiante[0].nota">
     <p>
       <b>Nombre: </b>{{estudiante[0].nota}}
     </p>
   </div>
-  <div [ngStyle] = "{'font-size': estudentFontSize}" [ngClass]="estudiante[3].nota > 3 ? 'approved' : 'disaproved'">
+  <div [ngStyle]="{'font-size': estudentFontSize}" [ngClass]="estudiante[3].nota > 3 ? 'approved' : 'disaproved'"
+    appRoundedBlockDirective [nota]="estudiante[3].nota">
     <p>
       <b>Nombre: </b>{{estudiante[3].nota}}
     </p>
   </div>
-
 </app-main-wrapper>

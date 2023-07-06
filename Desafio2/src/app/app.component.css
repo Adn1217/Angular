@@ -1,5 +1,9 @@
+div {
+    text-align: center;
+}
+
 .approved {
-    color: greenyellow;
+    color: green;
 }
 
 .disaproved {

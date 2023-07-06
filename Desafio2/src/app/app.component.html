@@ -4,11 +4,17 @@
 <app-main-wrapper>
   <b>{{title}}</b>
   <p>Nota final de estudiantes: </p>
-  <div *ngFor="let alumno of estudiante" [ngStyle]="{'font-size': estudentFontSize}"
-    [ngClass]="alumno.nota > 3 ? 'approved' : 'disaproved'" appRoundedBlockDirective [nota]="alumno.nota">
-    <p>
-      <b>Nombre: </b>{{alumno.nombre}}<br>
-      <b>Nota: </b>{{alumno.nota}}
-    </p>
+  <div>
+    <ol>
+      <div *ngFor="let alumno of estudiante" [ngStyle]="{'font-size': estudentFontSize}"
+        [ngClass]="alumno.nota > 3 ? 'approved' : 'disaproved'" appRoundedBlockDirective [nota]="alumno.nota">
+        <li>
+          <p>
+            <b>Nombre: </b>{{alumno.nombre}}<br>
+            <b>Nota: </b>{{alumno.nota}}
+          </p>
+        </li>
+      </div>
+    </ol>
   </div>
 </app-main-wrapper>

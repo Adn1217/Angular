@@ -1,4 +1,10 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+
+interface UserModel {
+  email: FormControl<string | null>;
+  password: FormControl<string | null>
+}
 
 @Component({
   selector: 'app-ingreso',
@@ -9,19 +15,27 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 export class IngresoComponent {
   
-@Input() 
-ingreso: boolean = true;
+  userModel: FormGroup<UserModel>
 
-@Output()
-changeView = new EventEmitter();
+  @Input() 
+  ingreso: boolean = true;
 
-@Output()
-ingresoChange = new EventEmitter();
+  constructor(private formBuilder: FormBuilder){
+    this.userModel = this.formBuilder.group({
+      email: [''],
+      password: ['']
+    })
+    console.log("UserModel: ", this.userModel.value)
+  }
+  @Output()
+  changeView = new EventEmitter();
 
-handleChangeView(event: Event){
-  event.preventDefault();
-  this.ingresoChange.emit(!this.ingreso)
-  this.changeView.emit(event);
-}
+  @Output()
+  ingresoChange = new EventEmitter();
 
+  handleChangeView(event: Event){
+    event.preventDefault();
+    this.ingresoChange.emit(!this.ingreso)
+    this.changeView.emit(event);
+  }
 }

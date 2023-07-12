@@ -18,11 +18,10 @@ changeView = new EventEmitter();
 @Output()
 ingresoChange = new EventEmitter();
 
-handleChangeView(ingreso: boolean, event: Event){
+handleChangeView(event: Event){
   event.preventDefault();
-  console.log("Ingreso recibido en hijo: ", ingreso);
-  // this.ingresoChange.emit(!ingreso)
-  this.changeView.emit(!ingreso);
+  this.ingresoChange.emit(!this.ingreso)
+  this.changeView.emit(event);
 }
 
 }

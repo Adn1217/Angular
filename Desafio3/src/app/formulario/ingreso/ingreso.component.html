@@ -9,8 +9,7 @@
         <input type="password" class="form-control" id="exampleInputPassword1">
     </div>
     <div class="buttonContainer">
-        <button type="submit" class="btn btn-primary">Submit</button>
-        <!-- <input type="button" value="Register" /> -->
-        <button (click)="handleChangeView(ingreso, $event)" type="register" class="btn btn-secondary">Register</button>
+        <button type="submit" disabled class="btn btn-primary">Submit</button>
+        <button (click)="handleChangeView($event)" type="register" class="btn btn-secondary">Register</button>
     </div>
 </form>

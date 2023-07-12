@@ -1,3 +1,6 @@
 .title {
-    padding: 2%;
+    padding: 10px;
+    justify-content: center;
+    min-width: 340px;
+    font-size: 2rem
 }

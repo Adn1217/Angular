@@ -9,10 +9,9 @@ export class AppComponent {
   title: string = 'Desafio3';
   ingreso: boolean = true;
 
-  onChangeView(ingreso: boolean, event: Event){
-    alert("Se ha cambiado la vista")
-    this.ingreso = ingreso;
-    console.log('Ingreso recibido: ', ingreso);
-    console.log("Evento: ", event)
+  onChangeView(event: Event){
+    // alert("Se ha cambiado la vista")
+    // console.log("Recibido en padre: ", event);
+    console.log("Se ha cambiado la vista");
   }
 }

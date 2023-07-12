@@ -1,0 +1,15 @@
+<app-nav-bar [title]="title"></app-nav-bar>
+<app-main-wrapper>
+    <div *ngIf="ingreso; else registerTitle">
+        <h1 class="title">Formulario de ingreso</h1>
+    </div>
+    <ng-template #registerTitle>
+        <h1 class="title">Formulario de registro</h1>
+    </ng-template>
+    <div *ngIf="ingreso; else appRegister">
+        <app-ingreso [ingreso]="ingreso " (changeView)="onChangeView(ingreso, $event)"></app-ingreso>
+    </div>
+    <ng-template #appRegister>
+        <app-registro></app-registro>
+    </ng-template>
+</app-main-wrapper>

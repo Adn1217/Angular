@@ -1,7 +1,8 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
-interface UserModel {
+const minCharLength: number = 8;
+interface LoginModel {
   email: FormControl<string | null>;
   password: FormControl<string | null>
 }
@@ -15,7 +16,7 @@ interface UserModel {
 
 export class IngresoComponent {
   
-  userModel: FormGroup<UserModel>
+  userModel: FormGroup<LoginModel>
   
   @Input() 
   ingreso: boolean = true;
@@ -23,7 +24,7 @@ export class IngresoComponent {
   constructor(private formBuilder: FormBuilder){
     this.userModel = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(8)]]
+      password: ['', [Validators.required, Validators.minLength(minCharLength)]]
     })
     console.log("UserModel: ", this.userModel.value)
     console.log("UserModel: ", this.userModel)

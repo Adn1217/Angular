@@ -9,3 +9,14 @@
 
 button {
 }
+
+.form{
+    margin: 0 5% 0 2%;
+    width: 58%
+}
+
+.screen {
+    display: flex;
+    flex-direction: row;
+    /* justify-content: space-evenly */
+}

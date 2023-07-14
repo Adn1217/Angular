@@ -1,32 +1,36 @@
-<form [formGroup]="userModel">
-    <div class="mb-3">
-        <label for="exampleInputEmail1" class="form-label">Email address</label>
-        <input formControlName="email" type="email" class="form-control" id="exampleInputEmail1"
-            [ngClass]="{'is-valid': userModel.controls.email.touched && !userModel.controls.email.invalid, 'is-invalid': userModel.controls.email.touched && userModel.controls.email.invalid}"
-            aria-describedby="emailHelp">
-        <div class="valid-feedback">
-            ¡Se ve bien!
+<div class="screen">
+    <form class="mb-9 form" [formGroup]="userModel">
+        <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Email address</label>
+            <input formControlName="email" type="email" class="form-control" id="exampleInputEmail1"
+                [ngClass]="{'is-valid': userModel.controls.email.touched && !userModel.controls.email.invalid, 'is-invalid': userModel.controls.email.touched && userModel.controls.email.invalid}"
+                aria-describedby="emailHelp">
+            <div class="valid-feedback">
+                ¡Se ve bien!
+            </div>
+            <div class="invalid-feedback">
+                {{getFieldError("email")}}
+            </div>
+            <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
         </div>
-        <div class="invalid-feedback">
-            {{getFieldError("email")}}
+        <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Password</label>
+            <input formControlName="password" type="password" class="form-control"
+                [ngClass]="{'is-valid': userModel.controls.password.touched && !userModel.controls.password.invalid, 'is-invalid': userModel.controls.password.touched && userModel.controls.password.invalid}"
+                id="exampleInputPassword1">
+            <div class="valid-feedback">
+                ¡Se ve bien!
+            </div>
+            <div class="invalid-feedback">
+                {{getFieldError("password")}}
+            </div>
         </div>
-        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+        <div class="buttonContainer">
+            <button type="submit" disabled class="btn btn-primary">Submit</button>
+            <button (click)="handleChangeView($event)" type="register" class="btn btn-secondary">Register</button>
+        </div>
+    </form>
+    <div>
+        <pre>{{userModel.value | json}}</pre>
     </div>
-    <div class="mb-3">
-        <label for="exampleInputPassword1" class="form-label">Password</label>
-        <input formControlName="password" type="password" class="form-control"
-            [ngClass]="{'is-valid': userModel.controls.password.touched && !userModel.controls.password.invalid, 'is-invalid': userModel.controls.password.touched && userModel.controls.password.invalid}"
-            id="exampleInputPassword1">
-        <div class="valid-feedback">
-            ¡Se ve bien!
-        </div>
-        <div class="invalid-feedback">
-            {{getFieldError("password")}}
-        </div>
-    </div>
-    <pre>{{userModel.value | json}}</pre>
-    <div class="buttonContainer">
-        <button type="submit" disabled class="btn btn-primary">Submit</button>
-        <button (click)="handleChangeView($event)" type="register" class="btn btn-secondary">Register</button>
-    </div>
-</form>
+</div>

@@ -37,13 +37,14 @@ export class RegistroComponent {
       })
   
   userList: users [] = USER_DATA;
-  // userList: RegisterModel [] = USER_DATA;
 
   @Input()
   ingreso: boolean = false;
+
+  @Input()
+  showForm: boolean = false;
   
   constructor(private formBuilder: FormBuilder){
-    console.log("UserModel: ", this.userModel.value)
     }
   
   @Output()
@@ -51,6 +52,9 @@ export class RegistroComponent {
 
   @Output()
   changeView = new EventEmitter();
+  
+  @Output()
+  showFormChange = new EventEmitter();
 
   handleChangeView(event: Event){
     event.preventDefault();
@@ -81,17 +85,17 @@ export class RegistroComponent {
   }
 
   handleSubmit(event: Event){
-      this.userList = [...this.userList, {
-        id: new Date().getTime(),
-        nombres: this.userModel.value.nombres || '',
-        apellidos: this.userModel.value.apellidos || '',
-        usuario: this.userModel.value.usuario || '',
-        edad: this.userModel.value.edad || 18,
-        correo: this.userModel.value.correo || '',
-        password: this.userModel.value.password || ''}]
+   
+    this.showFormChange.emit();
+    this.userList = [...this.userList, {
+      id: new Date().getTime(),
+      nombres: this.userModel.value.nombres || '',
+      apellidos: this.userModel.value.apellidos || '',
+      usuario: this.userModel.value.usuario || '',
+      edad: this.userModel.value.edad || 18,
+      correo: this.userModel.value.correo || '',
+      password: this.userModel.value.password || ''}]
 
-    // alert(`Se ha registrado el usuario:  ${JSON.stringify(this.userModel.value)}`)
-    // console.log("Se ha registrado el usuario: ", JSON.stringify(this.userModel.value))
   }
 
   handleDeleteUser(userToDelete: users ){
@@ -102,21 +106,33 @@ export class RegistroComponent {
   }
 
   handleUpdateUser(userUpdated: users){
-    const userToUpdate = this.userList.find((user) => user.id === userUpdated.id);
-    if(userToUpdate){
-      this.userList = this.userList.map((user) => {
-        if(user.id === userUpdated.id){
-          // return {...user, ...userUpdated}
-          return {...user, ...{nombres: this.userModel.value.nombres || '',
-          apellidos: this.userModel.value.apellidos || '',
-          usuario: this.userModel.value.usuario || '',
-          edad: this.userModel.value.edad || 18,
-          correo: this.userModel.value.correo || '',
-          password: this.userModel.value.password || ''}}
-        }else{
-          return user
-        }
-      })
+
+    if(!this.showForm){
+      const {id, ...rest} = userUpdated;
+      const userUpdatedInForm = {...rest};
+      this.userModel.setValue(userUpdatedInForm);
+      this.showFormChange.emit();
+    }else{
+      const userToUpdate = this.userList.find((user) => user.id === userUpdated.id);
+      if(userToUpdate && this.userModel.status === 'VALID'){
+        this.userList = this.userList.map((user) => {
+          if(user.id === userUpdated.id){
+            // return {...user, ...userUpdated}
+            return {...user, ...{nombres: this.userModel.value.nombres || '',
+            apellidos: this.userModel.value.apellidos || '',
+            usuario: this.userModel.value.usuario || '',
+            edad: this.userModel.value.edad || 18,
+            correo: this.userModel.value.correo || '',
+            password: this.userModel.value.password || ''}}
+          }else{
+            return user
+          }
+        })
+        this.showFormChange.emit();
+        alert(`Se ha actualizado el usuario con id: ${userToUpdate.id}`)
+      }else{
+        this.userModel.markAllAsTouched;
+      }
     }
   }
 

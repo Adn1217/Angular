@@ -16,7 +16,6 @@ import { UserModule } from '../usuarios/usuarios.module';
     CommonModule,
     ReactiveFormsModule,
     UserModule
-    // FormsModule
   ],
   exports: [
     RegistroComponent,

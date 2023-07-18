@@ -11,6 +11,11 @@ button {
     min-width: 40%;
 }
 
+.addButton {
+    max-width: 30%;
+    margin-bottom: 2%;
+}
+
 .form-text {
     color:aqua
 }

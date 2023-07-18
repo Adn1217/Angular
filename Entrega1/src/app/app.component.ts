@@ -10,20 +10,16 @@ export class AppComponent {
   title: string = 'Entrega 1';
   ingreso: boolean = true;
   sideBarOpen = false;
-
-  @ViewChild("sideBarComponent") 
-  drawer? : MatSidenavModule
+  showForm = false;
 
   onChangeView(event: Event){
-    // alert("Se ha cambiado la vista")
-    // console.log("Evento recibido en padre: ", event);
-    console.log("Se ha cambiado la vista");
   }
   
   toggleSideBar(flag: boolean){
     this.sideBarOpen = flag;
-    console.log("SideBarOpen? ", flag);
   }
 
-
+  handleFormView(event: Event){
+    this.showForm = !this.showForm;
+  }
 }

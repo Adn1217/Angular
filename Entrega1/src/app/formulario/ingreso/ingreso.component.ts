@@ -26,10 +26,8 @@ export class IngresoComponent {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(minCharLength)]]
     })
-    console.log("UserModel: ", this.userModel.value)
-    // console.log("UserModel: ", this.userModel)
-
   }
+
   @Output()
   changeView = new EventEmitter();
 
@@ -66,7 +64,6 @@ export class IngresoComponent {
 
   handleChangeView(event: Event){
     event.preventDefault();
-    console.log("handleChangeView hijo")
     this.ingresoChange.emit(!this.ingreso);
     this.changeView.emit(event);
   }

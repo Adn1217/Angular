@@ -1,5 +1,5 @@
 <div class="screen">
-    <form class="mb-9 form" [formGroup]="userModel">
+    <form class="mb-9 form" [formGroup]="userModel" *ngIf="showForm;">
         <div class="mb-3">
             <label for="exampleInputName" class="form-label">Nombres</label>
             <input formControlName="nombres" type="text" class="form-control" id="exampleInputName"
@@ -44,9 +44,6 @@
             <div class="valid-feedback">
                 ¡Se ve bien!
             </div>
-            <!-- <div class="invalid-feedback">
-                {{getFieldError("usuario")}}
-            </div> -->
         </div>
         <div class="mb-3 col-5" *ngIf="userModel.controls['edad'].touched && userModel.controls['edad'].invalid"
             class="invalid">
@@ -84,11 +81,11 @@
             <button (click)="handleChangeView($event)" type="register" class="btn btn-secondary">LogIn</button>
         </div>
     </form>
-    <!-- <div class="mb-3 model">
-        <pre>{{userModel.value | json}}</pre>
-    </div> -->
     <div class="mb-3 userTable">
-        <app-tabla [dataSource]="userList" (updateUser)="handleUpdateUser($event)"
+        <div class="addButton" *ngIf="!showForm;">
+            <button type="submit" (click)="showFormChange.emit($event)" class="btn btn-success">Agregar</button>
+        </div>
+        <app-tabla [dataSource]=" userList" (updateUser)="handleUpdateUser($event)"
             (deleteUser)="handleDeleteUser($event)"></app-tabla>
     </div>
 </div>

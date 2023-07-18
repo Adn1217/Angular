@@ -81,9 +81,6 @@ export class RegistroComponent {
   }
 
   handleSubmit(event: Event){
-    // const registeredUserInfo = {...this.userModel.value, id: new Date().getTime()};
-    // delete registeredUserInfo["password"];
-    // if(registeredUserInfo){
       this.userList = [...this.userList, {
         id: new Date().getTime(),
         nombres: this.userModel.value.nombres || '',
@@ -92,11 +89,35 @@ export class RegistroComponent {
         edad: this.userModel.value.edad || 18,
         correo: this.userModel.value.correo || '',
         password: this.userModel.value.password || ''}]
-    // }
-    // }
 
-    // alert(`Se ha registrado el usuario:  ${JSON.stringify(registeredUserInfo)}`)
+    // alert(`Se ha registrado el usuario:  ${JSON.stringify(this.userModel.value)}`)
     // console.log("Se ha registrado el usuario: ", JSON.stringify(this.userModel.value))
+  }
+
+  handleDeleteUser(userToDelete: users ){
+    if(userToDelete && confirm(`¿Está seguro que desea eliminar el usuario ${userToDelete.nombres + ' ' + userToDelete.apellidos}`)){
+      this.userList = this.userList.filter((user) => user.id !== userToDelete.id )
+      console.log("Se elimina usuario con id: ", userToDelete.id)
+    }
+  }
+
+  handleUpdateUser(userUpdated: users){
+    const userToUpdate = this.userList.find((user) => user.id === userUpdated.id);
+    if(userToUpdate){
+      this.userList = this.userList.map((user) => {
+        if(user.id === userUpdated.id){
+          // return {...user, ...userUpdated}
+          return {...user, ...{nombres: this.userModel.value.nombres || '',
+          apellidos: this.userModel.value.apellidos || '',
+          usuario: this.userModel.value.usuario || '',
+          edad: this.userModel.value.edad || 18,
+          correo: this.userModel.value.correo || '',
+          password: this.userModel.value.password || ''}}
+        }else{
+          return user
+        }
+      })
+    }
   }
 
 }

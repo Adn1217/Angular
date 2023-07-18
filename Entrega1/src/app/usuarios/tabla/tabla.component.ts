@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, Output, EventEmitter} from '@angular/core';
 import { users } from '../modelos';
 
 
@@ -12,8 +12,14 @@ import { users } from '../modelos';
 export class TablaComponent {
 
   displayedColumns: string[] = ['id', 'nombre completo', 'edad', 'correo', 'acciones'];
-  
+
   @Input()
   dataSource: users[] = [];
+
+  @Output()
+  deleteUser = new EventEmitter<users>();
+
+  @Output()
+  updateUser = new EventEmitter<users>();
 
 }

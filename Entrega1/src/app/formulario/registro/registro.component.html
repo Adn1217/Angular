@@ -88,6 +88,7 @@
         <pre>{{userModel.value | json}}</pre>
     </div> -->
     <div class="mb-3 userTable">
-        <app-tabla [dataSource]="userList"></app-tabla>
+        <app-tabla [dataSource]="userList" (updateUser)="handleUpdateUser($event)"
+            (deleteUser)="handleDeleteUser($event)"></app-tabla>
     </div>
 </div>

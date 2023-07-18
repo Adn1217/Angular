@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RegistroComponent } from './registro/registro.component';
 import { IngresoComponent } from './ingreso/ingreso.component';
 import { ReactiveFormsModule } from '@angular/forms'
+import { UserModule } from '../usuarios/usuarios.module';
 
 
 
@@ -14,6 +15,7 @@ import { ReactiveFormsModule } from '@angular/forms'
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    UserModule
     // FormsModule
   ],
   exports: [

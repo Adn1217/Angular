@@ -18,9 +18,15 @@ button {
 .form{
     margin: 0 5% 0 2%;
     /* width: 58%; */
-    width: 40%;
+    width: 30%;
     margin-left: auto;
     margin-right: auto;
+}
+
+.userTable{
+    min-width: 50%;
+    max-width: 70%;
+    margin: 0 5% 0 5%;
 }
 .invalid {
     color: #dc3545;
@@ -31,9 +37,10 @@ button {
 .screen {
     display: flex;
     flex-direction: row;
-    max-width: 80%;
+    max-width: 100%;
     margin-left: auto;
     margin-right: auto;
+    justify-content: space-between;
     /* justify-content: space-evenly */
 }
 

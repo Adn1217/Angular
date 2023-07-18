@@ -1,17 +1,23 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators  } from '@angular/forms';
+import { users } from 'src/app/usuarios/modelos';
 
 
 const minCharLength: number = 8;
 interface RegisterModel {
-  nombre: FormControl<string | null>;
-  apellido: FormControl<string | null>;
+  nombres: FormControl<string| null>;
+  apellidos: FormControl<string | null>;
   usuario: FormControl<string | null>;
   edad: FormControl<number | null>;
-  email: FormControl<string | null>;
+  correo: FormControl<string | null>;
   password: FormControl<string | null>
 }
   
+const USER_DATA = [
+  {id: 1, nombres: 'Adrian Alberto', apellidos: "Fernández Cabrera", usuario: "adn1217", edad: 32, correo: "adn1217@hotmail.com", password: "12345678"},
+  {id: 2, nombres: 'Alejandra Paola', apellidos: "Fernández Castro", usuario: "alu2110", edad: 31, correo: "alufndz_@gmail.com", password: "12345678"},
+  {id: 3, nombres: 'Rupertico Adolfo', apellidos: "Herrera Gonzalez", usuario: "ruper12", edad: 32, correo: "raherreraG@gmail.com", password: "12345678"},
+];
 @Component({
   selector: 'app-registro',
   templateUrl: './registro.component.html',
@@ -22,13 +28,16 @@ interface RegisterModel {
 export class RegistroComponent {
 
   userModel : FormGroup<RegisterModel> = this.formBuilder.group({
-      nombre: ['', [Validators.required]],
-      apellido: ['', [Validators.required]],
+      nombres: ['', [Validators.required]],
+      apellidos: ['', [Validators.required]],
       usuario: ['', [Validators.required]],
       edad: [0, [Validators.required]],
-      email: ['', [Validators.required, Validators.email]],
+      correo: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(minCharLength)]]
       })
+  
+  userList: users [] = USER_DATA;
+  // userList: RegisterModel [] = USER_DATA;
 
   @Input()
   ingreso: boolean = false;
@@ -72,9 +81,21 @@ export class RegistroComponent {
   }
 
   handleSubmit(event: Event){
-    const registeredUserInfo = this.userModel.value;
-    delete registeredUserInfo["password"];
-    alert(`Se ha registrado el usuario:  ${JSON.stringify(registeredUserInfo)}`)
+    // const registeredUserInfo = {...this.userModel.value, id: new Date().getTime()};
+    // delete registeredUserInfo["password"];
+    // if(registeredUserInfo){
+      this.userList = [...this.userList, {
+        id: new Date().getTime(),
+        nombres: this.userModel.value.nombres || '',
+        apellidos: this.userModel.value.apellidos || '',
+        usuario: this.userModel.value.usuario || '',
+        edad: this.userModel.value.edad || 18,
+        correo: this.userModel.value.correo || '',
+        password: this.userModel.value.password || ''}]
+    // }
+    // }
+
+    // alert(`Se ha registrado el usuario:  ${JSON.stringify(registeredUserInfo)}`)
     // console.log("Se ha registrado el usuario: ", JSON.stringify(this.userModel.value))
   }
 

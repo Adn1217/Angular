@@ -2,26 +2,26 @@
     <form class="mb-9 form" [formGroup]="userModel">
         <div class="mb-3">
             <label for="exampleInputName" class="form-label">Nombres</label>
-            <input formControlName="nombre" type="text" class="form-control" id="exampleInputName"
-                [ngClass]="{'is-valid': userModel.controls['nombre'].touched && !userModel.controls['nombre'].invalid, 'is-invalid': userModel.controls['nombre'].touched && userModel.controls['nombre'].invalid}"
+            <input formControlName="nombres" type="text" class="form-control" id="exampleInputName"
+                [ngClass]="{'is-valid': userModel.controls['nombres'].touched && !userModel.controls['nombres'].invalid, 'is-invalid': userModel.controls['nombres'].touched && userModel.controls['nombres'].invalid}"
                 aria-describedby="nameHelp">
             <div class="valid-feedback">
                 ¡Se ve bien!
             </div>
             <div class="invalid-feedback">
-                {{getFieldError("nombre")}}
+                {{getFieldError("nombres")}}
             </div>
         </div>
         <div class="mb-3">
             <label for="exampleInputLastname" class="form-label">Apellidos</label>
-            <input formControlName="apellido" type="text" class="form-control"
-                [ngClass]="{'is-valid': userModel.controls['apellido'].touched && !userModel.controls['apellido'].invalid, 'is-invalid': userModel.controls['apellido'].touched && userModel.controls['apellido'].invalid}"
+            <input formControlName="apellidos" type="text" class="form-control"
+                [ngClass]="{'is-valid': userModel.controls['apellidos'].touched && !userModel.controls['apellidos'].invalid, 'is-invalid': userModel.controls['apellidos'].touched && userModel.controls['apellidos'].invalid}"
                 id="exampleInputLastname">
             <div class="valid-feedback">
                 ¡Se ve bien!
             </div>
             <div class="invalid-feedback">
-                {{getFieldError("apellido")}}
+                {{getFieldError("apellidos")}}
             </div>
         </div>
         <div class="mb-3">
@@ -54,14 +54,14 @@
         </div>
         <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">Email address</label>
-            <input formControlName="email" type="email" class="form-control"
-                [ngClass]="{'is-valid': userModel.controls['email'].touched && !userModel.controls['email'].invalid, 'is-invalid': userModel.controls['email'].touched && userModel.controls['email'].invalid}"
+            <input formControlName="correo" type="email" class="form-control"
+                [ngClass]="{'is-valid': userModel.controls['correo'].touched && !userModel.controls['correo'].invalid, 'is-invalid': userModel.controls['correo'].touched && userModel.controls['correo'].invalid}"
                 id="exampleInputEmail1" aria-describedby="emailHelp">
             <div class="valid-feedback">
                 ¡Se ve bien!
             </div>
             <div class="invalid-feedback">
-                {{getFieldError("email")}}
+                {{getFieldError("correo")}}
             </div>
             <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
         </div>
@@ -88,6 +88,6 @@
         <pre>{{userModel.value | json}}</pre>
     </div> -->
     <div class="mb-3 userTable">
-        <app-tabla></app-tabla>
+        <app-tabla [dataSource]="userList"></app-tabla>
     </div>
 </div>

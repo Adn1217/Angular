@@ -7,7 +7,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title: string = 'Entrega 3';
+  title: string = 'Entrega 1';
   ingreso: boolean = true;
   sideBarOpen = false;
 

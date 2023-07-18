@@ -27,7 +27,7 @@ export class IngresoComponent {
       password: ['', [Validators.required, Validators.minLength(minCharLength)]]
     })
     console.log("UserModel: ", this.userModel.value)
-    console.log("UserModel: ", this.userModel)
+    // console.log("UserModel: ", this.userModel)
 
   }
   @Output()
@@ -43,6 +43,7 @@ export class IngresoComponent {
   getFieldError(field: string): string {
     const fieldControl = this.getFieldControl(field);
     const error = fieldControl.errors || {};
+ 
     if(error["required"]){
       return "El campo es necesario"
     }else if (error['email']){
@@ -58,8 +59,14 @@ export class IngresoComponent {
     }
   }
 
+  handleSubmit(event: Event){
+    event.preventDefault();
+    alert(`Se ha ingresado con el correo ${this.userModel.value.email}`)
+  }
+
   handleChangeView(event: Event){
     event.preventDefault();
+    console.log("handleChangeView hijo")
     this.ingresoChange.emit(!this.ingreso);
     this.changeView.emit(event);
   }

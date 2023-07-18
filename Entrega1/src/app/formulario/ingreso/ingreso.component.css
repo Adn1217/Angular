@@ -1,22 +1,29 @@
 .buttonContainer {
     display: flex;
     flex: 1;
-    max-width: 50%;
+    max-width: 60%;
     justify-content: space-between;
     margin-left: auto;
     margin-right: auto;
 }
 
-button {
+.form-text {
+    color:aqua
 }
 
 .form{
     margin: 0 5% 0 2%;
-    width: 58%
+    /* width: 58%; */
+    width: 40%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .screen {
     display: flex;
     flex-direction: row;
+    max-width: 80%;
+    margin-left: auto;
+    margin-right: auto;
     /* justify-content: space-evenly */
 }

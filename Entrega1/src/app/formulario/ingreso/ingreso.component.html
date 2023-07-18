@@ -26,11 +26,13 @@
             </div>
         </div>
         <div class="buttonContainer">
-            <button type="submit" disabled class="btn btn-primary">Submit</button>
+            <button (click)="handleSubmit($event)" type="submit"
+                [ngClass]="{'disabled': !userModel.controls.password.touched || userModel.status === 'INVALID'}"
+                class="btn btn-primary">Ingresar</button>
             <button (click)="handleChangeView($event)" type="register" class="btn btn-secondary">Register</button>
         </div>
     </form>
-    <div>
+    <!-- <div>
         <pre>{{userModel.value | json}}</pre>
-    </div>
+    </div> -->
 </div>

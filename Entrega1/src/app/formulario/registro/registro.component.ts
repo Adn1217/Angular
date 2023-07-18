@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormGroup, FormControl, FormBuilder, Validators  } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl, Validators  } from '@angular/forms';
 
 
 const minCharLength: number = 8;
@@ -9,7 +9,7 @@ interface RegisterModel {
   usuario: FormControl<string | null>;
   edad: FormControl<number | null>;
   email: FormControl<string | null>;
-  password: FormControl<string | null>;
+  password: FormControl<string | null>
 }
   
 @Component({
@@ -21,18 +21,21 @@ interface RegisterModel {
 
 export class RegistroComponent {
 
-
-  userModel: FormGroup = this.formBuilder.group({
+  userModel : FormGroup<RegisterModel> = this.formBuilder.group({
       nombre: ['', [Validators.required]],
       apellido: ['', [Validators.required]],
       usuario: ['', [Validators.required]],
-      edad: ['', [Validators.required]],
+      edad: [0, [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(minCharLength)]]
-    })
+      })
 
   @Input()
   ingreso: boolean = false;
+  
+  constructor(private formBuilder: FormBuilder){
+    console.log("UserModel: ", this.userModel.value)
+    }
   
   @Output()
   ingresoChange = new EventEmitter();
@@ -68,6 +71,11 @@ export class RegistroComponent {
     }
   }
 
-  constructor(private formBuilder: FormBuilder){}
+  handleSubmit(event: Event){
+    const registeredUserInfo = this.userModel.value;
+    delete registeredUserInfo["password"];
+    alert(`Se ha registrado el usuario:  ${JSON.stringify(registeredUserInfo)}`)
+    // console.log("Se ha registrado el usuario: ", JSON.stringify(this.userModel.value))
+  }
 
 }

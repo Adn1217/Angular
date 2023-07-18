@@ -1,6 +1,10 @@
 .title {
     padding: 10px;
-    justify-content: center;
+    /* justify-content: center;
+    align-items: center; */
     min-width: 340px;
-    font-size: 2rem
+    font-size: 2rem;
+}
+.titleContainer {
+    text-align: center;
 }

@@ -9,12 +9,14 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FullnamePipe } from './pipes/fullname.pipe';
 import { ErrorMessagesControlPipe } from './pipes/error-messages-control.pipe';
+import { FontSizeDirective } from './directives/font-size.directive';
 
 @NgModule({
   declarations: [
     SharedComponent,
     FullnamePipe,
-    ErrorMessagesControlPipe
+    ErrorMessagesControlPipe,
+    FontSizeDirective
   ],
   imports: [
     CommonModule
@@ -27,7 +29,8 @@ import { ErrorMessagesControlPipe } from './pipes/error-messages-control.pipe';
     MatInputModule,
     MatTooltipModule,
     FullnamePipe,
-    ErrorMessagesControlPipe
+    ErrorMessagesControlPipe,
+    FontSizeDirective
   ]
 })
 export class SharedModule { }

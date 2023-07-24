@@ -2,7 +2,7 @@
 <app-side-nav #sideBarComponent [sideBarOpen]="sideBarOpen">
     <app-main-wrapper>
         <div class="titleContainer" *ngIf="ingreso; else registerTitle">
-            <h1 class="title">Formulario de ingreso</h1>
+            <h1 appFontSize="2rem"> Formulario de ingreso</h1>
         </div>
         <ng-template #registerTitle>
             <div class="titleContainer">

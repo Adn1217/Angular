@@ -7,10 +7,12 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { FullnamePipe } from './pipes/fullname.pipe';
 
 @NgModule({
   declarations: [
-    SharedComponent
+    SharedComponent,
+    FullnamePipe
   ],
   imports: [
     CommonModule
@@ -21,7 +23,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatDialogModule,
     MatIconModule,
     MatInputModule,
-    MatTooltipModule
+    MatTooltipModule,
+    FullnamePipe
   ]
 })
 export class SharedModule { }

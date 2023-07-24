@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators  } from '@angular/forms';
 import { users } from 'src/app/usuarios/modelos';
+import { UserService } from 'src/app/usuarios/user.service';
 
 
 const minCharPwdLength: number = 8;
@@ -14,11 +15,6 @@ interface RegisterModel {
   password: FormControl<string | null>
 }
   
-const USER_DATA = [
-  {id: 1, nombres: 'Adrian Alberto', apellidos: "Fernández Cabrera", usuario: "adn1217", edad: 32, correo: "adn1217@hotmail.com", password: "12345678"},
-  {id: 2, nombres: 'Alejandra Paola', apellidos: "Fernández Castro", usuario: "alu2110", edad: 31, correo: "alufndz_@gmail.com", password: "12345678"},
-  {id: 3, nombres: 'Rupertico Adolfo', apellidos: "Herrera Gonzalez", usuario: "ruper12", edad: 32, correo: "raherreraG@gmail.com", password: "12345678"},
-];
 @Component({
   selector: 'app-registro',
   templateUrl: './registro.component.html',
@@ -37,7 +33,7 @@ export class RegistroComponent {
       password: ['', [Validators.required, Validators.minLength(minCharPwdLength)]]
       })
   
-  userList: users [] = USER_DATA;
+  userList: users [] = [];
 
   @Input()
   ingreso: boolean = false;
@@ -45,7 +41,9 @@ export class RegistroComponent {
   @Input()
   showForm: boolean = false;
   
-  constructor(private formBuilder: FormBuilder){
+  constructor(private formBuilder: FormBuilder, private userService: UserService){
+
+    this.userList = userService.getUsers();
     }
   
   @Output()
@@ -88,47 +86,57 @@ export class RegistroComponent {
   handleSubmit(event: Event){
    
     this.showFormChange.emit();
-    this.userList = [...this.userList, {
+    const newUser = {
       id: new Date().getTime(),
       nombres: this.userModel.value.nombres || '',
       apellidos: this.userModel.value.apellidos || '',
       usuario: this.userModel.value.usuario || '',
       edad: this.userModel.value.edad || 18,
       correo: this.userModel.value.correo || '',
-      password: this.userModel.value.password || ''}]
+      password: this.userModel.value.password || ''}
+
+    this.userService.createUser(newUser);
+    this.userList = this.userService.getUsers();
+    // this.userList = [...this.userList, newUser]
 
   }
 
   handleDeleteUser(userToDelete: users ){
-    if(userToDelete && confirm(`¿Está seguro que desea eliminar el usuario ${userToDelete.nombres + ' ' + userToDelete.apellidos}`)){
-      this.userList = this.userList.filter((user) => user.id !== userToDelete.id )
+  if(userToDelete && confirm(`¿Está seguro que desea eliminar el usuario ${userToDelete.nombres + ' ' + userToDelete.apellidos}`)){
+    this.userService.deleteUser(userToDelete);
+    this.userList = this.userService.getUsers();
+    // this.userList = this.userList.filter((user) => user.id !== userToDelete.id )
       console.log("Se elimina usuario con id: ", userToDelete.id)
     }
   }
 
-  handleUpdateUser(userUpdated: users){
+  handleUpdateUser(originalUser: users){
+
+    const {id, ...rest} = originalUser;
 
     if(!this.showForm){
-      const {id, ...rest} = userUpdated;
       const userUpdatedInForm = {...rest};
       this.userModel.setValue(userUpdatedInForm);
       this.showFormChange.emit();
     }else{
-      const userToUpdate = this.userList.find((user) => user.id === userUpdated.id);
+      const userToUpdate = this.userList.find((user) => user.id === id);
       if(userToUpdate && this.userModel.status === 'VALID'){
-        this.userList = this.userList.map((user) => {
-          if(user.id === userUpdated.id){
+        // this.userList = this.userList.map((user) => {
+        //   if(user.id === userUpdated.id){
             // return {...user, ...userUpdated}
-            return {...user, ...{nombres: this.userModel.value.nombres || '',
+            const updatedUser = {nombres: this.userModel.value.nombres || '',
             apellidos: this.userModel.value.apellidos || '',
             usuario: this.userModel.value.usuario || '',
             edad: this.userModel.value.edad || 18,
             correo: this.userModel.value.correo || '',
-            password: this.userModel.value.password || ''}}
-          }else{
-            return user
-          }
-        })
+            password: this.userModel.value.password || ''}
+            // return {...user, ...updatedUser}
+            this.userService.updateUser({id: id, ...updatedUser});
+            this.userList = this.userService.getUsers();
+          // }else{
+          //   return user
+          // }
+        // })
         this.showFormChange.emit();
         alert(`Se ha actualizado el usuario con id: ${userToUpdate.id}`)
       }else{

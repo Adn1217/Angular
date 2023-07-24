@@ -8,14 +8,9 @@
         <td mat-cell *matCellDef="let user"> {{user?.id}} </td>
     </ng-container>
 
-    <!-- <ng-container matColumnDef="nombre completo">
-        <th mat-header-cell *matHeaderCellDef> Nombre Completo</th>
-        <td mat-cell *matCellDef="let user"> {{user?.nombres}} {{user?.apellidos}} </td>
-    </ng-container> -->
-
     <ng-container matColumnDef="nombre completo">
         <th mat-header-cell *matHeaderCellDef> Nombre Completo</th>
-        <td mat-cell *matCellDef="let user"> {{user | fullname}} </td>
+        <td mat-cell *matCellDef="let user"> {{user | fullname: '1'}} </td>
     </ng-container>
 
     <ng-container matColumnDef="edad">

@@ -3,7 +3,8 @@ import { FormBuilder, FormGroup, FormControl, Validators  } from '@angular/forms
 import { users } from 'src/app/usuarios/modelos';
 
 
-const minCharLength: number = 8;
+const minCharPwdLength: number = 8;
+const minCharUserLength: number = 5;
 interface RegisterModel {
   nombres: FormControl<string| null>;
   apellidos: FormControl<string | null>;
@@ -30,10 +31,10 @@ export class RegistroComponent {
   userModel : FormGroup<RegisterModel> = this.formBuilder.group({
       nombres: ['', [Validators.required]],
       apellidos: ['', [Validators.required]],
-      usuario: ['', [Validators.required]],
+      usuario: ['', [Validators.required, Validators.minLength(minCharUserLength)]],
       edad: [0, [Validators.required]],
       correo: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(minCharLength)]]
+      password: ['', [Validators.required, Validators.minLength(minCharPwdLength)]]
       })
   
   userList: users [] = USER_DATA;

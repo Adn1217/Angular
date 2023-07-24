@@ -8,11 +8,13 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FullnamePipe } from './pipes/fullname.pipe';
+import { ErrorMessagesControlPipe } from './pipes/error-messages-control.pipe';
 
 @NgModule({
   declarations: [
     SharedComponent,
-    FullnamePipe
+    FullnamePipe,
+    ErrorMessagesControlPipe
   ],
   imports: [
     CommonModule
@@ -24,7 +26,8 @@ import { FullnamePipe } from './pipes/fullname.pipe';
     MatIconModule,
     MatInputModule,
     MatTooltipModule,
-    FullnamePipe
+    FullnamePipe,
+    ErrorMessagesControlPipe
   ]
 })
 export class SharedModule { }

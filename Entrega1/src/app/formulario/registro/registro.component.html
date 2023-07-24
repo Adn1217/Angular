@@ -33,7 +33,9 @@
                 ¡Se ve bien!
             </div>
             <div class="invalid-feedback">
-                {{getFieldError("usuario")}}
+                {{this.userModel.controls.usuario.errors && (this.userModel.controls.usuario.errors | keyvalue |
+                errorMessagesControl)}}
+                <!-- {{getFieldError("usuario")}} -->
             </div>
         </div>
         <div class="mb-3 col-3">
@@ -47,7 +49,9 @@
         </div>
         <div class="mb-3 col-5" *ngIf="userModel.controls['edad'].touched && userModel.controls['edad'].invalid"
             class="invalid">
-            {{getFieldError("edad")}}
+            {{this.userModel.controls.edad.errors && (this.userModel.controls.edad.errors | keyvalue |
+            errorMessagesControl)}}
+            <!-- {{getFieldError("edad")}} -->
         </div>
         <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">Email address</label>

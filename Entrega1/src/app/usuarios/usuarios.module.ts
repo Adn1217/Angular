@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { TablaComponent } from './tabla/tabla.component';
 import { SharedModule } from '../shared/shared.module';
 import {MatTableModule} from '@angular/material/table';
+import { FullnamePipe } from '../shared/pipes/fullname.pipe';
 
 
 @NgModule({
@@ -12,7 +13,7 @@ import {MatTableModule} from '@angular/material/table';
   imports: [
     CommonModule,
     SharedModule,
-    MatTableModule
+    MatTableModule,
   ],
   exports: [
     TablaComponent

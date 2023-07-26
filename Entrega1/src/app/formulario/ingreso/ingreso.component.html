@@ -8,8 +8,12 @@
             <div class="valid-feedback">
                 ¡Se ve bien!
             </div>
-            <div class="invalid-feedback">
+            <!-- <div class="invalid-feedback">
                 {{getFieldError("email")}}
+            </div> -->
+            <div class="invalid-feedback">
+                {{this.userModel.controls.email.errors && (this.userModel.controls.email.errors | keyvalue |
+                errorMessagesControl)}}
             </div>
             <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
         </div>
@@ -22,7 +26,9 @@
                 ¡Se ve bien!
             </div>
             <div class="invalid-feedback">
-                {{getFieldError("password")}}
+                {{this.userModel.controls.password.errors && (this.userModel.controls.password.errors | keyvalue |
+                errorMessagesControl)}}
+                <!-- {{getFieldError("password")}} -->
             </div>
         </div>
         <div class="buttonContainer">

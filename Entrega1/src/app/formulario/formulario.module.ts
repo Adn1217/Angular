@@ -4,6 +4,7 @@ import { RegistroComponent } from './registro/registro.component';
 import { IngresoComponent } from './ingreso/ingreso.component';
 import { ReactiveFormsModule } from '@angular/forms'
 import { UserModule } from '../usuarios/usuarios.module';
+import { SharedModule } from '../shared/shared.module';
 
 
 
@@ -15,7 +16,8 @@ import { UserModule } from '../usuarios/usuarios.module';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    UserModule
+    UserModule,
+    SharedModule
   ],
   exports: [
     RegistroComponent,

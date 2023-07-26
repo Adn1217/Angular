@@ -41,6 +41,7 @@ export class IngresoComponent {
   getFieldError(field: string): string {
     const fieldControl = this.getFieldControl(field);
     const error = fieldControl.errors || {};
+    console.log(error);
  
     if(error["required"]){
       return "El campo es necesario"

@@ -7,10 +7,16 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { FullnamePipe } from './pipes/fullname.pipe';
+import { ErrorMessagesControlPipe } from './pipes/error-messages-control.pipe';
+import { FontSizeDirective } from './directives/font-size.directive';
 
 @NgModule({
   declarations: [
-    SharedComponent
+    SharedComponent,
+    FullnamePipe,
+    ErrorMessagesControlPipe,
+    FontSizeDirective
   ],
   imports: [
     CommonModule
@@ -21,7 +27,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatDialogModule,
     MatIconModule,
     MatInputModule,
-    MatTooltipModule
+    MatTooltipModule,
+    FullnamePipe,
+    ErrorMessagesControlPipe,
+    FontSizeDirective
   ]
 })
 export class SharedModule { }

@@ -13,6 +13,7 @@ export class AppComponent {
   showForm = false;
 
   onChangeView(event: Event){
+    this.showForm = false;
   }
   
   toggleSideBar(flag: boolean){

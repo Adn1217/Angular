@@ -1,7 +1,8 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators  } from '@angular/forms';
 import { users } from 'src/app/usuarios/modelos';
 import { UserService } from 'src/app/usuarios/user.service';
+import { Observable, takeUntil, Subject } from 'rxjs';
 
 
 const minCharPwdLength: number = 8;
@@ -22,7 +23,7 @@ interface RegisterModel {
 })
 
 
-export class RegistroComponent {
+export class RegistroComponent implements OnDestroy {
 
   userModel : FormGroup<RegisterModel> = this.formBuilder.group({
       nombres: ['', [Validators.required]],
@@ -35,6 +36,9 @@ export class RegistroComponent {
   
   userList: users [] = [];
 
+  userListObserver: Observable<users[]>;
+  destroyed = new Subject<boolean>(); 
+
   @Input()
   ingreso: boolean = false;
 
@@ -43,8 +47,20 @@ export class RegistroComponent {
   
   constructor(private formBuilder: FormBuilder, private userService: UserService){
 
-    this.userList = userService.getUsers();
+    // this.userList = userService.getUsers();
+    this.userListObserver = userService.getUsers().pipe(takeUntil(this.destroyed));
+    this.userListObserver.subscribe({
+      next: (users) => {
+        this.userList = users;
+        console.log(users);
+      }
+    })
+
     }
+
+  ngOnDestroy(): void {
+    this.destroyed.next(true);
+  }
   
   @Output()
   ingresoChange = new EventEmitter();
@@ -96,7 +112,7 @@ export class RegistroComponent {
       password: this.userModel.value.password || ''}
 
     this.userService.createUser(newUser);
-    this.userList = this.userService.getUsers();
+    // this.userList = this.userService.getUsers();
     // this.userList = [...this.userList, newUser]
 
   }
@@ -104,7 +120,7 @@ export class RegistroComponent {
   handleDeleteUser(userToDelete: users ){
   if(userToDelete && confirm(`¿Está seguro que desea eliminar el usuario ${userToDelete.nombres + ' ' + userToDelete.apellidos}`)){
     this.userService.deleteUser(userToDelete);
-    this.userList = this.userService.getUsers();
+    // this.userList = this.userService.getUsers();
     // this.userList = this.userList.filter((user) => user.id !== userToDelete.id )
       console.log("Se elimina usuario con id: ", userToDelete.id)
     }
@@ -132,7 +148,7 @@ export class RegistroComponent {
             password: this.userModel.value.password || ''}
             // return {...user, ...updatedUser}
             this.userService.updateUser({id: id, ...updatedUser});
-            this.userList = this.userService.getUsers();
+            // this.userList = this.userService.getUsers();
           // }else{
           //   return user
           // }

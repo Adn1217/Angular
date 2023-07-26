@@ -47,7 +47,6 @@ export class RegistroComponent implements OnDestroy {
   
   constructor(private formBuilder: FormBuilder, private userService: UserService){
 
-    // this.userList = userService.getUsers();
     this.userListObserver = userService.getUsers().pipe(takeUntil(this.destroyed));
     this.userListObserver.subscribe({
       next: (users) => {
@@ -112,47 +111,52 @@ export class RegistroComponent implements OnDestroy {
       password: this.userModel.value.password || ''}
 
     this.userService.createUser(newUser);
-    // this.userList = this.userService.getUsers();
-    // this.userList = [...this.userList, newUser]
-
+    this.userModel.reset();
+    console.log(this.userModel.controls);
   }
 
   handleDeleteUser(userToDelete: users ){
   if(userToDelete && confirm(`¿Está seguro que desea eliminar el usuario ${userToDelete.nombres + ' ' + userToDelete.apellidos}`)){
     this.userService.deleteUser(userToDelete);
-    // this.userList = this.userService.getUsers();
-    // this.userList = this.userList.filter((user) => user.id !== userToDelete.id )
-      console.log("Se elimina usuario con id: ", userToDelete.id)
+    console.log("Se elimina usuario con id: ", userToDelete.id)
     }
   }
 
   handleUpdateUser(originalUser: users){
 
     const {id, ...rest} = originalUser;
+    const userUpdatedInForm = {...rest};
 
     if(!this.showForm){
-      const userUpdatedInForm = {...rest};
       this.userModel.setValue(userUpdatedInForm);
       this.showFormChange.emit();
+    }else if (this.showForm && this.userModel.status === 'INVALID'){
+      this.userModel.setValue(userUpdatedInForm);
     }else{
       const userToUpdate = this.userList.find((user) => user.id === id);
       if(userToUpdate && this.userModel.status === 'VALID'){
-        // this.userList = this.userList.map((user) => {
-        //   if(user.id === userUpdated.id){
-            // return {...user, ...userUpdated}
-            const updatedUser = {nombres: this.userModel.value.nombres || '',
-            apellidos: this.userModel.value.apellidos || '',
-            usuario: this.userModel.value.usuario || '',
-            edad: this.userModel.value.edad || 18,
-            correo: this.userModel.value.correo || '',
-            password: this.userModel.value.password || ''}
-            // return {...user, ...updatedUser}
-            this.userService.updateUser({id: id, ...updatedUser});
-            // this.userList = this.userService.getUsers();
-          // }else{
-          //   return user
-          // }
+
+        const updatedUser = {nombres: this.userModel.value.nombres || '',
+        apellidos: this.userModel.value.apellidos || '',
+        usuario: this.userModel.value.usuario || '',
+        edad: this.userModel.value.edad || 18,
+        correo: this.userModel.value.correo || '',
+        password: this.userModel.value.password || ''}
+        this.userService.updateUser({id: id, ...updatedUser});
+ 
+
+        // Object.keys(this.userModel.controls).forEach( key => {
+        //   console.log(key);
+        //   this.userModel.get(key)?.markAsUntouched;
+        //   if(key === 'edad'){
+        //     this.userModel.get(key)?.setValue(0)
+        //   }else{
+        //     this.userModel.get(key)?.setValue('')
+        //   }
         // })
+    
+        this.userModel.reset();
+
         this.showFormChange.emit();
         alert(`Se ha actualizado el usuario con id: ${userToUpdate.id}`)
       }else{

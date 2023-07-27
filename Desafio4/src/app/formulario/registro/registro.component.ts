@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, FormControl, Validators  } from '@angular/forms
 import { users } from 'src/app/usuarios/modelos';
 import { UserService } from 'src/app/usuarios/user.service';
 import { Observable, takeUntil, Subject } from 'rxjs';
+import { NotifierService } from 'src/app/core/services/notifier.service';
 
 
 const minCharPwdLength: number = 8;
@@ -45,7 +46,7 @@ export class RegistroComponent implements OnDestroy {
   @Input()
   showForm: boolean = false;
   
-  constructor(private formBuilder: FormBuilder, private userService: UserService){
+  constructor(private formBuilder: FormBuilder, private userService: UserService, private notifier: NotifierService){
 
     this.userListObserver = userService.getUsers().pipe(takeUntil(this.destroyed));
     this.userListObserver.subscribe({
@@ -158,7 +159,8 @@ export class RegistroComponent implements OnDestroy {
         this.userModel.reset();
 
         this.showFormChange.emit();
-        alert(`Se ha actualizado el usuario con id: ${userToUpdate.id}`)
+        this.notifier.showSucess('',`Se ha actualizado el usuario con id: ${userToUpdate.id}`)
+        // alert(`Se ha actualizado el usuario con id: ${userToUpdate.id}`)
       }else{
         this.userModel.markAllAsTouched;
       }

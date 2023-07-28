@@ -119,6 +119,7 @@ export class RegistroComponent implements OnDestroy {
   handleDeleteUser(userToDelete: users ){
   if(userToDelete && confirm(`¿Está seguro que desea eliminar el usuario ${userToDelete.nombres + ' ' + userToDelete.apellidos}`)){
     this.userService.deleteUser(userToDelete);
+    this.notifier.showSucessToast(`Se ha eliminado el usuario con id: ${userToDelete.id}`,'', 3000, false)
     console.log("Se elimina usuario con id: ", userToDelete.id)
     }
   }

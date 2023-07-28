@@ -55,8 +55,8 @@ export class RegistroComponent implements OnDestroy {
     //     this.userList = users;
     //     console.log(users);
     //   }
-    // })
-    this.userList = this.userListObserver;
+    // }) 
+    this.userList = this.userListObserver; // Reemplaza la subscripcion al usar pipe async.
     }
 
   ngOnDestroy(): void {

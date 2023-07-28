@@ -1,4 +1,5 @@
 <app-nav-bar [(sideBarOpen)]="sideBarOpen" [title]="title" (sideBarOpenChange)="toggleSideBar($event)"></app-nav-bar>
+<!-- <router-outlet></router-outlet> -->
 <app-side-nav #sideBarComponent [sideBarOpen]="sideBarOpen">
     <app-main-wrapper>
         <div class="titleContainer" *ngIf="ingreso; else registerTitle">

@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core
 import { FormBuilder, FormGroup, FormControl, Validators  } from '@angular/forms';
 import { users } from 'src/app/usuarios/modelos';
 import { UserService } from 'src/app/usuarios/user.service';
-import { Observable, takeUntil, Subject } from 'rxjs';
+import { Observable, takeUntil, Subject, Subscription } from 'rxjs';
 import { NotifierService } from 'src/app/core/services/notifier.service';
 
 
@@ -35,9 +35,10 @@ export class RegistroComponent implements OnDestroy {
       password: ['', [Validators.required, Validators.minLength(minCharPwdLength)]]
       })
   
-  userList: users [] = [];
+  userList: Observable<users[]>
 
   userListObserver: Observable<users[]>;
+  userListSubscription?: Subscription;
   destroyed = new Subject<boolean>(); 
 
   @Input()
@@ -49,16 +50,17 @@ export class RegistroComponent implements OnDestroy {
   constructor(private formBuilder: FormBuilder, private userService: UserService, private notifier: NotifierService){
 
     this.userListObserver = userService.getUsers().pipe(takeUntil(this.destroyed));
-    this.userListObserver.subscribe({
-      next: (users) => {
-        this.userList = users;
-        console.log(users);
-      }
-    })
-
+    // this.userListSubscription = this.userListObserver.subscribe({
+    //   next: (users) => {
+    //     this.userList = users;
+    //     console.log(users);
+    //   }
+    // })
+    this.userList = this.userListObserver;
     }
 
   ngOnDestroy(): void {
+    // this.userListSubscription.unsubscribe(); // Reemplazado por el takeUntil
     this.destroyed.next(true);
   }
   
@@ -135,7 +137,13 @@ export class RegistroComponent implements OnDestroy {
     }else if (this.showForm && this.userModel.status === 'INVALID'){
       this.userModel.setValue(userUpdatedInForm);
     }else{
-      const userToUpdate = this.userList.find((user) => user.id === id);
+      let userToUpdate: users | undefined;
+      this.userList.subscribe({
+        next: (users) => {
+          userToUpdate = users.find((user) => user.id === id);
+        }
+      })
+      // const userToUpdate = this.userList.find((user) => user.id === id);
       if(userToUpdate && this.userModel.status === 'VALID'){
 
         const updatedUser = {nombres: this.userModel.value.nombres || '',

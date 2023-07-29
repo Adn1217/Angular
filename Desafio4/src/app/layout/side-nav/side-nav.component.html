@@ -1,17 +1,27 @@
 <mat-drawer-container #sideBar class="sidenav-container" autosize>
     <mat-drawer #drawer class="sidenav" mode="side" [opened]="sideBarOpen">
-        <div>
-            <h1>Estudiantes</h1>
-        </div>
-        <div>
-            <h1>Profesores</h1>
-        </div>
-        <div>
-            <h1>Administradores</h1>
-        </div>
-        <div>
-            <h1>Estudiantes</h1>
-        </div>
+        <mat-nav-list>
+            <a routerLink="home" mat-list-item>
+                <div>
+                    <h1>Inicio</h1>
+                </div>
+            </a>
+            <a routerLink="login" mat-list-item>
+                <div>
+                    <h1>Profesores</h1>
+                </div>
+            </a>
+            <a routerLink="login" mat-list-item>
+                <div>
+                    <h1>Administradores</h1>
+                </div>
+            </a>
+            <a routerLink="home/register" mat-list-item>
+                <div>
+                    <h1>Estudiantes</h1>
+                </div>
+            </a>
+        </mat-nav-list>
     </mat-drawer>
 
     <div class="sidenav-content">

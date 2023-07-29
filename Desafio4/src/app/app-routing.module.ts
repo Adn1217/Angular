@@ -6,11 +6,17 @@ import { HomeComponent } from './pages/home/home.component';
 
 const routes: Routes = [
   { path: 'home',
-    component: HomeComponent 
-  },
-  {
-    path: 'register',
-    component: RegistroComponent
+    component: HomeComponent,
+    children: [
+      {
+      path: 'register',
+      component: RegistroComponent
+      },
+      {
+        path: '**',
+        redirectTo: '/home' 
+      }
+    ]
   },
   {
     path: 'login',

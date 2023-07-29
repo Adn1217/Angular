@@ -1,5 +1,5 @@
 <div class="screen">
-    <form class="mb-9 form" [formGroup]="userModel" *ngIf="showForm;">
+    <form class="mb-9 form" [formGroup]="userModel" *ngIf="this.showForm;">
         <div class="mb-3">
             <label for="exampleInputName" class="form-label">Nombres</label>
             <input formControlName="nombres" type="text" class="form-control" id="exampleInputName"
@@ -87,7 +87,7 @@
     </form>
     <div class="mb-3 userTable">
         <div class="addButton" *ngIf="!showForm;">
-            <button type="submit" (click)="showFormChange.emit($event)" class="btn btn-success">Agregar</button>
+            <button type="submit" (click)="this.showForm = !this.showForm" class="btn btn-success">Agregar</button>
         </div>
         <app-tabla [dataSource]="(userListObserver | async ) || []" (updateUser)="handleUpdateUser($event)"
             (deleteUser)="handleDeleteUser($event)"></app-tabla>

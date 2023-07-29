@@ -1,8 +1,8 @@
 <app-nav-bar [(sideBarOpen)]="sideBarOpen" [title]="title" (sideBarOpenChange)="toggleSideBar($event)"></app-nav-bar>
-<!-- <router-outlet></router-outlet> -->
 <app-side-nav #sideBarComponent [sideBarOpen]="sideBarOpen">
     <app-main-wrapper>
-        <div class="titleContainer" *ngIf="ingreso; else registerTitle">
+        <router-outlet></router-outlet>
+        <!-- <div class="titleContainer" *ngIf="ingreso; else registerTitle">
             <h1 appFontSize="2rem"> Formulario de ingreso</h1>
         </div>
         <ng-template #registerTitle>
@@ -16,6 +16,6 @@
         <ng-template #appRegister>
             <app-registro [showForm]="showForm" [(ingreso)]="ingreso" (changeView)="onChangeView($event)"
                 (showFormChange)="handleFormView($event)"></app-registro>
-        </ng-template>
+        </ng-template> -->
     </app-main-wrapper>
 </app-side-nav>

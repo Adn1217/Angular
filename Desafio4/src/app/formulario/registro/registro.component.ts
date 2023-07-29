@@ -44,7 +44,7 @@ export class RegistroComponent implements OnDestroy {
   @Input()
   ingreso: boolean = false;
 
-  @Input()
+  // @Input()
   showForm: boolean = false;
   
   constructor(private formBuilder: FormBuilder, private userService: UserService, private notifier: NotifierService){
@@ -103,7 +103,8 @@ export class RegistroComponent implements OnDestroy {
 
   handleSubmit(event: Event){
    
-    this.showFormChange.emit();
+    // this.showFormChange.emit();
+    this.showForm = !this.showForm;
     const newUser = {
       id: new Date().getTime(),
       nombres: this.userModel.value.nombres || '',
@@ -133,7 +134,8 @@ export class RegistroComponent implements OnDestroy {
 
     if(!this.showForm){
       this.userModel.setValue(userUpdatedInForm);
-      this.showFormChange.emit();
+      this.showForm = !this.showForm;
+      // this.showFormChange.emit();
     }else if (this.showForm && this.userModel.status === 'INVALID'){
       this.userModel.setValue(userUpdatedInForm);
     }else{
@@ -167,7 +169,8 @@ export class RegistroComponent implements OnDestroy {
     
         this.userModel.reset();
 
-        this.showFormChange.emit();
+        this.showForm = !this.showForm;
+        // this.showFormChange.emit();
         this.notifier.showSucess('',`Se ha actualizado el usuario con id: ${userToUpdate.id}`)
         // alert(`Se ha actualizado el usuario con id: ${userToUpdate.id}`)
       }else{

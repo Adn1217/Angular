@@ -17,9 +17,9 @@ import { RouterModule } from '@angular/router';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    UserModule,
     SharedModule,
-    RouterModule
+    RouterModule,
+    UserModule,
   ],
   exports: [
     RegistroComponent,

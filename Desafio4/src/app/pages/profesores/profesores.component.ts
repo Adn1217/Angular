@@ -1,6 +1,7 @@
+
 import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators  } from '@angular/forms';
-import { users } from 'src/app/usuarios/modelos';
+import { users, teachers } from 'src/app/usuarios/modelos';
 import { UserService } from 'src/app/usuarios/user.service';
 import { Observable, takeUntil, Subject, Subscription } from 'rxjs';
 import { NotifierService } from 'src/app/core/services/notifier.service';
@@ -13,31 +14,35 @@ interface RegisterModel {
   apellidos: FormControl<string | null>;
   usuario: FormControl<string | null>;
   edad: FormControl<number | null>;
+  nivelAcademico: FormControl<string | null>;
+  materias: FormControl<string[] | null>;
   correo: FormControl<string | null>;
   password: FormControl<string | null>
 }
   
 @Component({
   selector: 'app-registro',
-  templateUrl: './registro.component.html',
-  styleUrls: ['./registro.component.css']
+  templateUrl: './profesores.component.html',
+  styleUrls: ['./profesores.component.css']
 })
 
 
-export class RegistroComponent implements OnDestroy {
+export class ProfesoresComponent implements OnDestroy {
 
   userModel : FormGroup<RegisterModel> = this.formBuilder.group({
       nombres: ['', [Validators.required]],
       apellidos: ['', [Validators.required]],
       usuario: ['', [Validators.required, Validators.minLength(minCharUserLength)]],
       edad: [0, [Validators.required]],
+      nivelAcademico: ['', [Validators.required]],
+      materias: [[''], [Validators.required]],
       correo: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(minCharPwdLength)]]
       })
   
-  userList: Observable<users[]>
+  userList: Observable<teachers[]>
 
-  userListObserver: Observable<users[]>;
+  userListObserver: Observable<teachers[]>;
   userListSubscription?: Subscription;
   destroyed = new Subject<boolean>(); 
 
@@ -49,18 +54,11 @@ export class RegistroComponent implements OnDestroy {
   
   constructor(private formBuilder: FormBuilder, private userService: UserService, private notifier: NotifierService){
 
-    this.userListObserver = userService.getUsers().pipe(takeUntil(this.destroyed));
-    // this.userListSubscription = this.userListObserver.subscribe({
-    //   next: (users) => {
-    //     this.userList = users;
-    //     console.log(users);
-    //   }
-    // }) 
-    this.userList = this.userListObserver; // Reemplaza la subscripcion al usar pipe async.
+    this.userListObserver = userService.getTeachers().pipe(takeUntil(this.destroyed));
+    this.userList = this.userListObserver;
     }
 
   ngOnDestroy(): void {
-    // this.userListSubscription.unsubscribe(); // Reemplazado por el takeUntil
     this.destroyed.next(true);
   }
   
@@ -105,78 +103,74 @@ export class RegistroComponent implements OnDestroy {
    
     // this.showFormChange.emit();
     this.showForm = !this.showForm;
-    const newUser = {
+    const newTeacher = {
       id: new Date().getTime(),
       nombres: this.userModel.value.nombres || '',
       apellidos: this.userModel.value.apellidos || '',
       usuario: this.userModel.value.usuario || '',
       edad: this.userModel.value.edad || 18,
+      nivelAcademico: this.userModel.value.nivelAcademico || '',
+      materias: [this.userModel.value.materias] || [''],
       correo: this.userModel.value.correo || '',
       password: this.userModel.value.password || ''}
 
-    this.userService.createUser(newUser);
+    this.userService.createUser(newTeacher);
     this.userModel.reset();
     console.log(this.userModel.controls);
   }
 
-  handleDeleteUser(userToDelete: users ){
-  if(userToDelete && confirm(`¿Está seguro que desea eliminar el usuario ${userToDelete.nombres + ' ' + userToDelete.apellidos}`)){
+  handleDeleteUser(userToDelete: users | teachers ){
+  if(userToDelete && confirm(`¿Está seguro que desea eliminar el profesor ${userToDelete.nombres + ' ' + userToDelete.apellidos}`)){
     this.userService.deleteUser(userToDelete);
-    this.notifier.showSucessToast(`Se ha eliminado el usuario con id: ${userToDelete.id}`,'', 3000, false)
-    console.log("Se elimina usuario con id: ", userToDelete.id)
+    this.notifier.showSucessToast(`Se ha eliminado el profesor con id: ${userToDelete.id}`,'', 3000, false)
+    console.log("Se elimina profesor con id: ", userToDelete.id)
     }
   }
 
-  handleUpdateUser(originalUser: users){
+  handleUpdateUser(originalUser: users | teachers){
 
-    const {id, ...rest} = originalUser;
-    const userUpdatedInForm = {...rest};
+    if('nivelAcademico' in originalUser){ 
+      console.log('Profesor: ', originalUser);
+      const {id, ...rest} = originalUser;
+      const userUpdatedInForm = {...rest};
 
-    if(!this.showForm){
-      this.userModel.setValue(userUpdatedInForm);
-      this.showForm = !this.showForm;
-      // this.showFormChange.emit();
-    }else if (this.showForm && this.userModel.status === 'INVALID'){
-      this.userModel.setValue(userUpdatedInForm);
-    }else{
-      let userToUpdate: users | undefined;
-      this.userList.subscribe({
-        next: (users) => {
-          userToUpdate = users.find((user) => user.id === id);
-        }
-      })
-      // const userToUpdate = this.userList.find((user) => user.id === id);
-      if(userToUpdate && this.userModel.status === 'VALID'){
-
-        const updatedUser = {nombres: this.userModel.value.nombres || '',
-        apellidos: this.userModel.value.apellidos || '',
-        usuario: this.userModel.value.usuario || '',
-        edad: this.userModel.value.edad || 18,
-        correo: this.userModel.value.correo || '',
-        password: this.userModel.value.password || ''}
-        this.userService.updateUser({id: id, ...updatedUser});
- 
-
-        // Object.keys(this.userModel.controls).forEach( key => {
-        //   console.log(key);
-        //   this.userModel.get(key)?.markAsUntouched;
-        //   if(key === 'edad'){
-        //     this.userModel.get(key)?.setValue(0)
-        //   }else{
-        //     this.userModel.get(key)?.setValue('')
-        //   }
-        // })
-    
-        this.userModel.reset();
-
+      if(!this.showForm){
+        this.userModel.setValue(userUpdatedInForm);
         this.showForm = !this.showForm;
         // this.showFormChange.emit();
-        this.notifier.showSucess('',`Se ha actualizado el usuario con id: ${userToUpdate.id}`)
-        // alert(`Se ha actualizado el usuario con id: ${userToUpdate.id}`)
+      }else if (this.showForm && this.userModel.status === 'INVALID'){
+        this.userModel.setValue(userUpdatedInForm);
       }else{
-        this.userModel.markAllAsTouched;
+        let userToUpdate: teachers | undefined;
+        this.userList.subscribe({
+          next: (users) => {
+            userToUpdate = users.find((user) => user.id === id);
+          }
+        })
+        // const userToUpdate = this.userList.find((user) => user.id === id);
+        if(userToUpdate && this.userModel.status === 'VALID'){
+
+          const updatedUser = {nombres: this.userModel.value.nombres || '',
+          apellidos: this.userModel.value.apellidos || '',
+          usuario: this.userModel.value.usuario || '',
+          edad: this.userModel.value.edad || 18,
+          nivelAcademico: this.userModel.value.nivelAcademico || '',
+          materias: this.userModel.value.materias || [''],
+          correo: this.userModel.value.correo || '',
+          password: this.userModel.value.password || ''}
+          this.userService.updateUser({id: id, ...updatedUser});
+
+          this.userModel.reset();
+
+          this.showForm = !this.showForm;
+          // this.showFormChange.emit();
+          this.notifier.showSucess('',`Se ha actualizado el profesor con id: ${userToUpdate.id}`)
+          // alert(`Se ha actualizado el usuario con id: ${userToUpdate.id}`)
+        }else{
+          this.userModel.markAllAsTouched;
+        }
       }
     }
   }
-
 }
+

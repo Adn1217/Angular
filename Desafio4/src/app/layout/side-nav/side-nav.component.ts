@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
-import { MatDrawer, MatSidenavModule } from '@angular/material/sidenav';
 
 @Component({
   selector: 'app-side-nav',

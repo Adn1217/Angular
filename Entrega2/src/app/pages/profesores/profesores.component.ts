@@ -5,6 +5,7 @@ import { users, teachers } from 'src/app/usuarios/modelos';
 import { UserService } from 'src/app/usuarios/user.service';
 import { Observable, takeUntil, Subject, Subscription } from 'rxjs';
 import { NotifierService } from 'src/app/core/services/notifier.service';
+import { Router } from '@angular/router';
 
 
 const minCharPwdLength: number = 8;
@@ -45,6 +46,7 @@ export class ProfesoresComponent implements OnDestroy {
   userListObserver: Observable<teachers[]>;
   userListSubscription?: Subscription;
   destroyed = new Subject<boolean>(); 
+  showDetails: boolean = false;
 
   @Input()
   ingreso: boolean = false;
@@ -52,7 +54,7 @@ export class ProfesoresComponent implements OnDestroy {
   // @Input()
   showForm: boolean = false;
   
-  constructor(private formBuilder: FormBuilder, private userService: UserService, private notifier: NotifierService){
+  constructor(private formBuilder: FormBuilder, private userService: UserService, private notifier: NotifierService, public router: Router){
 
     this.userListObserver = userService.getTeachers().pipe(takeUntil(this.destroyed));
     this.userList = this.userListObserver;
@@ -97,6 +99,11 @@ export class ProfesoresComponent implements OnDestroy {
         return `${JSON.stringify(error)}`
         }
     }
+  }
+  
+  navigateTo(page: string){
+    console.log(page);
+    // this.router.navigate([`${page}`]);
   }
 
   handleSubmit(event: Event){

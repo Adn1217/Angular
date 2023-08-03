@@ -4,6 +4,7 @@ import { RegistroComponent } from './formulario/registro/registro.component';
 import { IngresoComponent } from './formulario/ingreso/ingreso.component';
 import { HomeComponent } from './pages/home/home.component';
 import { ProfesoresComponent } from './pages/profesores/profesores.component';
+import { DetallesComponent } from './pages/profesores/detalles/detalles.component';
 
 const routes: Routes = [
   { path: 'home',
@@ -25,7 +26,17 @@ const routes: Routes = [
   },
   {
     path: 'teachers',
-    component: ProfesoresComponent
+    component: ProfesoresComponent,
+    children: [
+      {
+      path: 'teacherDetail',
+      component: DetallesComponent
+      },
+      {
+        path: '**',
+        redirectTo: '/teachers' 
+      }
+    ]
   },
   {
     path: 'register',

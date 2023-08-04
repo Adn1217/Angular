@@ -43,7 +43,7 @@ export class ProfesoresComponent implements OnDestroy {
   
   userList: Observable<teachers[]>
 
-  userListObserver: Observable<teachers[]>;
+  // userListObserver: Observable<teachers[]>;
   userListSubscription?: Subscription;
   destroyed = new Subject<boolean>(); 
   showDetails: boolean = false;
@@ -56,8 +56,8 @@ export class ProfesoresComponent implements OnDestroy {
   
   constructor(private formBuilder: FormBuilder, private userService: UserService, private notifier: NotifierService, public router: Router){
 
-    this.userListObserver = userService.getTeachers().pipe(takeUntil(this.destroyed));
-    this.userList = this.userListObserver;
+    this.userList = userService.getTeachers().pipe(takeUntil(this.destroyed));
+    // this.userList = this.userListObserver;
     }
 
   ngOnDestroy(): void {

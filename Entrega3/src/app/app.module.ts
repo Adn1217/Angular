@@ -22,7 +22,7 @@ import { ProfesoresModule } from './pages/profesores/profesores.module';
     BrowserAnimationsModule,
     SharedModule,
     // ProfesoresModule,
-    HomeModule
+    // HomeModule
   ],
   providers: [],
   bootstrap: [AppComponent]

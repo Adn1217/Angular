@@ -1,0 +1,133 @@
+<div>
+    <div class="screen" *ngIf="this.router.url === '/teachers'; else detailsContainer">
+        <form class="mb-7 form" [formGroup]="userModel" *ngIf="this.showForm;">
+            <div class="mb-3">
+                <label for="inputName" class="form-label">Nombres</label>
+                <input formControlName="nombres" type="text" class="form-control" id="inputName"
+                    [ngClass]="{'is-valid': userModel.controls['nombres'].touched && !userModel.controls['nombres'].invalid, 'is-invalid': userModel.controls['nombres'].touched && userModel.controls['nombres'].invalid}"
+                    aria-describedby="nameHelp">
+                <div class="valid-feedback">
+                    ¡Se ve bien!
+                </div>
+                <div class="invalid-feedback">
+                    {{getFieldError("nombres")}}
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="inputLastname" class="form-label">Apellidos</label>
+                <input formControlName="apellidos" type="text" class="form-control"
+                    [ngClass]="{'is-valid': userModel.controls['apellidos'].touched && !userModel.controls['apellidos'].invalid, 'is-invalid': userModel.controls['apellidos'].touched && userModel.controls['apellidos'].invalid}"
+                    id="inputLastname">
+                <div class="valid-feedback">
+                    ¡Se ve bien!
+                </div>
+                <div class="invalid-feedback">
+                    {{getFieldError("apellidos")}}
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="inputUser" class="form-label">Usuario</label>
+                <input formControlName="usuario" type="text" class="form-control" id="inputUser"
+                    [ngClass]="{'is-valid': userModel.controls['usuario'].touched && !userModel.controls['usuario'].invalid, 'is-invalid': userModel.controls['usuario'].touched && userModel.controls['usuario'].invalid}"
+                    aria-describedby="userHelp">
+                <div class="valid-feedback">
+                    ¡Se ve bien!
+                </div>
+                <div class="invalid-feedback">
+                    {{this.userModel.controls.usuario.errors && (this.userModel.controls.usuario.errors | keyvalue |
+                    errorMessagesControl)}}
+                    <!-- {{getFieldError("usuario")}} -->
+                </div>
+            </div>
+            <div class="mb-3 col-3">
+                <label for="inputAge" class="form-label">Edad</label>
+                <input formControlName="edad" min="0" max="150" type="number" class="form-control"
+                    [ngClass]="{'is-valid': userModel.controls['edad'].touched && !userModel.controls['edad'].invalid, 'is-invalid': userModel.controls['edad'].touched && userModel.controls['edad'].invalid}"
+                    id="inputAge">
+                <div class="valid-feedback">
+                    ¡Se ve bien!
+                </div>
+            </div>
+            <div class="mb-3 col-5" *ngIf="userModel.controls['edad'].touched && userModel.controls['edad'].invalid"
+                class="invalid">
+                {{this.userModel.controls.edad.errors && (this.userModel.controls.edad.errors | keyvalue |
+                errorMessagesControl)}}
+                <!-- {{getFieldError("edad")}} -->
+            </div>
+            <div class="mb-3">
+                <label for="inputAcademicLevel" class="form-label">Nivel Académico</label>
+                <input formControlName="nivelAcademico" type="text" class="form-control"
+                    [ngClass]="{'is-valid': userModel.controls['nivelAcademico'].touched && !userModel.controls['nivelAcademico'].invalid, 'is-invalid': userModel.controls['nivelAcademico'].touched && userModel.controls['nivelAcademico'].invalid}"
+                    id="inputAcademicLevel">
+                <div class="valid-feedback">
+                    ¡Se ve bien!
+                </div>
+                <div class="invalid-feedback">
+                    {{this.userModel.controls.usuario.errors && (this.userModel.controls.usuario.errors | keyvalue |
+                    errorMessagesControl)}}
+                    <!-- {{getFieldError("usuario")}} -->
+                </div>
+
+            </div>
+            <div class="mb-3">
+                <label for="inputMaterias" class="form-label">Materia</label>
+                <input formControlName="materias" type="text" class="form-control"
+                    [ngClass]="{'is-valid': userModel.controls['materias'].touched && !userModel.controls['materias'].invalid, 'is-invalid': userModel.controls['materias'].touched && userModel.controls['nivelAcademico'].invalid}"
+                    id="inputMaterias">
+                <div class="valid-feedback">
+                    ¡Se ve bien!
+                </div>
+                <div class="invalid-feedback">
+                    {{this.userModel.controls.usuario.errors && (this.userModel.controls.usuario.errors | keyvalue |
+                    errorMessagesControl)}}
+                    <!-- {{getFieldError("usuario")}} -->
+                </div>
+
+            </div>
+            <div class="mb-3">
+                <label for="InputEmail1" class="form-label">Email address</label>
+                <input formControlName="correo" type="email" class="form-control"
+                    [ngClass]="{'is-valid': userModel.controls['correo'].touched && !userModel.controls['correo'].invalid, 'is-invalid': userModel.controls['correo'].touched && userModel.controls['correo'].invalid}"
+                    id="InputEmail1" aria-describedby="emailHelp">
+                <div class="valid-feedback">
+                    ¡Se ve bien!
+                </div>
+                <div class="invalid-feedback">
+                    {{getFieldError("correo")}}
+                </div>
+                <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+            </div>
+            <div class="mb-3">
+                <label for="inputPassword1" class="form-label">Password</label>
+                <input formControlName="password" type="password" class="form-control"
+                    [ngClass]="{'is-valid': userModel.controls['password'].touched && !userModel.controls['password'].invalid, 'is-invalid': userModel.controls['password'].touched && userModel.controls['password'].invalid}"
+                    id="inputPassword1">
+                <div class="valid-feedback">
+                    ¡Se ve bien!
+                </div>
+                <div class="invalid-feedback">
+                    {{getFieldError("password")}}
+                </div>
+            </div>
+            <div class="buttonContainer">
+                <button (click)="handleSubmit($event)" type="submit"
+                    [ngClass]="{'disabled': !userModel.controls.password.touched || userModel.status === 'INVALID'}"
+                    class="btn btn-primary">Registrar</button>
+                <button routerLink="/login" class="btn btn-secondary">LogIn</button>
+            </div>
+        </form>
+        <div class="mb-5 userTable">
+            <div class="addButton" *ngIf="!showForm;">
+                <button type="submit" (click)="this.showForm = !this.showForm" class="btn btn-success">Agregar</button>
+            </div>
+            <app-tabla title="Profesores" [(showDetails)]="this.showDetails" [dataSource]="(userList | async ) || []"
+                (updateUser)="handleUpdateUser($event)" (deleteUser)="handleDeleteUser($event)">
+            </app-tabla>
+        </div>
+    </div>
+    <ng-template #detailsContainer>
+        <div>
+            <router-outlet></router-outlet>
+        </div>
+    </ng-template>
+</div>

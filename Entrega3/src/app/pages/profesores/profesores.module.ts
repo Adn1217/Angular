@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { UserModule } from 'src/app/usuarios/usuarios.module';
 import { DetallesComponent } from './detalles/detalles.component';
+import { ProfesoresRoutingModule } from './profesores-routing.module';
 
 
 
@@ -20,6 +21,7 @@ import { DetallesComponent } from './detalles/detalles.component';
     SharedModule,
     RouterModule,
     UserModule,
+    ProfesoresRoutingModule
   ],
   exports: [
     ProfesoresComponent,

@@ -26,20 +26,7 @@ const routes: Routes = [
   },
   {
     path: 'teachers',
-    component: ProfesoresComponent,
-    children: [
-      {
-      path: 'teacherDetail',
-      children: [{
-        path: ':id',
-        component: DetallesComponent
-      }]
-      },
-      {
-        path: '**',
-        redirectTo: '/teachers' 
-      }
-    ]
+    loadChildren: () => import('./pages/profesores/profesores.module').then((mod) => mod.ProfesoresModule)
   },
   {
     path: 'register',

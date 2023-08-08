@@ -21,7 +21,7 @@ import { ProfesoresModule } from './pages/profesores/profesores.module';
     FormularioModule,
     BrowserAnimationsModule,
     SharedModule,
-    ProfesoresModule,
+    // ProfesoresModule,
     HomeModule
   ],
   providers: [],

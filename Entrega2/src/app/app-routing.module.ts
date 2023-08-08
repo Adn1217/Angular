@@ -30,7 +30,10 @@ const routes: Routes = [
     children: [
       {
       path: 'teacherDetail',
-      component: DetallesComponent
+      children: [{
+        path: ':id',
+        component: DetallesComponent
+      }]
       },
       {
         path: '**',

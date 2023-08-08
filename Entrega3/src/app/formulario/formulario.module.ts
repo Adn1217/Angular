@@ -6,6 +6,8 @@ import { ReactiveFormsModule } from '@angular/forms'
 import { UserModule } from '../usuarios/usuarios.module';
 import { SharedModule } from '../shared/shared.module';
 import { RouterModule } from '@angular/router';
+import { RegistroRoutingModule } from './registro/registro-routing.module';
+import { IngresoRoutingModule } from './ingreso/ingreso-routing.module';
 
 
 
@@ -20,6 +22,8 @@ import { RouterModule } from '@angular/router';
     SharedModule,
     RouterModule,
     UserModule,
+    RegistroRoutingModule,
+    IngresoRoutingModule
   ],
   exports: [
     RegistroComponent,

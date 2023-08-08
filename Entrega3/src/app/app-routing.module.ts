@@ -1,8 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { RegistroComponent } from './formulario/registro/registro.component';
-import { IngresoComponent } from './formulario/ingreso/ingreso.component';
-import { HomeComponent } from './pages/home/home.component';
 
 const routes: Routes = [
   { path: 'home',
@@ -10,7 +7,7 @@ const routes: Routes = [
   },
   {
     path: 'login',
-    component: IngresoComponent
+    loadChildren: () => import('./formulario/ingreso/ingreso-routing.module').then((mod) => mod.IngresoRoutingModule)
   },
   {
     path: 'teachers',
@@ -18,7 +15,7 @@ const routes: Routes = [
   },
   {
     path: 'register',
-    component: RegistroComponent
+    loadChildren: () => import('./formulario/registro/registro-routing.module').then((mod) => mod.RegistroRoutingModule)
   },     
   {
     path: '**',

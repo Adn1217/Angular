@@ -58,6 +58,15 @@ export class NotifierService {
   showSucess(title: string, text: string): void {
     this.notifier$.next({
       icon: 'success',
+      title: '' || title, 
+      text: text,
+    })
+  }
+  
+  showError(title: string, text: string): void {
+    this.notifier$.next({
+      icon: 'error',
+      title: title,
       text: text,
     })
   }

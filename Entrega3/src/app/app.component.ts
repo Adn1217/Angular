@@ -1,5 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { MatSidenavModule } from '@angular/material/sidenav';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -7,7 +6,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title: string = 'Entrega 1';
+  title: string = 'Entrega 3';
   ingreso: boolean = true;
   sideBarOpen = false;
   showForm = false;

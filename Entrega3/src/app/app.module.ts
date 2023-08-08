@@ -7,8 +7,6 @@ import { LayoutModule } from './layout/layout.module';
 import { FormularioModule } from './formulario/formulario.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedModule } from './shared/shared.module';
-import { HomeModule } from './pages/home/home.module';
-import { ProfesoresModule } from './pages/profesores/profesores.module';
 
 @NgModule({
   declarations: [
@@ -21,8 +19,6 @@ import { ProfesoresModule } from './pages/profesores/profesores.module';
     FormularioModule,
     BrowserAnimationsModule,
     SharedModule,
-    // ProfesoresModule,
-    // HomeModule
   ],
   providers: [],
   bootstrap: [AppComponent]

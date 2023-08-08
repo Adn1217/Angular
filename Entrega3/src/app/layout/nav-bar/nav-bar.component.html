@@ -8,6 +8,7 @@
     <span *ngIf="sideBarOpen; else openIcon">
         <mat-icon>expand_more</mat-icon>
     </span>
+    <span *ngIf="authUser;">{{authUserEmail}}</span>
     <ng-template #openIcon>
         <span>
             <mat-icon>expand_less</mat-icon>

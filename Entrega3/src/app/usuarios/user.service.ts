@@ -46,6 +46,11 @@ private teachers$ = this._teachers$.asObservable();
       const teacher = this.TEACHERS_DATA.find((teacher) => teacher.id === Number(id));
       return teacher;
     }
+    
+    getUserById(id: string): users | undefined {
+      const user = this.USERS_DATA.find((user) => user.id === Number(id));
+      return user;
+    }
 
     createUser(user: users | teachers): void {
       if('nivelAcademico' in user){

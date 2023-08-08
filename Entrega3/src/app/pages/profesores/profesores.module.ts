@@ -25,7 +25,7 @@ import { ProfesoresRoutingModule } from './profesores-routing.module';
   ],
   exports: [
     ProfesoresComponent,
-    DetallesComponent
+    // DetallesComponent
   ]
 })
 export class ProfesoresModule { }

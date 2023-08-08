@@ -56,7 +56,7 @@ export class ProfesoresComponent implements OnDestroy {
   
   constructor(private formBuilder: FormBuilder, private userService: UserService, private notifier: NotifierService, public router: Router){
 
-    this.userList = userService.getTeachers().pipe(takeUntil(this.destroyed));
+    this.userList = userService.getTeachers().pipe(takeUntil(this.destroyed)); // TakeUntil no es necesario con pipe async.
     // this.userList = this.userListObserver;
     }
 

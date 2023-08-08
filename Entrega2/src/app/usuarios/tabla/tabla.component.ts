@@ -1,5 +1,6 @@
 import {Component, Input, Output, EventEmitter, OnChanges} from '@angular/core';
 import { users, teachers } from '../modelos';
+import { Router } from '@angular/router';
 
 
 
@@ -11,7 +12,12 @@ import { users, teachers } from '../modelos';
 
 export class TablaComponent implements OnChanges {
 
+  constructor(private router: Router ){}
+
   displayedColumns: string[] = ['id', 'nombre completo', 'edad', 'correo', 'acciones'];
+
+  @Input()
+  showDetails: boolean = false;
 
   @Input()
   dataSource: users[] | teachers[] = [];
@@ -24,6 +30,15 @@ export class TablaComponent implements OnChanges {
 
   @Output()
   updateUser = new EventEmitter<users | teachers>();
+
+  @Output()
+  showDetailsChange = new EventEmitter<boolean>();
+
+  handleShowDetails(){
+    console.log("ShowDetails: ", this.showDetails);
+    this.showDetails = !this.showDetails;
+    this.showDetailsChange.emit(this.showDetails);
+  }
 
   handleDeleteUser(user: users | teachers){
     this.deleteUser.emit(user);

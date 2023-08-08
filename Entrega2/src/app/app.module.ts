@@ -12,7 +12,7 @@ import { ProfesoresModule } from './pages/profesores/profesores.module';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserModule,

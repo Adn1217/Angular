@@ -5,12 +5,14 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { UserModule } from 'src/app/usuarios/usuarios.module';
+import { DetallesComponent } from './detalles/detalles.component';
 
 
 
 @NgModule({
   declarations: [
-    ProfesoresComponent
+    ProfesoresComponent,
+    DetallesComponent
   ],
   imports: [
     CommonModule,
@@ -20,7 +22,8 @@ import { UserModule } from 'src/app/usuarios/usuarios.module';
     UserModule,
   ],
   exports: [
-    ProfesoresComponent
+    ProfesoresComponent,
+    DetallesComponent
   ]
 })
 export class ProfesoresModule { }

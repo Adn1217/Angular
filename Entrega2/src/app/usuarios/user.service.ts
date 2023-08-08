@@ -42,13 +42,18 @@ private teachers$ = this._teachers$.asObservable();
       return this.teachers$;
     }
 
+    getTeacherById(id: string): teachers | undefined {
+      const teacher = this.TEACHERS_DATA.find((teacher) => teacher.id === Number(id));
+      return teacher;
+    }
+
     createUser(user: users | teachers): void {
       if('nivelAcademico' in user){
         this.TEACHERS_DATA = [...this.TEACHERS_DATA, user];
-        this._teachers$.next(this.TEACHERS_DATA)
+        this._teachers$.next(this.TEACHERS_DATA);
       }else{
         this.USERS_DATA = [...this.USERS_DATA, user];
-        this._users$.next(this.USERS_DATA)
+        this._users$.next(this.USERS_DATA);
       }
     }
 
@@ -57,9 +62,9 @@ private teachers$ = this._teachers$.asObservable();
       if(this.isTeacher(userToUpdate)){
       const NEW_USER_DATA = this.TEACHERS_DATA.map((user) => {
         if(user.id === id){
-          return {...user, ...rest}
+          return {...user, ...rest};
         }else{
-          return user
+          return user;
         }
       })
       // console.log(NEW_USER_DATA)
@@ -68,9 +73,9 @@ private teachers$ = this._teachers$.asObservable();
       }else{
         const NEW_USER_DATA = this.USERS_DATA.map((user) => {
           if(user.id === id){
-            return {...user, ...rest}
+            return {...user, ...rest};
           }else{
-            return user
+            return user;
           }
         })
         this.USERS_DATA = NEW_USER_DATA;
@@ -80,11 +85,11 @@ private teachers$ = this._teachers$.asObservable();
 
     deleteUser(userToDelete: users | teachers ): void {
       if(this.isTeacher(userToDelete)){
-        this.TEACHERS_DATA = this.TEACHERS_DATA.filter((user) => user.id !== userToDelete.id)
-        this._teachers$.next(this.TEACHERS_DATA)
+        this.TEACHERS_DATA = this.TEACHERS_DATA.filter((user) => user.id !== userToDelete.id);
+        this._teachers$.next(this.TEACHERS_DATA);
       }else{
-        this.USERS_DATA = this.USERS_DATA.filter((user) => user.id !== userToDelete.id)
-        this._users$.next(this.USERS_DATA)
+        this.USERS_DATA = this.USERS_DATA.filter((user) => user.id !== userToDelete.id);
+        this._users$.next(this.USERS_DATA);
       }
     }
 }

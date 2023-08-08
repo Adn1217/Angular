@@ -1,7 +1,7 @@
 .buttonContainer {
     display: flex;
     flex: 1;
-    max-width: 50%;
+    max-width: 75%;
     justify-content: space-between;
     margin-left: auto;
     margin-right: auto;
@@ -23,8 +23,8 @@ button {
 .form{
     margin: 0 5% 0 2%;
     /* width: 58%; */
-    width: 30%;
-    min-width: 340px;
+    /* width: 30%; */
+    min-width: 300px;
     margin-left: auto;
     margin-right: auto;
 }
@@ -34,11 +34,13 @@ button {
     max-width: 70%;
     margin: 0 5% 0 5%;
 }
+
 .invalid {
     color: #dc3545;
     width: 100%;
     /* margin-top: 0.25rem; */
-    font-size: 0.875rem;
+    font-size:
+     0.875rem;
 }
 .screen {
     display: flex;
@@ -46,7 +48,7 @@ button {
     max-width: 100%;
     margin-left: auto;
     margin-right: auto;
-    justify-content: space-between;
+    /* justify-content: space-between; */
     /* justify-content: space-evenly */
 }
 

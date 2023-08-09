@@ -7,7 +7,7 @@ import { LayoutModule } from './layout/layout.module';
 import { FormularioModule } from './formulario/formulario.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedModule } from './shared/shared.module';
-
+import { HttpClientModule } from '@angular/common/http';
 @NgModule({
   declarations: [
     AppComponent,
@@ -19,6 +19,7 @@ import { SharedModule } from './shared/shared.module';
     FormularioModule,
     BrowserAnimationsModule,
     SharedModule,
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

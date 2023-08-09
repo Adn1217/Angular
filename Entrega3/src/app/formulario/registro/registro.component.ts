@@ -50,12 +50,6 @@ export class RegistroComponent implements OnDestroy {
   constructor(private formBuilder: FormBuilder, private userService: UserService, private notifier: NotifierService){
 
     this.userListObserver = userService.getUsers().pipe(takeUntil(this.destroyed));
-    // this.userListSubscription = this.userListObserver.subscribe({
-    //   next: (users) => {
-    //     this.userList = users;
-    //     console.log(users);
-    //   }
-    // }) 
     this.userList = this.userListObserver; // Reemplaza la subscripcion al usar pipe async.
     }
 

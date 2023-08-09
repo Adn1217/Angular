@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Subject, Observable } from 'rxjs'
+import { BehaviorSubject, Subject, Observable, take, mergeMap, map } from 'rxjs'
 import { users, teachers } from './modelos';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +26,7 @@ private users$ = this._users$.asObservable();
 private _teachers$ = new BehaviorSubject<teachers[]>([]);
 private teachers$ = this._teachers$.asObservable();
 
-  constructor() {}
+  constructor(private client: HttpClient) {}
 
     isTeacher(data: users | teachers){
       return ('nivelAcademico' in data)
@@ -33,7 +34,12 @@ private teachers$ = this._teachers$.asObservable();
 
     getUsers(): Observable<users[]>{
       // return this.USERS_DATA;
-      this._users$.next(this.USERS_DATA);
+      this.client.get<users[]>('http://localhost:3000/users').pipe(take(1)).subscribe({
+        next: (users) => {
+        this._users$.next(users);
+        }
+      })
+      // this._users$.next(this.USERS_DATA);
       return this.users$;
     }
 
@@ -42,9 +48,18 @@ private teachers$ = this._teachers$.asObservable();
       return this.teachers$;
     }
 
-    getTeacherById(id: string): teachers | undefined {
-      const teacher = this.TEACHERS_DATA.find((teacher) => teacher.id === Number(id));
-      return teacher;
+    getTeacherById(id: string): Observable<teachers | undefined> {
+      let _teacher$ = new BehaviorSubject<teachers | undefined>(undefined);
+      let teacher$ = _teacher$.asObservable()
+      this.client.get<teachers[]>('http://localhost:3000/teachers').pipe(take(1)).subscribe({
+        next: (teachers) => {
+          let teacher = teachers.find((teacher) => teacher.id === Number(id));
+          _teacher$.next(teacher);
+          console.log('Profesor: ', teacher);
+        }
+      })
+      // const teacher = this.TEACHERS_DATA.find((teacher) => teacher.id === Number(id));
+      return teacher$;
     }
     
     getUserById(id: string): users | undefined {
@@ -54,11 +69,27 @@ private teachers$ = this._teachers$.asObservable();
 
     createUser(user: users | teachers): void {
       if('nivelAcademico' in user){
-        this.TEACHERS_DATA = [...this.TEACHERS_DATA, user];
-        this._teachers$.next(this.TEACHERS_DATA);
+        this.client.post<teachers>('http://localhost:3000/users', user).pipe(
+          mergeMap((createdTeacher) => this.teachers$.pipe(
+            take(1),
+            map((teachersList) => [...teachersList, createdTeacher])))
+        ).subscribe({
+          next: (teacherList) => {
+            this._teachers$.next([...teacherList]);
+          }
+        })
       }else{
-        this.USERS_DATA = [...this.USERS_DATA, user];
-        this._users$.next(this.USERS_DATA);
+        this.client.post<users>('http://localhost:3000/users', user).pipe(
+          mergeMap((createdUser) => this.users$.pipe(
+            take(1),
+            map((usersList) => [...usersList, createdUser])))
+        ).subscribe({
+          next: (userList) => {
+            this._users$.next([...userList]);
+          }
+        })
+        // this.USERS_DATA = [...this.USERS_DATA, user];
+        // this._users$.next(this.USERS_DATA);
       }
     }
 

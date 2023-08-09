@@ -23,6 +23,7 @@ const routes: Routes = [
   },     
   {
     path: 'admins',
+    canActivate: [authGuard],
     loadChildren: () => import('./pages/administradores/administradores.module').then((mod) => mod.AdministradoresModule)
   },
   {

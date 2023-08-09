@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { loginUser } from '../models';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, take } from 'rxjs';
 import { Router } from '@angular/router';
 import { NotifierService } from 'src/app/core/services/notifier.service';
 
@@ -38,6 +38,21 @@ export class IngresoService {
   getRegisterUser(userToLog: loginUser): loginUser | undefined{
     const authUser = this.REGISTERED_USERS_DATA.find((user) => user.email === userToLog.email);
     return authUser
+  }
+  
+  isAuthenticated(): boolean {
+    let authUser = null;
+    this.authUser$.pipe(take(1)).subscribe({
+      next: (user) => {
+        authUser = user
+      }
+    })
+
+    if(authUser && authUser['email']){
+      return true;
+    }else{
+      return false;
+    }
   }
 
   login(user: loginUser): void{

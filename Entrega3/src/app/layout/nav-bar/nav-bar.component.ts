@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
-import { Observable } from 'rxjs';
+import { Observable, take } from 'rxjs';
 import { loginUser } from 'src/app/formulario/ingreso/models';
 import { IngresoService } from 'src/app/formulario/ingreso/services/ingreso.service';
 
@@ -32,7 +32,7 @@ export class NavBarComponent {
 
   constructor(private userService: IngresoService){
     this.authUser = this.userService.authUser$;
-    this.userService.authUser$.subscribe(user => {
+    this.userService.authUser$.pipe(take(1)).subscribe(user => {
       if(user && user.email){
         this.authUserEmail = user.email
       }

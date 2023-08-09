@@ -22,6 +22,10 @@ const routes: Routes = [
     loadChildren: () => import('./formulario/registro/registro-routing.module').then((mod) => mod.RegistroRoutingModule)
   },     
   {
+    path: 'admins',
+    loadChildren: () => import('./pages/administradores/administradores.module').then((mod) => mod.AdministradoresModule)
+  },
+  {
     path: '**',
     redirectTo: '/login' 
   }

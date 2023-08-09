@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -21,5 +22,9 @@ export class AppComponent {
 
   handleFormView(event: Event){
     this.showForm = !this.showForm;
+  }
+
+  constructor(public router: Router){
+
   }
 }

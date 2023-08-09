@@ -35,7 +35,8 @@
             <button (click)="login($event)" type="submit"
                 [ngClass]="{'disabled': !userModel.controls.password.touched || userModel.status === 'INVALID'}"
                 class="btn btn-primary">Ingresar</button>
-            <button routerLink="/register" class="btn btn-secondary">Register</button>
+            <button [ngClass]="{'disabled': this.router.url === '/login'}" routerLink="/register"
+                class="btn btn-secondary">Register</button>
         </div>
     </form>
 </div>

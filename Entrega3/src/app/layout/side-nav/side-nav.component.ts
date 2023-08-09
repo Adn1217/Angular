@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-side-nav',
@@ -7,9 +7,6 @@ import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core
 })
 export class SideNavComponent {
   
-  // @ViewChild('drawer', { static: true }) 
-  // public drawer!: MatDrawer;
-
   @Input()
   sideBarOpen: boolean = false;
 

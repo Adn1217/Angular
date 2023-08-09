@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { IngresoService } from './services/ingreso.service';
 import { UserService } from 'src/app/usuarios/user.service';
+import { Router } from '@angular/router';
 
 const minCharLength: number = 8;
 interface LoginModel {
@@ -23,7 +24,7 @@ export class IngresoComponent {
   @Input() 
   ingreso: boolean = true;
 
-  constructor(private formBuilder: FormBuilder, private service: IngresoService, private usersService: UserService){
+  constructor(private formBuilder: FormBuilder, private service: IngresoService, private usersService: UserService, public router: Router){
     this.userModel = this.formBuilder.group({
       email: ['adn1217@hotmail.com', [Validators.required, Validators.email]],
       password: ['12345678', [Validators.required, Validators.minLength(minCharLength)]]

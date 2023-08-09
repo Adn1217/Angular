@@ -1,0 +1,14 @@
+<div class="mat-drawer-container login" *ngIf="this.router.url === '/login'; else appLayout">
+    <app-main-wrapper>
+        <router-outlet></router-outlet>
+    </app-main-wrapper>
+</div>
+<ng-template #appLayout>
+    <app-nav-bar [(sideBarOpen)]="sideBarOpen" [title]="title"
+        (sideBarOpenChange)="toggleSideBar($event)"></app-nav-bar>
+    <app-side-nav #sideBarComponent [sideBarOpen]="sideBarOpen">
+        <app-main-wrapper>
+            <router-outlet></router-outlet>
+        </app-main-wrapper>
+    </app-side-nav>
+</ng-template>

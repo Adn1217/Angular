@@ -10,17 +10,12 @@ import { Observable } from 'rxjs'
 })
 export class DetallesComponent {
 
-  teacherDetails?: teachers
   teacherDetails$?: Observable<teachers | undefined>
   teacherId: string
 
   constructor(private userService: UserService, private activatedRoute: ActivatedRoute ){
     this.teacherId = this.activatedRoute.snapshot.params['id'];
-    this.teacherDetails$ = this.userService.getTeacherById(this.teacherId)
-    // this.teacherDetails$?.subscribe({
-    //   next: (details) => this.teacherDetails = details
-    // })
-
+    this.teacherDetails$ = this.userService.getTeacherById(this.teacherId);
   }
 
 }

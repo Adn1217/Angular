@@ -123,21 +123,23 @@ export class ProfesoresComponent implements OnDestroy {
 
     this.userService.createUser(newTeacher);
     this.userModel.reset();
-    console.log(this.userModel.controls);
   }
 
-  handleDeleteUser(userToDelete: users | teachers ){
-  if(userToDelete && confirm(`¿Está seguro que desea eliminar el profesor ${userToDelete.nombres + ' ' + userToDelete.apellidos}`)){
-    this.userService.deleteUser(userToDelete);
-    this.notifier.showSucessToast(`Se ha eliminado el profesor con id: ${userToDelete.id}`,'', 3000, false)
-    console.log("Se elimina profesor con id: ", userToDelete.id)
-    }
+  async handleDeleteUser(userToDelete: users | teachers ){
+    let confirmModal = this.notifier.getConfirm('',`¿Está seguro que desea eliminar el profesor ${userToDelete.nombres} ${userToDelete.apellidos}?`, 'warning');
+    let confirmation = await confirmModal.fire();
+    
+    if(userToDelete && confirmation.isConfirmed){
+      this.userService.deleteUser(userToDelete);
+      // this.notifier.showSuccessToast(`Se ha eliminado el profesor con id: ${userToDelete.id}`,'', 3000, false)
+      console.log("Se elimina profesor con id: ", userToDelete.id)
+      }
   }
 
   handleUpdateUser(originalUser: users | teachers){
 
     if('nivelAcademico' in originalUser){ 
-      console.log('Profesor: ', originalUser);
+      // console.log('Profesor: ', originalUser);
       const {id, ...rest} = originalUser;
       const userUpdatedInForm = {...rest};
 
@@ -171,7 +173,7 @@ export class ProfesoresComponent implements OnDestroy {
 
           this.showForm = !this.showForm;
           // this.showFormChange.emit();
-          this.notifier.showSucess('',`Se ha actualizado el profesor con id: ${userToUpdate.id}`)
+          this.notifier.showSuccess('',`Se ha actualizado el profesor con id: ${userToUpdate.id}`)
           // alert(`Se ha actualizado el usuario con id: ${userToUpdate.id}`)
         }else{
           this.userModel.markAllAsTouched;

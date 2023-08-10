@@ -3,7 +3,7 @@ import { Subject } from 'rxjs';
 import Swal from 'sweetalert2';
 
 
-interface MyCustomNotificacion {
+interface MyCustomNotification {
   icon: 'success' | 'error' | 'warning' | 'info' | 'question',
   title?: string,
   text: string,
@@ -13,12 +13,15 @@ interface MyCustomNotificacion {
   showCancelButton?: boolean,
   showDenyButton?: boolean,
   focusConfirm?: boolean,
+  focusDeny?: boolean,
   confirmButtonText?: string,
   cancelButtonText?: string,
   denyButtonText?: string,
-  timer?: number
+  timer?: number,
+  reverseButtons?: boolean
 }
-interface MyCustomToastNotificacion {
+
+interface MyCustomToastNotification {
   icon: 'success' | 'error' | 'warning' | 'info' | 'question',
   title?: string,
   text: string,
@@ -37,30 +40,59 @@ interface MyCustomToastNotificacion {
 
 export class NotifierService {
 
-  private notifier$ = new Subject<MyCustomNotificacion>();
-  private toastNotifier$ = new Subject<MyCustomNotificacion>();
-  private toastNotifier = Swal.mixin(<MyCustomToastNotificacion>{});
+  private notifier = Swal.mixin(<MyCustomNotification>{});
+  private notifier$ = new Subject<MyCustomNotification>();
+  private toastNotifier$ = new Subject<MyCustomNotification>();
+  private toastNotifier = Swal.mixin(<MyCustomToastNotification>{});
 
   constructor() { 
     this.notifier$.subscribe({
       next: (myNotification) => {
-        Swal.fire(myNotification.title, myNotification.text, myNotification.icon)
+        Swal.fire({...myNotification})
       }
     })
     
     this.toastNotifier$.subscribe({
       next: (myNotification) => {
-        this.toastNotifier.fire({title: myNotification.title, text: myNotification.text, icon: myNotification.icon})
+        this.toastNotifier.fire({...myNotification})
       }
     })
   }
 
-  showSucess(title: string, text: string): void {
+  showSuccess(title: string, text: string): void {
     this.notifier$.next({
       icon: 'success',
       title: '' || title, 
       text: text,
     })
+  }
+  
+  showConfirm(title: string, text: string, icon?: 'warning' | 'info' | 'question'): void {
+    this.notifier$.next({
+      icon: icon || 'question',
+      title: title || '', 
+      text: text,
+      showDenyButton: true,
+      focusConfirm: false,
+      focusDeny: true,
+      confirmButtonText: 'Sí',
+      denyButtonText: 'No',
+      reverseButtons: true
+    })
+  }
+  
+  getConfirm(title: string, text: string, icon?: 'warning' | 'info' | 'question'): any {
+    return (Swal.mixin({
+      icon: icon || 'question',
+      title: title || '', 
+      text: text,
+      showDenyButton: true,
+      focusConfirm: false,
+      focusDeny: true,
+      confirmButtonText: 'Sí',
+      denyButtonText: 'No',
+      reverseButtons: true
+    }))
   }
   
   showError(title: string, text: string): void {
@@ -71,7 +103,7 @@ export class NotifierService {
     })
   }
 
-  showSucessToast(title: string, text: string, timer: number, showConfButton?: boolean, position?: 'top' | 'top-start' | 'top-end' | 'center' | 'center-start' | 'center-end' | 'bottom' | 'bottom-start' | 'bottom-end'): void {
+  showSuccessToast(title: string, text: string, timer: number, showConfButton?: boolean, position?: 'top' | 'top-start' | 'top-end' | 'center' | 'center-start' | 'center-end' | 'bottom' | 'bottom-start' | 'bottom-end'): void {
 
     this.toastNotifier = Swal.mixin({
       toast: true,

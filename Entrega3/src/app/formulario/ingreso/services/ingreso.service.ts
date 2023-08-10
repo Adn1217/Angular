@@ -58,7 +58,7 @@ export class IngresoService {
   login(user: loginUser): void{
     const authUser = this.getRegisterUser(user);
     if(authUser && authUser?.password === user.password){
-      this.notifier.showSucess('', 'Autenticación exitosa');
+      this.notifier.showSuccess('', 'Autenticación exitosa');
       this._authUser$.next(authUser);
       this.router.navigate(['/home'])
     }else{

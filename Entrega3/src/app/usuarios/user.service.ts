@@ -15,6 +15,9 @@ private users$ = this._users$.asObservable();
 private _teachers$ = new BehaviorSubject<teachers[]>([]);
 private teachers$ = this._teachers$.asObservable();
 
+private _isLoading$ = new BehaviorSubject<boolean>(false);
+public isLoading$ = this._isLoading$.asObservable();
+
   constructor(private client: HttpClient, private notifier: NotifierService) {}
 
     isTeacher(data: users | teachers){
@@ -22,22 +25,32 @@ private teachers$ = this._teachers$.asObservable();
     }
 
     getUsers(): Observable<users[]>{
+      this._isLoading$.next(true);
+      setTimeout(() => {
       // return this.USERS_DATA;
       this.client.get<users[]>('http://localhost:3000/users').pipe(take(1)).subscribe({
         next: (users) => {
-        this._users$.next(users);
+          this._users$.next(users);
+          this._isLoading$.next(false);
         }
       })
+      }, 1000);
       // this._users$.next(this.USERS_DATA);
       return this.users$;
     }
 
     getTeachers(): Observable<teachers[]>{
-      this.client.get<teachers[]>('http://localhost:3000/teachers').pipe(take(1)).subscribe({
-        next: (teachers) => {
-        this._teachers$.next(teachers);
-        }
-      })
+      this._isLoading$.next(true);
+      setTimeout(() => {
+        this.client.get<teachers[]>('http://localhost:3000/teachers').pipe(take(1)).subscribe({
+          next: (teachers) => {
+            this._teachers$.next(teachers);
+          },
+          complete: () => {
+            this._isLoading$.next(false);
+          }
+        })
+      }, 1000);
       // this._teachers$.next(this.TEACHERS_DATA);
       return this.teachers$;
     }
@@ -105,6 +118,9 @@ private teachers$ = this._teachers$.asObservable();
               }else{
                 this.notifier.showError('','No fue posible actualizar la información');
               }
+            },
+            error: (error) => {
+              this.notifier.showError('', 'Se ha presenta error en el servicio: ' + error);
             }
           })
       }else{
@@ -116,6 +132,9 @@ private teachers$ = this._teachers$.asObservable();
               }else{
                 this.notifier.showError('','No fue posible actualizar la información');
               }
+            },
+            error: (error) => {
+              this.notifier.showError('', 'Se ha presenta error en el servicio: ' + error);
             }
           })
       }

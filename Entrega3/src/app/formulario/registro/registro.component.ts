@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core
 import { FormBuilder, FormGroup, FormControl, Validators  } from '@angular/forms';
 import { users } from 'src/app/usuarios/modelos';
 import { UserService } from 'src/app/usuarios/user.service';
-import { Observable, takeUntil, Subject, Subscription } from 'rxjs';
+import { Observable, takeUntil, Subject, Subscription, BehaviorSubject } from 'rxjs';
 import { NotifierService } from 'src/app/core/services/notifier.service';
 
 
@@ -40,6 +40,7 @@ export class RegistroComponent implements OnDestroy {
   userListObserver: Observable<users[]>;
   userListSubscription?: Subscription;
   destroyed = new Subject<boolean>(); 
+  isLoading$: Observable<boolean>;
 
   @Input()
   ingreso: boolean = false;
@@ -49,6 +50,7 @@ export class RegistroComponent implements OnDestroy {
   
   constructor(private formBuilder: FormBuilder, private userService: UserService, private notifier: NotifierService){
 
+    this.isLoading$ = this.userService.isLoading$;
     this.userListObserver = userService.getUsers().pipe(takeUntil(this.destroyed));
     this.userList = this.userListObserver; // Reemplaza la subscripcion al usar pipe async.
     }

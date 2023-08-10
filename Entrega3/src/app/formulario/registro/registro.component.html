@@ -89,6 +89,9 @@
         <div class="addButton" *ngIf="!showForm;">
             <button type="submit" (click)="this.showForm = !this.showForm" class="btn btn-success">Agregar</button>
         </div>
+        <div *ngIf="isLoading$ | async;">
+            Cargando ...
+        </div>
         <app-tabla title="Estudiantes" [dataSource]="(userListObserver | async ) || []"
             (updateUser)="handleUpdateUser($event)" (deleteUser)="handleDeleteUser($event)"></app-tabla>
     </div>

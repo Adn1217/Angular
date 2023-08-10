@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core
 import { FormBuilder, FormGroup, FormControl, Validators  } from '@angular/forms';
 import { users, teachers } from 'src/app/usuarios/modelos';
 import { UserService } from 'src/app/usuarios/user.service';
-import { Observable, takeUntil, Subject, Subscription } from 'rxjs';
+import { Observable, takeUntil, Subject, Subscription, BehaviorSubject } from 'rxjs';
 import { NotifierService } from 'src/app/core/services/notifier.service';
 import { Router } from '@angular/router';
 
@@ -41,12 +41,13 @@ export class ProfesoresComponent implements OnDestroy {
       password: ['', [Validators.required, Validators.minLength(minCharPwdLength)]]
       })
   
-  userList: Observable<teachers[]>
+  userList: Observable<teachers[]>;
 
   // userListObserver: Observable<teachers[]>;
   userListSubscription?: Subscription;
   destroyed = new Subject<boolean>(); 
   showDetails: boolean = false;
+  isLoading$: Observable<boolean>;
 
   @Input()
   ingreso: boolean = false;
@@ -55,10 +56,10 @@ export class ProfesoresComponent implements OnDestroy {
   showForm: boolean = false;
   
   constructor(private formBuilder: FormBuilder, private userService: UserService, private notifier: NotifierService, public router: Router){
-
-    this.userList = userService.getTeachers().pipe(takeUntil(this.destroyed)); // TakeUntil no es necesario con pipe async.
+    this.isLoading$ = this.userService.isLoading$;
+    this.userList = userService.getTeachers().pipe(takeUntil(this.destroyed)) // TakeUntil no es necesario con pipe async.
     // this.userList = this.userListObserver;
-    }
+  }
 
   ngOnDestroy(): void {
     this.destroyed.next(true);

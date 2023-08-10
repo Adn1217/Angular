@@ -29,22 +29,22 @@ public isLoading$ = this._isLoading$.asObservable();
     getUsers(): Observable<users[]>{
       this._isLoading$.next(true);
       setTimeout(() => {
-      // return this.USERS_DATA;
-      this.client.get<users[]>(env.baseApiUrl+'/users').pipe(take(1)).subscribe({
-        next: (users) => {
-          this._users$.next(users);
-          this._isLoading$.next(false);
-        },
-        error: (err) => {
-          if(err instanceof HttpErrorResponse){
-            if(err.status === 500){
-              this.notifier.showError('','Ha ocurrido un error en el servidor');
+        // return this.USERS_DATA;
+        this.client.get<users[]>(env.baseApiUrl+'/users').pipe(take(1)).subscribe({
+          next: (users) => {
+            this._users$.next(users);
+            this._isLoading$.next(false);
+          },
+          error: (err) => {
+            if(err instanceof HttpErrorResponse){
+              if(err.status === 500){
+                this.notifier.showError('','Ha ocurrido un error en el servidor');
+              }
+            }else{
+              this.notifier.showError('', 'Ha ocurrido un error al consultar usuarios.');
             }
-          }else{
-            this.notifier.showError('', 'Ha ocurrido un error al consultar usuarios.');
           }
-        }
-      })
+        })
       }, 1000);
       // this._users$.next(this.USERS_DATA);
       return this.users$;

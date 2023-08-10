@@ -125,12 +125,15 @@ export class ProfesoresComponent implements OnDestroy {
     this.userModel.reset();
   }
 
-  handleDeleteUser(userToDelete: users | teachers ){
-  if(userToDelete && confirm(`¿Está seguro que desea eliminar el profesor ${userToDelete.nombres + ' ' + userToDelete.apellidos}`)){
-    this.userService.deleteUser(userToDelete);
-    // this.notifier.showSuccessToast(`Se ha eliminado el profesor con id: ${userToDelete.id}`,'', 3000, false)
-    console.log("Se elimina profesor con id: ", userToDelete.id)
-    }
+  async handleDeleteUser(userToDelete: users | teachers ){
+    let confirmModal = this.notifier.getConfirm('',`¿Está seguro que desea eliminar el profesor ${userToDelete.nombres} ${userToDelete.apellidos}?`, 'warning');
+    let confirmation = await confirmModal.fire();
+    
+    if(userToDelete && confirmation.isConfirmed){
+      this.userService.deleteUser(userToDelete);
+      // this.notifier.showSuccessToast(`Se ha eliminado el profesor con id: ${userToDelete.id}`,'', 3000, false)
+      console.log("Se elimina profesor con id: ", userToDelete.id)
+      }
   }
 
   handleUpdateUser(originalUser: users | teachers){

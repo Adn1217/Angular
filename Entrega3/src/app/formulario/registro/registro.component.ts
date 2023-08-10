@@ -113,12 +113,15 @@ export class RegistroComponent implements OnDestroy {
     console.log(this.userModel.controls);
   }
 
-  handleDeleteUser(userToDelete: users ){
-  if(userToDelete && confirm(`¿Está seguro que desea eliminar el usuario ${userToDelete.nombres + ' ' + userToDelete.apellidos}`)){
-    this.userService.deleteUser(userToDelete);
-    this.notifier.showSuccessToast(`Se ha eliminado el usuario con id: ${userToDelete.id}`,'', 3000, false)
-    console.log("Se elimina usuario con id: ", userToDelete.id)
-    }
+  async handleDeleteUser(userToDelete: users ){
+    let confirmModal = this.notifier.getConfirm('',`¿Está seguro que desea eliminar el usuario ${userToDelete.nombres} ${userToDelete.apellidos}?`, 'warning');
+    let confirmation = await confirmModal.fire();
+    
+    if(userToDelete && confirmation.isConfirmed){
+      this.userService.deleteUser(userToDelete);
+      // this.notifier.showSuccessToast(`Se ha eliminado el profesor con id: ${userToDelete.id}`,'', 3000, false)
+      console.log("Se elimina usuario con id: ", userToDelete.id)
+      }
   }
 
   handleUpdateUser(originalUser: users){
@@ -150,17 +153,6 @@ export class RegistroComponent implements OnDestroy {
         password: this.userModel.value.password || ''}
         this.userService.updateUser({id: id, ...updatedUser});
  
-
-        // Object.keys(this.userModel.controls).forEach( key => {
-        //   console.log(key);
-        //   this.userModel.get(key)?.markAsUntouched;
-        //   if(key === 'edad'){
-        //     this.userModel.get(key)?.setValue(0)
-        //   }else{
-        //     this.userModel.get(key)?.setValue('')
-        //   }
-        // })
-    
         this.userModel.reset();
 
         this.showForm = !this.showForm;

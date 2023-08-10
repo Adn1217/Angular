@@ -2,7 +2,7 @@
   "users": [
     {
       "id": 1,
-      "nombres": "Adrian Alberto",
+      "nombres": "Adrian Alberto1",
       "apellidos": "Fernández Cabrera",
       "usuario": "adn1217",
       "edad": 32,
@@ -69,21 +69,6 @@
         "Algebra"
       ],
       "correo": "lrruiz@gmail.com",
-      "password": "12345678"
-    },
-    {
-      "id": 4,
-      "nombres": "Sebastián Andrés222",
-      "apellidos": "Castañeda Rosales",
-      "usuario": "scastaneda",
-      "edad": 58,
-      "nivelAcademico": "Maestría",
-      "materias": [
-        "Cálculo I",
-        "Cálculo II",
-        "Cálculo III"
-      ],
-      "correo": "scastaneda@hotmail.com",
       "password": "12345678"
     }
   ],

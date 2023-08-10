@@ -3,6 +3,8 @@ import { BehaviorSubject, Subject, Observable, take, mergeMap, map } from 'rxjs'
 import { users, teachers } from './modelos';
 import { HttpClient } from '@angular/common/http';
 import { NotifierService } from 'src/app/core/services/notifier.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { env } from 'src/app/envs/env';
 
 @Injectable({
   providedIn: 'root'
@@ -28,10 +30,19 @@ public isLoading$ = this._isLoading$.asObservable();
       this._isLoading$.next(true);
       setTimeout(() => {
       // return this.USERS_DATA;
-      this.client.get<users[]>('http://localhost:3000/users').pipe(take(1)).subscribe({
+      this.client.get<users[]>(env.baseApiUrl+'/users').pipe(take(1)).subscribe({
         next: (users) => {
           this._users$.next(users);
           this._isLoading$.next(false);
+        },
+        error: (err) => {
+          if(err instanceof HttpErrorResponse){
+            if(err.status === 500){
+              this.notifier.showError('','Ha ocurrido un error en el servidor');
+            }
+          }else{
+            this.notifier.showError('', 'Ha ocurrido un error al consultar usuarios.');
+          }
         }
       })
       }, 1000);
@@ -42,9 +53,18 @@ public isLoading$ = this._isLoading$.asObservable();
     getTeachers(): Observable<teachers[]>{
       this._isLoading$.next(true);
       setTimeout(() => {
-        this.client.get<teachers[]>('http://localhost:3000/teachers').pipe(take(1)).subscribe({
+        this.client.get<teachers[]>(env.baseApiUrl + '/teachers').pipe(take(1)).subscribe({
           next: (teachers) => {
             this._teachers$.next(teachers);
+          },
+          error: (err) => {
+            if(err instanceof HttpErrorResponse){
+              if(err.status === 500){
+                this.notifier.showError('','Ha ocurrido un error en el servidor');
+              }
+            }else{
+              this.notifier.showError('', 'Ha ocurrido un error al consultar profesores.');
+            }
           },
           complete: () => {
             this._isLoading$.next(false);
@@ -58,7 +78,7 @@ public isLoading$ = this._isLoading$.asObservable();
     getTeacherById(id: string): Observable<teachers | undefined> {
       let _teacher$ = new BehaviorSubject<teachers | undefined>(undefined);
       let teacher$ = _teacher$.asObservable();
-      this.client.get<teachers>(`http://localhost:3000/teachers/${id}`).pipe(take(1)).subscribe({
+      this.client.get<teachers>(env.baseApiUrl + `/teachers/${id}`).pipe(take(1)).subscribe({
         next: (teacher) => {
           _teacher$.next(teacher);
         },
@@ -73,7 +93,7 @@ public isLoading$ = this._isLoading$.asObservable();
     getUserById(id: string): Observable<users | undefined> {
       let _user$ = new BehaviorSubject<users | undefined>(undefined);
       let user$ = _user$.asObservable();
-      this.client.get<users[]>('http://localhost:3000/users').pipe(take(1)).subscribe({
+      this.client.get<users[]>(env.baseApiUrl + '/users').pipe(take(1)).subscribe({
         next: (users) => {
           let user = users.find((user) => user.id === Number(id));
           _user$.next(user);
@@ -85,7 +105,7 @@ public isLoading$ = this._isLoading$.asObservable();
 
     createUser(user: users | teachers): void {
       if('nivelAcademico' in user){
-        this.client.post<teachers>('http://localhost:3000/teachers', user).pipe(
+        this.client.post<teachers>(env.baseApiUrl + '/teachers', user).pipe(
           mergeMap((createdTeacher) => this.teachers$.pipe(
             take(1),
             map((teachersList) => [...teachersList, createdTeacher])))
@@ -95,7 +115,7 @@ public isLoading$ = this._isLoading$.asObservable();
           }
         })
       }else{
-        this.client.post<users>('http://localhost:3000/users', user).pipe(
+        this.client.post<users>(env.baseApiUrl + '/users', user).pipe(
           mergeMap((createdUser) => this.users$.pipe(
             take(1),
             map((usersList) => [...usersList, createdUser])))
@@ -110,7 +130,7 @@ public isLoading$ = this._isLoading$.asObservable();
     updateUser(userToUpdate: users | teachers): void {
       const {id, ...rest} = userToUpdate;
       if('nivelAcademico' in userToUpdate){
-        this.client.put<teachers>(`http://localhost:3000/teachers/${id}`, userToUpdate).pipe(
+        this.client.put<teachers>(env.baseApiUrl + `/teachers/${id}`, userToUpdate).pipe(
           take(1)).subscribe({
             next: (updatedTeacher) => {
               if(updatedTeacher.id){
@@ -124,7 +144,7 @@ public isLoading$ = this._isLoading$.asObservable();
             }
           })
       }else{
-        this.client.put<users>(`http://localhost:3000/users/${id}`, userToUpdate).pipe(
+        this.client.put<users>(env.baseApiUrl + `/users/${id}`, userToUpdate).pipe(
           take(1)).subscribe({
             next: (updatedUser) => {
               if(updatedUser.id){
@@ -143,7 +163,7 @@ public isLoading$ = this._isLoading$.asObservable();
     deleteUser(userToDelete: users | teachers ): void {
       const {id, ...rest} = userToDelete;
       if(this.isTeacher(userToDelete)){
-        this.client.delete(`http://localhost:3000/teachers/${id}`).pipe(take(1)).subscribe({
+        this.client.delete(env.baseApiUrl + `/teachers/${id}`).pipe(take(1)).subscribe({
           next: (response) => {
             this.getTeachers();
             this.notifier.showSuccessToast('', 'Se ha eliminado correctamente al profesor.', 2000)
@@ -154,7 +174,7 @@ public isLoading$ = this._isLoading$.asObservable();
           }
         });
       }else{
-        this.client.delete<users>(`http://localhost:3000/users/${id}`).pipe(take(1)).subscribe({
+        this.client.delete<users>(env.baseApiUrl + `/users/${id}`).pipe(take(1)).subscribe({
           next: (response) => {
             this.getUsers();
             this.notifier.showSuccessToast('', 'Se ha eliminado correctamente al usuario.', 2000)

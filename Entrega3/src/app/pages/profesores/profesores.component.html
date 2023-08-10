@@ -120,12 +120,15 @@
             <div class="addButton" *ngIf="!showForm;">
                 <button type="submit" (click)="this.showForm = !this.showForm" class="btn btn-success">Agregar</button>
             </div>
-            <div *ngIf="(isLoading$ | async)">
-                Cargando...
+            <div *ngIf="(isLoading$ | async); else teachersTable">
+                Cargando lista...
             </div>
-            <app-tabla title="Profesores" [(showDetails)]="this.showDetails" [dataSource]="(userList | async ) || []"
-                (updateUser)="handleUpdateUser($event)" (deleteUser)="handleDeleteUser($event)">
-            </app-tabla>
+            <ng-template #teachersTable>
+                <app-tabla title="Profesores" [(showDetails)]="this.showDetails"
+                    [dataSource]="(userList | async ) || []" (updateUser)="handleUpdateUser($event)"
+                    (deleteUser)="handleDeleteUser($event)">
+                </app-tabla>
+            </ng-template>
         </div>
     </div>
     <ng-template #detailsContainer>

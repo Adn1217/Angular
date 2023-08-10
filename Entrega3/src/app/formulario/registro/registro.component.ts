@@ -116,7 +116,7 @@ export class RegistroComponent implements OnDestroy {
   handleDeleteUser(userToDelete: users ){
   if(userToDelete && confirm(`¿Está seguro que desea eliminar el usuario ${userToDelete.nombres + ' ' + userToDelete.apellidos}`)){
     this.userService.deleteUser(userToDelete);
-    this.notifier.showSucessToast(`Se ha eliminado el usuario con id: ${userToDelete.id}`,'', 3000, false)
+    this.notifier.showSuccessToast(`Se ha eliminado el usuario con id: ${userToDelete.id}`,'', 3000, false)
     console.log("Se elimina usuario con id: ", userToDelete.id)
     }
   }
@@ -165,7 +165,7 @@ export class RegistroComponent implements OnDestroy {
 
         this.showForm = !this.showForm;
         // this.showFormChange.emit();
-        this.notifier.showSucess('',`Se ha actualizado el usuario con id: ${userToUpdate.id}`)
+        this.notifier.showSuccess('',`Se ha actualizado el usuario con id: ${userToUpdate.id}`)
         // alert(`Se ha actualizado el usuario con id: ${userToUpdate.id}`)
       }else{
         this.userModel.markAllAsTouched;

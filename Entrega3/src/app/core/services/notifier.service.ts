@@ -55,7 +55,7 @@ export class NotifierService {
     })
   }
 
-  showSucess(title: string, text: string): void {
+  showSuccess(title: string, text: string): void {
     this.notifier$.next({
       icon: 'success',
       title: '' || title, 
@@ -71,7 +71,7 @@ export class NotifierService {
     })
   }
 
-  showSucessToast(title: string, text: string, timer: number, showConfButton?: boolean, position?: 'top' | 'top-start' | 'top-end' | 'center' | 'center-start' | 'center-end' | 'bottom' | 'bottom-start' | 'bottom-end'): void {
+  showSuccessToast(title: string, text: string, timer: number, showConfButton?: boolean, position?: 'top' | 'top-start' | 'top-end' | 'center' | 'center-start' | 'center-end' | 'bottom' | 'bottom-start' | 'bottom-end'): void {
 
     this.toastNotifier = Swal.mixin({
       toast: true,

@@ -40,6 +40,26 @@ describe('NavBarComponent', () => {
         expect(compiled.querySelector('.toolBar span')?.textContent).toBe('');
     })
     
+    it(`should render title 'Entrega 3'`, () => {
+        const fixture = TestBed.createComponent(NavBarComponent);
+        const navBar = fixture.componentInstance;
+        const titulo = 'Entrega 3'
+        navBar.title = titulo;
+        fixture.detectChanges();
+        const compiled = fixture.nativeElement as HTMLElement;
+
+        expect(compiled.querySelector('.toolBar span')?.textContent).toBe(titulo);
+    })
+    
+    it(`component should render with side-nav closed and the icon associated `, () => {
+        const fixture = TestBed.createComponent(NavBarComponent);
+        const navBar = fixture.componentInstance;
+        expect(navBar.sideBarOpen).toBeFalse();
+        fixture.detectChanges();
+        const compiled = fixture.nativeElement as HTMLElement;
+        expect(compiled.querySelector('div span mat-icon')?.textContent).toBe('expand_less');
+    })
+    
     it(`if menu is clicked, the icon and side-nav property have to change accordingly `, () => {
         const fixture = TestBed.createComponent(NavBarComponent);
         const navBar = fixture.componentInstance;

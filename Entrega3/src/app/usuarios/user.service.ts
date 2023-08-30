@@ -11,8 +11,14 @@ import { env } from 'src/app/envs/env';
 })
 export class UserService {
 
+private  _user$ = new BehaviorSubject<users | undefined>(undefined);
+private user$ = this._user$.asObservable();
+
 private _users$ = new BehaviorSubject<users[]>([]);
 private users$ = this._users$.asObservable();
+      
+private _teacher$ = new BehaviorSubject<teachers | undefined>(undefined);
+private teacher$ = this._teacher$.asObservable();
 
 private _teachers$ = new BehaviorSubject<teachers[]>([]);
 private teachers$ = this._teachers$.asObservable();
@@ -30,7 +36,7 @@ public isLoading$ = this._isLoading$.asObservable();
       this._isLoading$.next(true);
       setTimeout(() => {
         // return this.USERS_DATA;
-        this.client.get<users[]>(env.baseApiUrl+'/users').pipe(take(1)).subscribe({
+        this.client.get<users[]>(env.baseApiUrl + '/users').pipe(take(1)).subscribe({
           next: (users) => {
             this._users$.next(users);
             this._isLoading$.next(false);
@@ -76,31 +82,28 @@ public isLoading$ = this._isLoading$.asObservable();
     }
 
     getTeacherById(id: string): Observable<teachers | undefined> {
-      let _teacher$ = new BehaviorSubject<teachers | undefined>(undefined);
-      let teacher$ = _teacher$.asObservable();
       this.client.get<teachers>(env.baseApiUrl + `/teachers/${id}`).pipe(take(1)).subscribe({
         next: (teacher) => {
-          _teacher$.next(teacher);
+          this._teacher$.next(teacher);
         },
         error: (error) => {
-          _teacher$.next(undefined);
+          this._teacher$.next(undefined);
           console.log("Se presenta el error: ", error)
         }
       })
-      return teacher$;
+      return this.teacher$;
     }
     
     getUserById(id: string): Observable<users | undefined> {
-      let _user$ = new BehaviorSubject<users | undefined>(undefined);
-      let user$ = _user$.asObservable();
       this.client.get<users[]>(env.baseApiUrl + '/users').pipe(take(1)).subscribe({
         next: (users) => {
+          console.log('Usuarios encontrados: ', JSON.stringify(users));
           let user = users.find((user) => user.id === Number(id));
-          _user$.next(user);
+          this._user$.next(user);
         }
       })
       // const user = this.USERS_DATA.find((user) => user.id === Number(id));
-      return user$;
+      return this.user$;
     }
 
     createUser(user: users | teachers): void {

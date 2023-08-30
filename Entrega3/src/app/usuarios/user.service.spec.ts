@@ -30,7 +30,7 @@ describe('userService', () => {
     })
 
 
-    it('Get User method has to return an array of Users', () => {
+    it('Get User method has to return an array of Users', (done) => {
         const  mockListOfUsers: users[] = [
             {
               "id": 1,
@@ -60,6 +60,7 @@ describe('userService', () => {
                 realResponse = usersList;
                 console.log('Userlist: ', realResponse)
                 expect(typeof usersList).toEqual(typeof mockResponse)
+                done();
             },
             complete: () => {
                 const req = httpController.expectOne({

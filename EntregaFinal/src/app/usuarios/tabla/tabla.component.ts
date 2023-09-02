@@ -66,6 +66,16 @@ export class TablaComponent implements OnChanges {
     }
   }
   
+  handleDelete(entity: users | teachers | courses | enrollments ){
+    if('idCurso' in entity){
+      this.handleDeleteEnrollment(entity);
+    }else if ('curso' in entity){
+      this.handleDeleteCourse(entity);
+    }else {
+      this.handleDeleteUser(entity)
+    }
+  }
+  
   handleUpdateUser(user: users | teachers){
     this.updateUser.emit(user);
   }
@@ -80,6 +90,10 @@ export class TablaComponent implements OnChanges {
   
   handleUpdateEnrollment(enrollment: enrollments){
     this.updateEnrollment.emit(enrollment);
+  }
+  
+  handleDeleteEnrollment(enrollment: enrollments){
+    this.deleteEnrollment.emit(enrollment);
   }
 
   ngOnChanges(){

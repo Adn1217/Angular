@@ -64,8 +64,7 @@
                 <button (click)="handleUpdate(user)" mat-icon-button color="primary">
                     <mat-icon>edit</mat-icon>
                 </button>
-                <button (click)="user?.curso ? handleDeleteCourse(user) : handleDeleteUser(user)" mat-icon-button
-                    color="warn">
+                <button (click)="handleDelete(user)" mat-icon-button color="warn">
                     <mat-icon>delete</mat-icon>
                 </button>
             </td>

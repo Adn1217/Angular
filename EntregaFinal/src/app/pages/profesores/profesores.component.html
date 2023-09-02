@@ -109,11 +109,15 @@
                     {{getFieldError("password")}}
                 </div>
             </div>
+            <div *ngIf="editionNote.length > 0;" class="form-text">
+                {{this.editionNote}}
+            </div>
             <div class="buttonContainer">
                 <button (click)="handleSubmit($event)" type="submit"
                     [ngClass]="{'disabled': !userModel.controls.password.touched || userModel.status === 'INVALID'}"
                     class="btn btn-primary">Registrar</button>
-                <button routerLink="/login" class="btn btn-secondary">LogIn</button>
+                <!-- <button routerLink="/login" class="btn btn-secondary">LogIn</button> -->
+                <button (click)="handleCancel($event)" class="btn btn-secondary">Cancelar</button>
             </div>
         </form>
         <div class="mb-5 userTable">

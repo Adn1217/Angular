@@ -48,6 +48,7 @@ export class ProfesoresComponent implements OnDestroy {
   destroyed = new Subject<boolean>(); 
   showDetails: boolean = false;
   isLoading$: Observable<boolean>;
+  editionNote: string = '';
 
   @Input()
   ingreso: boolean = false;
@@ -125,6 +126,12 @@ export class ProfesoresComponent implements OnDestroy {
     this.userService.createUser(newTeacher);
     this.userModel.reset();
   }
+  
+  handleCancel(event: Event){
+    this.userModel.reset();
+    this.editionNote = ''
+    this.showForm = false;
+  }
 
   async handleDeleteUser(userToDelete: users | teachers ){
     let confirmModal = this.notifier.getConfirm('',`¿Está seguro que desea eliminar el profesor ${userToDelete.nombres} ${userToDelete.apellidos}?`, 'warning');
@@ -143,6 +150,7 @@ export class ProfesoresComponent implements OnDestroy {
       // console.log('Profesor: ', originalUser);
       const {id, ...rest} = originalUser;
       const userUpdatedInForm = {...rest};
+      this.editionNote = 'Recuerde, pare editar seleccionar nuevamente el lápiz.'
 
       if(!this.showForm){
         this.userModel.setValue(userUpdatedInForm);
@@ -170,6 +178,7 @@ export class ProfesoresComponent implements OnDestroy {
           password: this.userModel.value.password || ''}
           this.userService.updateUser({id: id, ...updatedUser});
 
+          this.editionNote = '';
           this.userModel.reset();
 
           this.showForm = !this.showForm;

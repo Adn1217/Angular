@@ -41,6 +41,7 @@ export class RegistroComponent implements OnDestroy {
   userListSubscription?: Subscription;
   destroyed = new Subject<boolean>(); 
   isLoading$: Observable<boolean>;
+  editionNote = ''
 
   @Input()
   ingreso: boolean = false;
@@ -114,7 +115,7 @@ export class RegistroComponent implements OnDestroy {
     this.userModel.reset();
     console.log(this.userModel.controls);
   }
-
+  
   async handleDeleteUser(userToDelete: users ){
     let confirmModal = this.notifier.getConfirm('',`¿Está seguro que desea eliminar el usuario ${userToDelete.nombres} ${userToDelete.apellidos}?`, 'warning');
     let confirmation = await confirmModal.fire();
@@ -130,6 +131,7 @@ export class RegistroComponent implements OnDestroy {
 
     const {id, ...rest} = originalUser;
     const userUpdatedInForm = {...rest};
+    this.editionNote = 'Recuerde, pare editar seleccionar nuevamente el lápiz.'
 
     if(!this.showForm){
       this.userModel.setValue(userUpdatedInForm);
@@ -156,7 +158,7 @@ export class RegistroComponent implements OnDestroy {
         this.userService.updateUser({id: id, ...updatedUser});
  
         this.userModel.reset();
-
+        this.editionNote = '';
         this.showForm = !this.showForm;
         // this.showFormChange.emit();
         this.notifier.showSuccess('',`Se ha actualizado el usuario con id: ${userToUpdate.id}`)

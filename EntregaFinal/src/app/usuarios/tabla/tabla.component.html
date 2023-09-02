@@ -25,6 +25,16 @@
             <td mat-cell *matCellDef="let user"> {{user?.nivelAcademico}} </td>
         </ng-container>
 
+        <ng-container matColumnDef="Curso">
+            <th mat-header-cell *matHeaderCellDef> Curso </th>
+            <td mat-cell *matCellDef="let user"> {{user?.curso}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Créditos">
+            <th mat-header-cell *matHeaderCellDef> Créditos </th>
+            <td mat-cell *matCellDef="let user"> {{user?.creditos}} </td>
+        </ng-container>
+
         <ng-container matColumnDef="correo">
             <th mat-header-cell *matHeaderCellDef> Correo </th>
             <td mat-cell *matCellDef="let user"> {{user?.correo}} </td>
@@ -41,10 +51,12 @@
                 <button *ngIf="user.materias;" routerLink="teacherDetail/{{user.id}}" mat-icon-button color="secondary">
                     <mat-icon>info</mat-icon>
                 </button>
-                <button (click)="handleUpdateUser(user)" mat-icon-button color="primary">
+                <button (click)="user?.curso ? handleUpdateCourse(user) : handleUpdateUser(user)" mat-icon-button
+                    color="primary">
                     <mat-icon>edit</mat-icon>
                 </button>
-                <button (click)="handleDeleteUser(user)" mat-icon-button color="warn">
+                <button (click)="user?.curso ? handleDeleteCourse(user) : handleDeleteUser(user)" mat-icon-button
+                    color="warn">
                     <mat-icon>delete</mat-icon>
                 </button>
             </td>

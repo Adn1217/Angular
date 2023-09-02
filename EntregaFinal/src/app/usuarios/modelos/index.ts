@@ -19,3 +19,10 @@ export interface teachers {
     password: string;
     materias: string[];
   }
+
+export interface courses {
+    id: number;
+    curso: string;
+    creditos: number;
+    // profesor: number;
+  }

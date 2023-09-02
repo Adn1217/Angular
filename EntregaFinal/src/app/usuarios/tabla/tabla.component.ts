@@ -1,5 +1,5 @@
 import {Component, Input, Output, EventEmitter, OnChanges} from '@angular/core';
-import { users, teachers } from '../modelos';
+import { users, teachers, courses } from '../modelos';
 import { Router } from '@angular/router';
 
 
@@ -20,7 +20,7 @@ export class TablaComponent implements OnChanges {
   showDetails: boolean = false;
 
   @Input()
-  dataSource: users[] | teachers[] = [];
+  dataSource: users[] | teachers[] | courses[] | any[] = [];
 
   @Input()
   title: string = '';
@@ -30,6 +30,12 @@ export class TablaComponent implements OnChanges {
 
   @Output()
   updateUser = new EventEmitter<users | teachers>();
+  
+  @Output()
+  deleteCourse = new EventEmitter<courses>();
+
+  @Output()
+  updateCourse = new EventEmitter<courses>();
 
   @Output()
   showDetailsChange = new EventEmitter<boolean>();
@@ -47,10 +53,21 @@ export class TablaComponent implements OnChanges {
   handleUpdateUser(user: users | teachers){
     this.updateUser.emit(user);
   }
+  
+  handleDeleteCourse(course: courses){
+    this.deleteCourse.emit(course);
+  }
+  
+  handleUpdateCourse(course: courses){
+    this.updateCourse.emit(course);
+  }
 
   ngOnChanges(){
+    console.log(this.dataSource);
     if(this.title === 'Profesores'){
       this.displayedColumns = ['id', 'nombre completo', 'edad', 'correo', 'nivel académico', 'materias', 'acciones'];
+    }else if (this.title === 'Cursos'){
+      this.displayedColumns = ['id', 'Curso', 'Créditos', 'acciones'];
     }
   }
 

@@ -78,6 +78,9 @@
                 {{getFieldError("password")}}
             </div>
         </div>
+        <div *ngIf="editionNote.length > 0;" class="form-text">
+            {{this.editionNote}}
+        </div>
         <div class="buttonContainer">
             <button (click)="handleSubmit($event)" type="submit"
                 [ngClass]="{'disabled': !userModel.controls.password.touched || userModel.status === 'INVALID'}"

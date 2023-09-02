@@ -70,8 +70,57 @@
       ],
       "correo": "lrruiz@gmail.com",
       "password": "12345678"
+    },
+    {
+      "id": 1693609310231,
+      "nombres": "Javier Arnoldo2",
+      "apellidos": "Bermejo Salinas",
+      "usuario": "basalinas",
+      "edad": 44,
+      "nivelAcademico": "Maestría",
+      "materias": [
+        "Etica"
+      ],
+      "correo": "jaberm@gmail.com",
+      "password": "222222232"
     }
   ],
   "admins": [],
-  "courses": []
+  "courses": [
+    {
+      "id": 1,
+      "curso": "Cálculo I",
+      "creditos": "3"
+    },
+    {
+      "id": 2,
+      "curso": "Cálculo II",
+      "creditos": "3"
+    },
+    {
+      "id": 3,
+      "curso": "Cálculo III",
+      "creditos": 3
+    },
+    {
+      "id": 4,
+      "curso": "Ecuaciones Diferenciales",
+      "creditos": "2"
+    },
+    {
+      "id": 5,
+      "curso": "Física Moderna",
+      "creditos": "2"
+    },
+    {
+      "id": 1693610585127,
+      "curso": "Física Calor-Ondas",
+      "creditos": "3"
+    },
+    {
+      "id": 1693611206284,
+      "curso": "Fisica Electricidad",
+      "creditos": "3"
+    }
+  ]
 }

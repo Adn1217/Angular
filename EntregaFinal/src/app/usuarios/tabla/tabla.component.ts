@@ -1,5 +1,5 @@
 import {Component, Input, Output, EventEmitter, OnChanges} from '@angular/core';
-import { users, teachers, courses } from '../modelos';
+import { users, teachers, courses, enrollments } from '../modelos';
 import { Router } from '@angular/router';
 
 
@@ -20,7 +20,7 @@ export class TablaComponent implements OnChanges {
   showDetails: boolean = false;
 
   @Input()
-  dataSource: users[] | teachers[] | courses[] | any[] = [];
+  dataSource: users[] | teachers[] | courses[] | enrollments[] | any[] = [];
 
   @Input()
   title: string = '';
@@ -36,6 +36,12 @@ export class TablaComponent implements OnChanges {
 
   @Output()
   updateCourse = new EventEmitter<courses>();
+  
+  @Output()
+  updateEnrollment = new EventEmitter<enrollments>();
+  
+  @Output()
+  deleteEnrollment = new EventEmitter<enrollments>();
 
   @Output()
   showDetailsChange = new EventEmitter<boolean>();
@@ -50,6 +56,16 @@ export class TablaComponent implements OnChanges {
     this.deleteUser.emit(user);
   }
   
+  handleUpdate(entity: users | teachers | courses | enrollments ){
+    if('idCurso' in entity){
+      this.handleUpdateEnrollment(entity);
+    }else if ('curso' in entity){
+      this.handleUpdateCourse(entity);
+    }else {
+      this.handleUpdateUser(entity)
+    }
+  }
+  
   handleUpdateUser(user: users | teachers){
     this.updateUser.emit(user);
   }
@@ -61,6 +77,10 @@ export class TablaComponent implements OnChanges {
   handleUpdateCourse(course: courses){
     this.updateCourse.emit(course);
   }
+  
+  handleUpdateEnrollment(enrollment: enrollments){
+    this.updateEnrollment.emit(enrollment);
+  }
 
   ngOnChanges(){
     console.log(this.dataSource);
@@ -68,6 +88,8 @@ export class TablaComponent implements OnChanges {
       this.displayedColumns = ['id', 'nombre completo', 'edad', 'correo', 'nivel académico', 'materias', 'acciones'];
     }else if (this.title === 'Cursos'){
       this.displayedColumns = ['id', 'Curso', 'Créditos', 'acciones'];
+    }else if (this.title === 'Inscripciones'){
+      this.displayedColumns = ['id', 'idCurso', 'idAlumno', 'acciones'];
     }
   }
 

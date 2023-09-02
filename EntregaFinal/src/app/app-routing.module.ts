@@ -32,6 +32,11 @@ const routes: Routes = [
     loadChildren: () => import('./pages/cursos/cursos.module').then((mod) => mod.CursosModule)
   },
   {
+    path: 'enrollments',
+    canActivate: [authGuard],
+    loadChildren: () => import('./pages/inscripciones/inscripciones.module').then((mod) => mod.InscripcionesModule)
+  },
+  {
     path: '**',
     redirectTo: '/login' 
   }

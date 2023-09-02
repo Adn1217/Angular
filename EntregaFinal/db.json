@@ -90,12 +90,12 @@
     {
       "id": 1,
       "curso": "Cálculo I",
-      "creditos": "3"
+      "creditos": 3
     },
     {
       "id": 2,
       "curso": "Cálculo II",
-      "creditos": "3"
+      "creditos": 3
     },
     {
       "id": 3,
@@ -105,22 +105,49 @@
     {
       "id": 4,
       "curso": "Ecuaciones Diferenciales",
-      "creditos": "2"
+      "creditos": 2
     },
     {
       "id": 5,
       "curso": "Física Moderna",
-      "creditos": "2"
+      "creditos": 2
     },
     {
       "id": 1693610585127,
       "curso": "Física Calor-Ondas",
-      "creditos": "3"
+      "creditos": 3
     },
     {
       "id": 1693611206284,
       "curso": "Fisica Electricidad",
-      "creditos": "3"
+      "creditos": 3
+    }
+  ],
+  "enrollments": [
+    {
+      "id": 1,
+      "idCurso": 5,
+      "idAlumno": 2
+    },
+    {
+      "id": 2,
+      "idCurso": 1,
+      "idAlumno": 1
+    },
+    {
+      "id": 3,
+      "idCurso": 3,
+      "idAlumno": 3
+    },
+    {
+      "id": 4,
+      "idCurso": 4,
+      "idAlumno": 3
+    },
+    {
+      "id": 1693688918498,
+      "idCurso": 5,
+      "idAlumno": 3
     }
   ]
 }

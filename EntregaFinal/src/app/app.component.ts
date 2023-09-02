@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title: string = 'Entrega 3';
+  title: string = 'Entrega Final';
   ingreso: boolean = true;
   sideBarOpen = false;
   showForm = false;

@@ -36,11 +36,7 @@
       "usuario": "scastaneda",
       "edad": 58,
       "nivelAcademico": "Maestría",
-      "materias": [
-        "Cálculo I",
-        "Cálculo II",
-        "Cálculo III"
-      ],
+      "materias": ["Cálculo I", "Cálculo II", "Cálculo III"],
       "correo": "scastaneda@hotmail.com",
       "password": "12345678"
     },
@@ -51,10 +47,7 @@
       "usuario": "alu2110",
       "edad": 47,
       "nivelAcademico": "Doctorado",
-      "materias": [
-        "Máquinas Eléctricas I",
-        "Máquinas Eléctricas II"
-      ],
+      "materias": ["Máquinas Eléctricas I", "Máquinas Eléctricas II"],
       "correo": "evftrsa_@gmail.com",
       "password": "12345678"
     },
@@ -65,9 +58,7 @@
       "usuario": "libardoRuzRuiz",
       "edad": 60,
       "nivelAcademico": "Especialización",
-      "materias": [
-        "Algebra"
-      ],
+      "materias": ["Algebra"],
       "correo": "lrruiz@gmail.com",
       "password": "12345678"
     },
@@ -78,9 +69,7 @@
       "usuario": "basalinas",
       "edad": 44,
       "nivelAcademico": "Maestría",
-      "materias": [
-        "Etica"
-      ],
+      "materias": ["Etica"],
       "correo": "jaberm@gmail.com",
       "password": "222222232"
     }
@@ -126,23 +115,18 @@
   "enrollments": [
     {
       "id": 1,
-      "idCurso": 5,
-      "idAlumno": 2
+      "courseId": 5,
+      "userId": 2
     },
     {
       "id": 2,
-      "idCurso": 1,
-      "idAlumno": 1
+      "courseId": 3,
+      "userId": 3
     },
     {
       "id": 3,
-      "idCurso": 3,
-      "idAlumno": 3
-    },
-    {
-      "id": 4,
-      "idCurso": 4,
-      "idAlumno": 3
+      "courseId": 4,
+      "userId": 2
     }
   ]
 }

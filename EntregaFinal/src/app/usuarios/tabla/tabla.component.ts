@@ -57,7 +57,7 @@ export class TablaComponent implements OnChanges {
   }
   
   handleUpdate(entity: users | teachers | courses | enrollments ){
-    if('idCurso' in entity){
+    if('courseId' in entity){
       this.handleUpdateEnrollment(entity);
     }else if ('curso' in entity){
       this.handleUpdateCourse(entity);
@@ -67,7 +67,7 @@ export class TablaComponent implements OnChanges {
   }
   
   handleDelete(entity: users | teachers | courses | enrollments ){
-    if('idCurso' in entity){
+    if('courseId' in entity){
       this.handleDeleteEnrollment(entity);
     }else if ('curso' in entity){
       this.handleDeleteCourse(entity);

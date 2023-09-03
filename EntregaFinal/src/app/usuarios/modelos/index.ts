@@ -29,6 +29,6 @@ export interface courses {
 
 export interface enrollments {
     id: number;
-    idCurso: number;
-    idAlumno: number;
+    courseId: number;
+    userId: number;
   }

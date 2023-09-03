@@ -3,26 +3,26 @@
         <form class="mb-7 form" [formGroup]="enrollmentModel" *ngIf="this.showForm;">
             <div class="mb-3">
                 <label for="inputEnrollmentCourse" class="form-label">Curso</label>
-                <input formControlName="idCurso" min="1" max="9999" type="number" class="form-control"
-                    [ngClass]="{'is-valid': enrollmentModel.controls['idCurso'].touched && !enrollmentModel.controls['idCurso'].invalid, 'is-invalid': enrollmentModel.controls['idCurso'].touched && enrollmentModel.controls['idCurso'].invalid}"
+                <input formControlName="courseId" min="1" max="9999" type="number" class="form-control"
+                    [ngClass]="{'is-valid': enrollmentModel.controls['courseId'].touched && !enrollmentModel.controls['courseId'].invalid, 'is-invalid': enrollmentModel.controls['courseId'].touched && enrollmentModel.controls['courseId'].invalid}"
                     id="inputEnrollmentCourse">
                 <div class="valid-feedback">
                     ¡Se ve bien!
                 </div>
                 <div class="invalid-feedback">
-                    {{getFieldError("idCurso")}}
+                    {{getFieldError("courseId")}}
                 </div>
             </div>
             <div class="mb-3">
                 <label for="inputEnrollmentStudent" class="form-label">Alumno</label>
-                <input formControlName="idAlumno" min="1" max="9999" type="number" class="form-control"
-                    [ngClass]="{'is-valid': enrollmentModel.controls['idAlumno'].touched && !enrollmentModel.controls['idAlumno'].invalid, 'is-invalid': enrollmentModel.controls['idAlumno'].touched && enrollmentModel.controls['idAlumno'].invalid}"
+                <input formControlName="userId" min="1" max="9999" type="number" class="form-control"
+                    [ngClass]="{'is-valid': enrollmentModel.controls['userId'].touched && !enrollmentModel.controls['userId'].invalid, 'is-invalid': enrollmentModel.controls['userId'].touched && enrollmentModel.controls['userId'].invalid}"
                     id="inputEnrollmentStudent">
                 <div class="valid-feedback">
                     ¡Se ve bien!
                 </div>
                 <div class="invalid-feedback">
-                    {{getFieldError("idAlumno")}}
+                    {{getFieldError("userId")}}
                 </div>
             </div>
             <!-- <div class="mb-3 col-3">

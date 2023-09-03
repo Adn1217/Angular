@@ -40,7 +40,6 @@ public isLoading$ = this._isLoading$.asObservable();
     getUsers(): Observable<users[]>{
       this._isLoading$.next(true);
       setTimeout(() => {
-        // return this.USERS_DATA;
         this.client.get<users[]>(env.baseApiUrl + '/users').pipe(take(1)).subscribe({
           next: (users) => {
             this._users$.next(users);
@@ -57,7 +56,6 @@ public isLoading$ = this._isLoading$.asObservable();
           }
         })
       }, 1000);
-      // this._users$.next(this.USERS_DATA);
       return this.users$;
     }
 
@@ -82,7 +80,6 @@ public isLoading$ = this._isLoading$.asObservable();
           }
         })
       }, 1000);
-      // this._teachers$.next(this.TEACHERS_DATA);
       return this.teachers$;
     }
 

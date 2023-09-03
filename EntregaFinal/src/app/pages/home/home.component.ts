@@ -19,7 +19,7 @@ export class HomeComponent {
       return newUser
     })).subscribe({
       next: (user) => {
-        console.log('usuario completo: ', user);
+        // console.log('usuario completo: ', user);
         if(user && user.nombres){
           // this.authUserName = user.nombreCompleto;
           this.authUserName.next(user.nombreCompleto)

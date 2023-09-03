@@ -14,35 +14,12 @@ import { Store } from '@ngrx/store';
 
 export class IngresoService {
 
-  // private REGISTERED_USERS_DATA = [
-  //   {
-  //     nombre: 'Adrian Fernández',
-  //     email: 'adn1217@hotmail.com',
-  //     password: '12345678'
-  //   },
-  //   {
-  //     nombre: 'Juan Muñoz',
-  //     email: 'j.cr68@hotmail.com',
-  //     password: '12345678'
-  //   },
-  //   {
-  //     nombre: 'Andrea Fernández',
-  //     email: 'afernandez@gmail.com',
-  //     password: '12345678'
-  //   }
-  // ]
-
   constructor(private router: Router, private notifier: NotifierService, private userService: UserService, private store: Store) {
    }
   
   private _authUser$ = new BehaviorSubject<any>(null);
   public authUser$ = this._authUser$.asObservable();
 
-  // getRegisterUser(userToLog: loginUser): loginUser | undefined{
-  //   const authUser = this.REGISTERED_USERS_DATA.find((user) => user.email === userToLog.email);
-  //   return authUser
-  // }
-  
   isAuthenticated(): boolean {
     let authUser = null;
     this.authUser$.pipe(take(1)).subscribe({
@@ -55,7 +32,6 @@ export class IngresoService {
   }
 
   login(user: loginUser): void{
-    // const authUser = this.getRegisterUser(user);
     const registeredUser = this.userService.getUserByEmail(user.email);
     registeredUser.pipe(skip(1), take(1)).subscribe({
       next: (regUser) => {
@@ -65,6 +41,7 @@ export class IngresoService {
           this._authUser$.next(regUser);
           this.router.navigate(['/home'])
         }else{
+          this._authUser$.next(null);
           this.notifier.showError('Error de autenticación', 'Verifique credenciales');
         }
       }

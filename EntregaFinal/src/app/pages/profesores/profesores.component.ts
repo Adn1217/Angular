@@ -1,11 +1,13 @@
 
 import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators  } from '@angular/forms';
-import { users, teachers } from 'src/app/usuarios/modelos';
+import { users, teachers, userRol } from 'src/app/usuarios/modelos';
 import { UserService } from 'src/app/usuarios/user.service';
 import { Observable, takeUntil, Subject, Subscription, BehaviorSubject } from 'rxjs';
 import { NotifierService } from 'src/app/core/services/notifier.service';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { selectAuthUserValue } from 'src/app/store/selectors/auth.selectors';
 
 
 const minCharPwdLength: number = 8;
@@ -49,6 +51,7 @@ export class ProfesoresComponent implements OnDestroy {
   showDetails: boolean = false;
   isLoading$: Observable<boolean>;
   editionNote: string = '';
+  userRol: userRol = null
 
   @Input()
   ingreso: boolean = false;
@@ -56,10 +59,18 @@ export class ProfesoresComponent implements OnDestroy {
   // @Input()
   showForm: boolean = false;
   
-  constructor(private formBuilder: FormBuilder, private userService: UserService, private notifier: NotifierService, public router: Router){
+  constructor(private formBuilder: FormBuilder, private userService: UserService, private notifier: NotifierService, public router: Router, private store: Store){
     this.isLoading$ = this.userService.isLoading$;
     this.userList = userService.getTeachers().pipe(takeUntil(this.destroyed)) // TakeUntil no es necesario con pipe async.
     // this.userList = this.userListObserver;
+    
+    this.store.select(selectAuthUserValue).subscribe({
+      next: (authUser) => {
+        if(authUser){
+          this.userRol = authUser?.role
+        }
+      }
+    })
   }
 
   ngOnDestroy(): void {
@@ -122,7 +133,7 @@ export class ProfesoresComponent implements OnDestroy {
       materias: this.userModel.value.materias || [''],
       correo: this.userModel.value.correo || '',
       password: this.userModel.value.password || '',
-      role: 'user'
+      role: 'user' as const
     }
 
     this.userService.createUser(newTeacher);
@@ -170,15 +181,16 @@ export class ProfesoresComponent implements OnDestroy {
         // const userToUpdate = this.userList.find((user) => user.id === id);
         if(userToUpdate && this.userModel.status === 'VALID'){
 
-          const updatedUser = {nombres: this.userModel.value.nombres || '',
-          apellidos: this.userModel.value.apellidos || '',
-          usuario: this.userModel.value.usuario || '',
-          edad: this.userModel.value.edad || 18,
-          nivelAcademico: this.userModel.value.nivelAcademico || '',
-          materias: this.userModel.value.materias || [''],
-          correo: this.userModel.value.correo || '',
-          password: this.userModel.value.password || '',
-          role: 'user'
+          const updatedUser = {
+            nombres: this.userModel.value.nombres || '',
+            apellidos: this.userModel.value.apellidos || '',
+            usuario: this.userModel.value.usuario || '',
+            edad: this.userModel.value.edad || 18,
+            nivelAcademico: this.userModel.value.nivelAcademico || '',
+            materias: this.userModel.value.materias || [''],
+            correo: this.userModel.value.correo || '',
+            password: this.userModel.value.password || '',
+            role: 'user' as const
           }
           this.userService.updateUser({id: id, ...updatedUser});
 

@@ -90,7 +90,8 @@
     </form>
     <div class="mb-3 userTable">
         <div class="addButton" *ngIf="!showForm;">
-            <button type="submit" (click)="this.showForm = !this.showForm" class="btn btn-success">Agregar</button>
+            <button type="submit" [disabled]="userRol !== 'admin'" (click)="this.showForm = !this.showForm"
+                class="btn btn-success">Agregar</button>
         </div>
         <div *ngIf="isLoading$ | async; else usersTable">
             Cargando lista...

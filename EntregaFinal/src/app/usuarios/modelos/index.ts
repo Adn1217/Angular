@@ -1,3 +1,5 @@
+
+export type userRol = 'user' | 'admin' | null
 export interface users {
     id: number;
     nombres: string;
@@ -6,7 +8,7 @@ export interface users {
     edad: number;
     correo: string;
     password: string;
-    role: string
+    role: userRol
   }
 
 export interface teachers {
@@ -19,7 +21,7 @@ export interface teachers {
     correo: string;
     password: string;
     materias: string[];
-    role: string
+    role: userRol 
   }
 
 export interface courses {

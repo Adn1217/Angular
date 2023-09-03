@@ -1,6 +1,8 @@
 import {Component, Input, Output, EventEmitter, OnChanges} from '@angular/core';
-import { users, teachers, courses, enrollments } from '../modelos';
+import { users, teachers, courses, enrollments, userRol } from '../modelos';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { selectAuthUserValue } from 'src/app/store/selectors/auth.selectors';
 
 
 
@@ -12,9 +14,21 @@ import { Router } from '@angular/router';
 
 export class TablaComponent implements OnChanges {
 
-  constructor(private router: Router ){}
+  constructor(private router: Router, private store: Store){
+
+    this.store.select(selectAuthUserValue).subscribe({
+      next: (authUser) => {
+        if(authUser){
+          this.userRol = authUser?.role
+        }
+      }
+    })
+  }
 
   displayedColumns: string[] = ['id', 'nombre completo', 'edad', 'correo', 'rol', 'acciones'];
+
+  userRol: userRol = null
+
 
   @Input()
   showDetails: boolean = false;

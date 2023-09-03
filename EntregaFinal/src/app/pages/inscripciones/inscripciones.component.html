@@ -51,7 +51,8 @@
         </form>
         <div class="mb-5 userTable">
             <div class="addButton" *ngIf="!showForm;">
-                <button type="submit" (click)="this.showForm = !this.showForm" class="btn btn-success">Agregar</button>
+                <button [disabled]="userRol !== 'admin'" type="submit" (click)="this.showForm = !this.showForm"
+                    class="btn btn-success">Agregar</button>
             </div>
             <div *ngIf="(isLoading$ | async); else coursesTable">
                 Cargando lista...

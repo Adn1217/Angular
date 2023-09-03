@@ -1,12 +1,13 @@
 import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators  } from '@angular/forms';
-import { enrollments } from 'src/app/usuarios/modelos';
+import { enrollments, userRol } from 'src/app/usuarios/modelos';
 import { Observable, takeUntil, Subject, Subscription, BehaviorSubject, take } from 'rxjs';
 import { NotifierService } from 'src/app/core/services/notifier.service';
 import { InscripcionesService } from './inscripciones.service';
 import { Store } from '@ngrx/store';
 import { inscripcionesActions } from 'src/app/store/actions/inscripciones.actions';
 import { selectEnrollmentList, selectEnrollmentListValue } from 'src/app/store/selectors/inscripciones.selectors';
+import { selectAuthUserValue } from 'src/app/store/selectors/auth.selectors';
 
 interface EnrollmentModel {
   courseId: FormControl<number| null>;
@@ -36,6 +37,8 @@ export class InscripcionesComponent {
   isLoading$: Observable<boolean>;
   editionNote: string = '';
 
+  userRol: userRol = null;
+
   @Input()
   ingreso: boolean = false;
 
@@ -46,11 +49,11 @@ export class InscripcionesComponent {
     this.isLoading$ = this.enrollmentService.isLoading$;
     this.enrollmentList = this.enrollmentService.getEnrollments().pipe(takeUntil(this.destroyed)) // TakeUntil no es necesario con pipe async.
     // this.userList = this.userListObserver;
-    this.enrollmentList.subscribe({
-      next: (enrollments) => {
-        console.log('Inscripciones: ', enrollments);
-      }
-    })
+    // this.enrollmentList.subscribe({
+    //   next: (enrollments) => {
+    //     console.log('Inscripciones: ', enrollments);
+    //   }
+    // })
 
     // this.store.select(selectEnrollmentList).pipe(take(1)).subscribe({
     //   next: (enrollmentList) => {
@@ -61,6 +64,14 @@ export class InscripcionesComponent {
     this.store.select(selectEnrollmentListValue).subscribe({
       next: (enrollmentList) => {
         console.log('EnrollmentList: ', enrollmentList)
+      }
+    })
+    
+    this.store.select(selectAuthUserValue).subscribe({
+      next: (authUser) => {
+        if(authUser){
+          this.userRol = authUser?.role
+        }
       }
     })
   }

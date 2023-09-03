@@ -14,7 +14,7 @@ interface RegisterModel {
   usuario: FormControl<string | null>;
   edad: FormControl<number | null>;
   correo: FormControl<string | null>;
-  password: FormControl<string | null>
+  password: FormControl<string | null>;
 }
   
 @Component({
@@ -32,7 +32,7 @@ export class RegistroComponent implements OnDestroy {
       usuario: ['', [Validators.required, Validators.minLength(minCharUserLength)]],
       edad: [0, [Validators.required]],
       correo: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(minCharPwdLength)]]
+      password: ['', [Validators.required, Validators.minLength(minCharPwdLength)]],
       })
   
   userList: Observable<users[]>
@@ -109,7 +109,9 @@ export class RegistroComponent implements OnDestroy {
       usuario: this.userModel.value.usuario || '',
       edad: this.userModel.value.edad || 18,
       correo: this.userModel.value.correo || '',
-      password: this.userModel.value.password || ''}
+      password: this.userModel.value.password || '',
+      role: 'user'
+    }
 
     this.userService.createUser(newUser);
     this.userModel.reset();
@@ -154,7 +156,10 @@ export class RegistroComponent implements OnDestroy {
         usuario: this.userModel.value.usuario || '',
         edad: this.userModel.value.edad || 18,
         correo: this.userModel.value.correo || '',
-        password: this.userModel.value.password || ''}
+        password: this.userModel.value.password || '',
+        role: 'user'
+        }
+
         this.userService.updateUser({id: id, ...updatedUser});
  
         this.userModel.reset();

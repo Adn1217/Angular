@@ -5,7 +5,8 @@ export interface users {
     usuario: string;
     edad: number;
     correo: string;
-    password: string
+    password: string;
+    role: string
   }
 
 export interface teachers {
@@ -18,6 +19,7 @@ export interface teachers {
     correo: string;
     password: string;
     materias: string[];
+    role: string
   }
 
 export interface courses {

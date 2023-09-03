@@ -16,7 +16,7 @@ interface RegisterModel {
   usuario: FormControl<string | null>;
   edad: FormControl<number | null>;
   nivelAcademico: FormControl<string | null>;
-  materias: FormControl<string[] | null>;
+  materias: FormControl<string[] | null >;
   correo: FormControl<string | null>;
   password: FormControl<string | null>
 }
@@ -119,9 +119,11 @@ export class ProfesoresComponent implements OnDestroy {
       usuario: this.userModel.value.usuario || '',
       edad: this.userModel.value.edad || 18,
       nivelAcademico: this.userModel.value.nivelAcademico || '',
-      materias: [this.userModel.value.materias] || [''],
+      materias: this.userModel.value.materias || [''],
       correo: this.userModel.value.correo || '',
-      password: this.userModel.value.password || ''}
+      password: this.userModel.value.password || '',
+      role: 'user'
+    }
 
     this.userService.createUser(newTeacher);
     this.userModel.reset();
@@ -148,7 +150,7 @@ export class ProfesoresComponent implements OnDestroy {
 
     if('nivelAcademico' in originalUser){ 
       // console.log('Profesor: ', originalUser);
-      const {id, ...rest} = originalUser;
+      const {id, role, ...rest} = originalUser;
       const userUpdatedInForm = {...rest};
       this.editionNote = 'Recuerde, pare editar seleccionar nuevamente el lápiz.'
 
@@ -175,7 +177,9 @@ export class ProfesoresComponent implements OnDestroy {
           nivelAcademico: this.userModel.value.nivelAcademico || '',
           materias: this.userModel.value.materias || [''],
           correo: this.userModel.value.correo || '',
-          password: this.userModel.value.password || ''}
+          password: this.userModel.value.password || '',
+          role: 'user'
+          }
           this.userService.updateUser({id: id, ...updatedUser});
 
           this.editionNote = '';

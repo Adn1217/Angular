@@ -14,7 +14,7 @@ export class TablaComponent implements OnChanges {
 
   constructor(private router: Router ){}
 
-  displayedColumns: string[] = ['id', 'nombre completo', 'edad', 'correo', 'acciones'];
+  displayedColumns: string[] = ['id', 'nombre completo', 'edad', 'correo', 'rol', 'acciones'];
 
   @Input()
   showDetails: boolean = false;
@@ -99,7 +99,7 @@ export class TablaComponent implements OnChanges {
   ngOnChanges(){
     console.log(this.dataSource);
     if(this.title === 'Profesores'){
-      this.displayedColumns = ['id', 'nombre completo', 'edad', 'correo', 'nivel académico', 'materias', 'acciones'];
+      this.displayedColumns = ['id', 'nombre completo', 'edad', 'correo', 'nivel académico', 'materias', 'rol', 'acciones'];
     }else if (this.title === 'Cursos'){
       this.displayedColumns = ['id', 'Curso', 'Créditos', 'acciones'];
     }else if (this.title === 'Inscripciones'){

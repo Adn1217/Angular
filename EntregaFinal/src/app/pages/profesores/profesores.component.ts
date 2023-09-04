@@ -48,7 +48,6 @@ export class ProfesoresComponent implements OnDestroy {
   // userListObserver: Observable<teachers[]>;
   userListSubscription?: Subscription;
   destroyed = new Subject<boolean>(); 
-  showDetails: boolean = false;
   isLoading$: Observable<boolean>;
   editionNote: string = '';
   userRol: userRol = null

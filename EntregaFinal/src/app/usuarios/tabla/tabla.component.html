@@ -66,6 +66,10 @@
                 <button *ngIf="user.materias;" routerLink="teacherDetail/{{user.id}}" mat-icon-button color="secondary">
                     <mat-icon>info</mat-icon>
                 </button>
+                <button *ngIf="!user.materias && !user.courseId;" routerLink="registerDetail/{{user.id}}"
+                    mat-icon-button color="secondary">
+                    <mat-icon>info</mat-icon>
+                </button>
                 <button [disabled]="userRol !== 'admin'" (click)="handleUpdate(user)" mat-icon-button color="primary">
                     <mat-icon>edit</mat-icon>
                 </button>

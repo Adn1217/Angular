@@ -1,0 +1,5 @@
+<h1>Detalle de estudiante {{(userDetails$ | async)?.nombres}} {{(userDetails$ | async)?.apellidos}}</h1>
+<pre><code>{{(userDetails$ | async) | json}}</code></pre>
+<button routerLink="register" mat-icon-button color="secondary">
+    <mat-icon>arrow_back</mat-icon>
+</button>

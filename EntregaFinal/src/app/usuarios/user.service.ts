@@ -97,6 +97,7 @@ public isLoading$ = this._isLoading$.asObservable();
     }
     
     getUserById(id: string): Observable<users | undefined> {
+      console.log(env.baseApiUrl + `/users/${id}`)
       this.client.get<users>(env.baseApiUrl + `/users/${id}`).pipe(take(1)).subscribe({
         next: (user) => {
           this._user$.next(user);

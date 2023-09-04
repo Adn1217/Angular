@@ -6,9 +6,10 @@ import { NotifierService } from 'src/app/core/services/notifier.service';
 import { InscripcionesService } from './inscripciones.service';
 import { Store } from '@ngrx/store';
 import { inscripcionesActions } from 'src/app/store/actions/inscripciones.actions';
-import { selectEnrollmentList, selectEnrollmentListValue } from 'src/app/store/selectors/inscripciones.selectors';
+// import { selectEnrollmentList, selectEnrollmentListValue } from 'src/app/store/selectors/inscripciones.selectors';
 import { selectAuthUserValue } from 'src/app/store/selectors/auth.selectors';
 import { InscripcionesActions } from './store/inscripciones.actions';
+import { selectEnrollmentListValue } from './store/inscripciones.selectors';
 
 interface EnrollmentModel {
   courseId: FormControl<number| null>;

@@ -12,7 +12,7 @@
                         <h1>Profesores</h1>
                     </div>
                 </a>
-                <a routerLink="admins" mat-list-item>
+                <a *ngIf="(authUser$ | async)?.role ==='admin'" routerLink="admins" mat-list-item>
                     <div>
                         <h1>Administradores</h1>
                     </div>

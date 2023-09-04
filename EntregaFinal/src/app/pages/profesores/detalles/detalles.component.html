@@ -1,0 +1,5 @@
+<h1>Detalle de profesor {{(teacherDetails$ | async)?.nombres}} {{(teacherDetails$ | async)?.apellidos}}</h1>
+<pre><code>{{(teacherDetails$ | async) | json}}</code></pre>
+<button routerLink="teachers" mat-icon-button color="secondary">
+    <mat-icon>arrow_back</mat-icon>
+</button>

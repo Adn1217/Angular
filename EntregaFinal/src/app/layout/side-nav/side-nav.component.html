@@ -1,0 +1,48 @@
+<mat-drawer-container #sideBar class="sidenav-container" autosize>
+    <mat-drawer #drawer class="sidenav" mode="side" [opened]="sideBarOpen">
+        <mat-nav-list class="sideNavList">
+            <div>
+                <a routerLink="home" mat-list-item>
+                    <div>
+                        <h1>Inicio</h1>
+                    </div>
+                </a>
+                <a routerLink="teachers" mat-list-item>
+                    <div>
+                        <h1>Profesores</h1>
+                    </div>
+                </a>
+                <a routerLink="admins" mat-list-item>
+                    <div>
+                        <h1>Administradores</h1>
+                    </div>
+                </a>
+                <a routerLink="register" mat-list-item>
+                    <div>
+                        <h1>Estudiantes</h1>
+                    </div>
+                </a>
+                <a routerLink="courses" mat-list-item>
+                    <div>
+                        <h1>Cursos</h1>
+                    </div>
+                </a>
+                <a routerLink="enrollments" mat-list-item>
+                    <div>
+                        <h1>Inscripciones</h1>
+                    </div>
+                </a>
+            </div>
+            <div id="logOutButtonContainer">
+                <button (click)='handleLogout()' id="logOutButton" mat-button color="secondary">
+                    <mat-icon>logout</mat-icon>
+                    <h1>Salir</h1>
+                </button>
+            </div>
+        </mat-nav-list>
+    </mat-drawer>
+
+    <div class="sidenav-content">
+        <ng-content></ng-content>
+    </div>
+</mat-drawer-container>

@@ -1,0 +1,68 @@
+<div>
+    <div class="screen">
+        <form class="mb-7 form" [formGroup]="enrollmentModel" *ngIf="this.showForm;">
+            <div class="mb-3">
+                <label for="inputEnrollmentCourse" class="form-label">Curso</label>
+                <input formControlName="courseId" min="1" max="9999" type="number" class="form-control"
+                    [ngClass]="{'is-valid': enrollmentModel.controls['courseId'].touched && !enrollmentModel.controls['courseId'].invalid, 'is-invalid': enrollmentModel.controls['courseId'].touched && enrollmentModel.controls['courseId'].invalid}"
+                    id="inputEnrollmentCourse">
+                <div class="valid-feedback">
+                    ¡Se ve bien!
+                </div>
+                <div class="invalid-feedback">
+                    {{getFieldError("courseId")}}
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="inputEnrollmentStudent" class="form-label">Alumno</label>
+                <input formControlName="userId" min="1" max="9999" type="number" class="form-control"
+                    [ngClass]="{'is-valid': enrollmentModel.controls['userId'].touched && !enrollmentModel.controls['userId'].invalid, 'is-invalid': enrollmentModel.controls['userId'].touched && enrollmentModel.controls['userId'].invalid}"
+                    id="inputEnrollmentStudent">
+                <div class="valid-feedback">
+                    ¡Se ve bien!
+                </div>
+                <div class="invalid-feedback">
+                    {{getFieldError("userId")}}
+                </div>
+            </div>
+            <!-- <div class="mb-3 col-3">
+                <label for="inputAge" class="form-label">Edad</label>
+                <input formControlName="edad" min="0" max="150" type="number" class="form-control"
+                    [ngClass]="{'is-valid': userModel.controls['edad'].touched && !userModel.controls['edad'].invalid, 'is-invalid': userModel.controls['edad'].touched && userModel.controls['edad'].invalid}"
+                    id="inputAge">
+                <div class="valid-feedback">
+                    ¡Se ve bien!
+                </div>
+            </div> -->
+            <!-- <div class="mb-3 col-5" *ngIf="userModel.controls['edad'].touched && userModel.controls['edad'].invalid"
+                class="invalid">
+                {{this.userModel.controls.edad.errors && (this.userModel.controls.edad.errors | keyvalue |
+                errorMessagesControl)}}
+            </div> -->
+            <div *ngIf="editionNote.length > 0;" class="form-text">
+                {{this.editionNote}}
+            </div>
+            <div class="buttonContainer">
+                <button (click)="handleSubmit($event)" type="submit"
+                    [ngClass]="{'disabled': !(enrollmentModel.dirty && enrollmentModel.status === 'VALID')}"
+                    class="btn btn-primary">Inscribir</button>
+                <button (click)="handleCancel($event)" class="btn btn-secondary">Cancelar</button>
+            </div>
+        </form>
+        <div class="mb-5 userTable">
+            <div class="addButton" *ngIf="!showForm;">
+                <button [disabled]="userRol !== 'admin'" type="submit" (click)="this.showForm = !this.showForm"
+                    class="btn btn-success">Agregar</button>
+            </div>
+            <div *ngIf="(isLoading$ | async); else coursesTable">
+                Cargando lista...
+            </div>
+            <ng-template #coursesTable>
+                <app-tabla title="Inscripciones" [dataSource]="(enrollmentList | async ) || []"
+                    (updateEnrollment)="handleUpdateEnrollment($event)"
+                    (deleteEnrollment)="handleDeleteEnrollment($event)">
+                </app-tabla>
+            </ng-template>
+        </div>
+    </div>
+</div>

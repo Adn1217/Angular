@@ -1,0 +1,21 @@
+<mat-toolbar class="toolBar" color="primary">
+    <div>
+        <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon"
+            (click)="changeSideNav()">
+            <mat-icon>menu</mat-icon>
+        </button>
+        <span>{{title}}</span>
+        <span class="example-spacer"></span>
+        <span *ngIf="sideBarOpen; else openIcon">
+            <mat-icon>expand_more</mat-icon>
+        </span>
+        <ng-template #openIcon>
+            <span>
+                <mat-icon>expand_less</mat-icon>
+            </span>
+        </ng-template>
+    </div>
+    <div *ngIf="authUser;">
+        {{authUserEmail}}
+    </div>
+</mat-toolbar>

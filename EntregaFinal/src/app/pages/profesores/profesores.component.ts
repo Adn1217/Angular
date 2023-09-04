@@ -1,10 +1,13 @@
 
 import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators  } from '@angular/forms';
-import { users, teachers } from 'src/app/usuarios/modelos';
+import { users, teachers, userRol } from 'src/app/usuarios/modelos';
 import { UserService } from 'src/app/usuarios/user.service';
-import { Observable, takeUntil, Subject, Subscription } from 'rxjs';
+import { Observable, takeUntil, Subject, Subscription, BehaviorSubject } from 'rxjs';
 import { NotifierService } from 'src/app/core/services/notifier.service';
+import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { selectAuthUserValue } from 'src/app/store/selectors/auth.selectors';
 
 
 const minCharPwdLength: number = 8;
@@ -15,7 +18,7 @@ interface RegisterModel {
   usuario: FormControl<string | null>;
   edad: FormControl<number | null>;
   nivelAcademico: FormControl<string | null>;
-  materias: FormControl<string[] | null>;
+  materias: FormControl<string[] | null >;
   correo: FormControl<string | null>;
   password: FormControl<string | null>
 }
@@ -40,11 +43,14 @@ export class ProfesoresComponent implements OnDestroy {
       password: ['', [Validators.required, Validators.minLength(minCharPwdLength)]]
       })
   
-  userList: Observable<teachers[]>
+  userList: Observable<teachers[]>;
 
-  userListObserver: Observable<teachers[]>;
+  // userListObserver: Observable<teachers[]>;
   userListSubscription?: Subscription;
   destroyed = new Subject<boolean>(); 
+  isLoading$: Observable<boolean>;
+  editionNote: string = '';
+  userRol: userRol = null
 
   @Input()
   ingreso: boolean = false;
@@ -52,11 +58,19 @@ export class ProfesoresComponent implements OnDestroy {
   // @Input()
   showForm: boolean = false;
   
-  constructor(private formBuilder: FormBuilder, private userService: UserService, private notifier: NotifierService){
-
-    this.userListObserver = userService.getTeachers().pipe(takeUntil(this.destroyed));
-    this.userList = this.userListObserver;
-    }
+  constructor(private formBuilder: FormBuilder, private userService: UserService, private notifier: NotifierService, public router: Router, private store: Store){
+    this.isLoading$ = this.userService.isLoading$;
+    this.userList = userService.getTeachers().pipe(takeUntil(this.destroyed)) // TakeUntil no es necesario con pipe async.
+    // this.userList = this.userListObserver;
+    
+    this.store.select(selectAuthUserValue).subscribe({
+      next: (authUser) => {
+        if(authUser){
+          this.userRol = authUser?.role
+        }
+      }
+    })
+  }
 
   ngOnDestroy(): void {
     this.destroyed.next(true);
@@ -98,6 +112,11 @@ export class ProfesoresComponent implements OnDestroy {
         }
     }
   }
+  
+  navigateTo(page: string){
+    console.log(page);
+    // this.router.navigate([`${page}`]);
+  }
 
   handleSubmit(event: Event){
    
@@ -110,31 +129,40 @@ export class ProfesoresComponent implements OnDestroy {
       usuario: this.userModel.value.usuario || '',
       edad: this.userModel.value.edad || 18,
       nivelAcademico: this.userModel.value.nivelAcademico || '',
-      materias: [this.userModel.value.materias] || [''],
+      materias: this.userModel.value.materias || [''],
       correo: this.userModel.value.correo || '',
       password: this.userModel.value.password || '',
-      role: 'user'
+      role: 'user' as const
     }
 
     this.userService.createUser(newTeacher);
     this.userModel.reset();
-    console.log(this.userModel.controls);
+  }
+  
+  handleCancel(event: Event){
+    this.userModel.reset();
+    this.editionNote = ''
+    this.showForm = false;
   }
 
-  handleDeleteUser(userToDelete: users | teachers ){
-  if(userToDelete && confirm(`¿Está seguro que desea eliminar el profesor ${userToDelete.nombres + ' ' + userToDelete.apellidos}`)){
-    this.userService.deleteUser(userToDelete);
-    this.notifier.showSucessToast(`Se ha eliminado el profesor con id: ${userToDelete.id}`,'', 3000, false)
-    console.log("Se elimina profesor con id: ", userToDelete.id)
-    }
+  async handleDeleteUser(userToDelete: users | teachers ){
+    let confirmModal = this.notifier.getConfirm('',`¿Está seguro que desea eliminar el profesor ${userToDelete.nombres} ${userToDelete.apellidos}?`, 'warning');
+    let confirmation = await confirmModal.fire();
+    
+    if(userToDelete && confirmation.isConfirmed){
+      this.userService.deleteUser(userToDelete);
+      // this.notifier.showSuccessToast(`Se ha eliminado el profesor con id: ${userToDelete.id}`,'', 3000, false)
+      console.log("Se elimina profesor con id: ", userToDelete.id)
+      }
   }
 
   handleUpdateUser(originalUser: users | teachers){
 
     if('nivelAcademico' in originalUser){ 
-      console.log('Profesor: ', originalUser);
-      const {id, ...rest} = originalUser;
+      // console.log('Profesor: ', originalUser);
+      const {id, role, ...rest} = originalUser;
       const userUpdatedInForm = {...rest};
+      this.editionNote = 'Recuerde, pare editar seleccionar nuevamente el lápiz.'
 
       if(!this.showForm){
         this.userModel.setValue(userUpdatedInForm);
@@ -161,15 +189,16 @@ export class ProfesoresComponent implements OnDestroy {
             materias: this.userModel.value.materias || [''],
             correo: this.userModel.value.correo || '',
             password: this.userModel.value.password || '',
-            role: 'user'
+            role: 'user' as const
           }
           this.userService.updateUser({id: id, ...updatedUser});
 
+          this.editionNote = '';
           this.userModel.reset();
 
           this.showForm = !this.showForm;
           // this.showFormChange.emit();
-          this.notifier.showSucess('',`Se ha actualizado el profesor con id: ${userToUpdate.id}`)
+          this.notifier.showSuccess('',`Se ha actualizado el profesor con id: ${userToUpdate.id}`)
           // alert(`Se ha actualizado el usuario con id: ${userToUpdate.id}`)
         }else{
           this.userModel.markAllAsTouched;

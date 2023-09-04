@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators  } from '@angular/forms';
 import { courses } from 'src/app/usuarios/modelos';
-import { Observable, takeUntil, Subject, Subscription, BehaviorSubject } from 'rxjs';
+import { Observable, takeUntil, Subject, Subscription, BehaviorSubject, take } from 'rxjs';
 import { NotifierService } from 'src/app/core/services/notifier.service';
 import { Router } from '@angular/router';
 import { CourseService } from './course.service';
@@ -149,7 +149,7 @@ export class CursosComponent {
         this.courseModel.setValue(courseUpdatedInForm);
       }else{
         let courseToUpdate: courses | undefined;
-        this.courseList.subscribe({
+        this.courseList.pipe(take(1)).subscribe({
           next: (courses) => {
             courseToUpdate = courses.find((course) => course.id === id);
           }

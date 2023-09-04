@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core
 import { FormBuilder, FormGroup, FormControl, Validators  } from '@angular/forms';
 import { userRol, users } from 'src/app/usuarios/modelos';
 import { UserService } from 'src/app/usuarios/user.service';
-import { Observable, takeUntil, Subject, Subscription, BehaviorSubject } from 'rxjs';
+import { Observable, takeUntil, Subject, Subscription, BehaviorSubject, take } from 'rxjs';
 import { NotifierService } from 'src/app/core/services/notifier.service';
 import { Store } from '@ngrx/store';
 import { selectAuthUserValue } from 'src/app/store/selectors/auth.selectors';
@@ -59,7 +59,7 @@ export class RegistroComponent implements OnDestroy {
     this.userListObserver = userService.getUsers().pipe(takeUntil(this.destroyed));
     this.userList = this.userListObserver; // Reemplaza la subscripcion al usar pipe async.
 
-    this.store.select(selectAuthUserValue).subscribe({
+    this.store.select(selectAuthUserValue).pipe(take(1)).subscribe({
       next: (authUser) => {
         if(authUser){
           this.userRol = authUser?.role
@@ -127,7 +127,7 @@ export class RegistroComponent implements OnDestroy {
 
     this.userService.createUser(newUser);
     this.userModel.reset();
-    console.log(this.userModel.controls);
+    // console.log(this.userModel.controls);
   }
   
   async handleDeleteUser(userToDelete: users ){
@@ -143,7 +143,7 @@ export class RegistroComponent implements OnDestroy {
 
   handleUpdateUser(originalUser: users){
 
-    const {id, ...rest} = originalUser;
+    const {id, role, ...rest} = originalUser;
     const userUpdatedInForm = {...rest};
     this.editionNote = 'Recuerde, pare editar seleccionar nuevamente el lápiz.'
 
@@ -163,13 +163,14 @@ export class RegistroComponent implements OnDestroy {
       // const userToUpdate = this.userList.find((user) => user.id === id);
       if(userToUpdate && this.userModel.status === 'VALID'){
 
-        const updatedUser = {nombres: this.userModel.value.nombres || '',
-        apellidos: this.userModel.value.apellidos || '',
-        usuario: this.userModel.value.usuario || '',
-        edad: this.userModel.value.edad || 18,
-        correo: this.userModel.value.correo || '',
-        password: this.userModel.value.password || '',
-        role: 'user' as const
+        const updatedUser = {
+          nombres: this.userModel.value.nombres || '',
+          apellidos: this.userModel.value.apellidos || '',
+          usuario: this.userModel.value.usuario || '',
+          edad: this.userModel.value.edad || 18,
+          correo: this.userModel.value.correo || '',
+          password: this.userModel.value.password || '',
+          role: 'user' as const
         }
 
         this.userService.updateUser({id: id, ...updatedUser});

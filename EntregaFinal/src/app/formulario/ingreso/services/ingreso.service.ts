@@ -38,7 +38,7 @@ export class IngresoService {
     authUser$.pipe(take(1)).subscribe({
       next: (user) => {
         authUser = user
-        console.log('Usuario autenticado: ', user)
+        // console.log('Usuario autenticado: ', user)
       }
     })
     return (!!authUser)

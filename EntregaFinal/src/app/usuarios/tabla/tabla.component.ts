@@ -111,7 +111,7 @@ export class TablaComponent implements OnChanges {
   }
 
   ngOnChanges(){
-    console.log(this.dataSource);
+    // console.log(this.dataSource);
     if(this.title === 'Profesores'){
       this.displayedColumns = ['id', 'nombre completo', 'edad', 'correo', 'nivel académico', 'materias', 'rol', 'acciones'];
     }else if (this.title === 'Cursos'){

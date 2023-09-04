@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IngresoService } from 'src/app/formulario/ingreso/services/ingreso.service';
 import { take, map, BehaviorSubject } from 'rxjs';
 import { UserService } from 'src/app/usuarios/user.service';
+import { users } from 'src/app/usuarios/modelos';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -10,7 +11,7 @@ import { UserService } from 'src/app/usuarios/user.service';
 export class HomeComponent {
 
   // authUserName: Observable<any> = this.userService.authUser$;
-  private authUserName = new BehaviorSubject<any>('');
+  private authUserName = new BehaviorSubject<string>('');
   public authUserName$ = this.authUserName.asObservable();
 
   constructor(private authService: IngresoService, private userService: UserService ){

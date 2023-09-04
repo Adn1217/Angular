@@ -63,13 +63,13 @@ export class InscripcionesComponent implements OnInit, OnDestroy {
     //   }
     // })
     
-    this.store.select(selectEnrollmentListValue).subscribe({
+    this.store.select(selectEnrollmentListValue).pipe(takeUntil(this.destroyed)).subscribe({
       next: (enrollmentList) => {
         console.log('EnrollmentList: ', enrollmentList)
       }
     })
     
-    this.store.select(selectAuthUserValue).subscribe({
+    this.store.select(selectAuthUserValue).pipe(take(1)).subscribe({
       next: (authUser) => {
         if(authUser){
           this.userRol = authUser?.role
@@ -175,7 +175,7 @@ export class InscripcionesComponent implements OnInit, OnDestroy {
         this.enrollmentModel.setValue(enrollmentUpdatedInForm);
       }else{
         let enrollmentToUpdate: enrollments | undefined;
-        this.enrollmentList.subscribe({
+        this.enrollmentList.pipe(take(1)).subscribe({
           next: (enrollments) => {
             enrollmentToUpdate = enrollments.find((enrollment) => enrollment.id === id);
           }

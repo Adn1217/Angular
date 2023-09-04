@@ -62,7 +62,7 @@ export class ProfesoresComponent implements OnDestroy {
     this.userList = userService.getTeachers().pipe(takeUntil(this.destroyed)) // TakeUntil no es necesario con pipe async.
     // this.userList = this.userListObserver;
     
-    this.store.select(selectAuthUserValue).subscribe({
+    this.store.select(selectAuthUserValue).pipe(takeUntil(this.destroyed)).subscribe({
       next: (authUser) => {
         if(authUser){
           this.userRol = authUser?.role

@@ -32,11 +32,21 @@
     },
     {
       "id": 1693702085020,
-      "nombres": "Adrian Alberto2",
+      "nombres": "Adrian Alberto",
       "apellidos": "Fernández Castro",
       "usuario": "adn1217",
       "edad": 22,
       "correo": "adn1218@hotmail.com",
+      "password": "11111111",
+      "role": "user"
+    },
+    {
+      "id": 1693794786589,
+      "nombres": "Adrian Alberto222",
+      "apellidos": "Fernández Castro",
+      "usuario": "adn1217",
+      "edad": 22,
+      "correo": "adn1219@hotmail.com",
       "password": "11111111",
       "role": "user"
     }
@@ -49,7 +59,11 @@
       "usuario": "scastaneda",
       "edad": 58,
       "nivelAcademico": "Maestría",
-      "materias": ["Cálculo I", "Cálculo II", "Cálculo III"],
+      "materias": [
+        "Cálculo I",
+        "Cálculo II",
+        "Cálculo III"
+      ],
       "correo": "scastaneda@hotmail.com",
       "password": "12345678",
       "role": "user"
@@ -61,7 +75,10 @@
       "usuario": "alu2110",
       "edad": 47,
       "nivelAcademico": "Doctorado",
-      "materias": ["Máquinas Eléctricas I", "Máquinas Eléctricas II"],
+      "materias": [
+        "Máquinas Eléctricas I",
+        "Máquinas Eléctricas II"
+      ],
       "correo": "evftrsa_@gmail.com",
       "password": "12345678",
       "role": "user"
@@ -73,7 +90,9 @@
       "usuario": "libardoRuzRuiz",
       "edad": 60,
       "nivelAcademico": "Especialización",
-      "materias": ["Algebra"],
+      "materias": [
+        "Algebra"
+      ],
       "correo": "lrruiz@gmail.com",
       "password": "12345678",
       "role": "user"
@@ -85,7 +104,9 @@
       "usuario": "basalinas",
       "edad": 44,
       "nivelAcademico": "Maestría",
-      "materias": ["Etica"],
+      "materias": [
+        "Etica"
+      ],
       "correo": "jaberm@gmail.com",
       "password": "222222232",
       "role": "user"

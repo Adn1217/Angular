@@ -5,7 +5,6 @@ import { users, teachers, userRol } from 'src/app/usuarios/modelos';
 import { UserService } from 'src/app/usuarios/user.service';
 import { Observable, takeUntil, Subject, Subscription, BehaviorSubject } from 'rxjs';
 import { NotifierService } from 'src/app/core/services/notifier.service';
-import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectAuthUserValue } from 'src/app/store/selectors/auth.selectors';
 
@@ -58,7 +57,7 @@ export class ProfesoresComponent implements OnDestroy {
   // @Input()
   showForm: boolean = false;
   
-  constructor(private formBuilder: FormBuilder, private userService: UserService, private notifier: NotifierService, public router: Router, private store: Store){
+  constructor(private formBuilder: FormBuilder, private userService: UserService, private notifier: NotifierService, private store: Store){
     this.isLoading$ = this.userService.isLoading$;
     this.userList = userService.getTeachers().pipe(takeUntil(this.destroyed)) // TakeUntil no es necesario con pipe async.
     // this.userList = this.userListObserver;

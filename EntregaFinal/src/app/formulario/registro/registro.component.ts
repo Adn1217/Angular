@@ -6,7 +6,6 @@ import { Observable, takeUntil, Subject, Subscription, BehaviorSubject } from 'r
 import { NotifierService } from 'src/app/core/services/notifier.service';
 import { Store } from '@ngrx/store';
 import { selectAuthUserValue } from 'src/app/store/selectors/auth.selectors';
-import { Router } from '@angular/router';
 
 
 const minCharPwdLength: number = 8;
@@ -54,7 +53,7 @@ export class RegistroComponent implements OnDestroy {
   // @Input()
   showForm: boolean = false;
   
-  constructor(private formBuilder: FormBuilder, private userService: UserService, private notifier: NotifierService, private store: Store, public router: Router){
+  constructor(private formBuilder: FormBuilder, private userService: UserService, private notifier: NotifierService, private store: Store){
 
     this.isLoading$ = this.userService.isLoading$;
     this.userListObserver = userService.getUsers().pipe(takeUntil(this.destroyed));

@@ -22,14 +22,9 @@ public isLoading$ = this._isLoading$.asObservable();
 
   constructor(private client: HttpClient, private notifier: NotifierService) {}
 
-    isTeacher(data: users | teachers){
-      return ('nivelAcademico' in data)
-    }
-
     getEnrollments(): Observable<enrollments[]>{
       this._isLoading$.next(true);
       setTimeout(() => {
-        // return this.USERS_DATA;
         this.client.get<enrollments[]>(env.baseApiUrl + '/enrollments').pipe(take(1)).subscribe({
           next: (enrollments) => {
             this._enrollments$.next(enrollments);
@@ -46,7 +41,6 @@ public isLoading$ = this._isLoading$.asObservable();
           }
         })
       }, 1000);
-      // this._users$.next(this.USERS_DATA);
       return this.enrollments$;
     }
 
@@ -58,7 +52,6 @@ public isLoading$ = this._isLoading$.asObservable();
           this._enrollment$.next(enrollment);
         }
       })
-      // const user = this.USERS_DATA.find((user) => user.id === Number(id));
       return this.enrollment$;
     }
 

@@ -39,7 +39,8 @@ describe('userService', () => {
               "usuario": "adn1217",
               "edad": 32,
               "correo": "adn1217@hotmail.com",
-              "password": "12345678"
+              "password": "12345678",
+              "role": "user"
             },
             {
               "id": 2,
@@ -48,7 +49,8 @@ describe('userService', () => {
               "usuario": "alu2110",
               "edad": 31,
               "correo": "alufndz_@gmail.com",
-              "password": "12345678"
+              "password": "12345678",
+              "role": "user"
             }
         ]
 
@@ -87,7 +89,8 @@ describe('userService', () => {
               "Cálculo III"
             ],
             "correo": "scastaneda@hotmail.com",
-            "password": "12345678"
+            "password": "12345678",
+            "role": "user"
           };
         
         const mockUser: users = {
@@ -97,7 +100,8 @@ describe('userService', () => {
             "usuario": "alu2110",
             "edad": 31,
             "correo": "alufndz_@gmail.com",
-            "password": "12345678"
+            "password": "12345678",
+            "role": "user"
           };
 
         let realResponse: boolean = service.isTeacher(mockTeacher);
@@ -122,7 +126,8 @@ describe('userService', () => {
                 "Cálculo III"
               ],
               "correo": "scastaneda@hotmail.com",
-              "password": "12345678"
+              "password": "12345678",
+              "role": "user"
             },
             {
               "id": 2,
@@ -136,7 +141,8 @@ describe('userService', () => {
                 "Máquinas Eléctricas II"
               ],
               "correo": "evftrsa_@gmail.com",
-              "password": "12345678"
+              "password": "12345678",
+              "role": "user"
             }
         ]
 
@@ -174,7 +180,8 @@ describe('userService', () => {
                 "Cálculo III"
               ],
               "correo": "scastaneda@hotmail.com",
-              "password": "12345678"
+              "password": "12345678",
+              "role": "admin"
             }
 
         const mockResponse: teachers = mockTeacher;
@@ -213,7 +220,8 @@ describe('userService', () => {
             "usuario": "alu2110",
             "edad": 31,
             "correo": "alufndz_@gmail.com",
-            "password": "12345678"
+            "password": "12345678",
+            "role": "admin"
           }
 
         const mockResponse: users = mockUser;

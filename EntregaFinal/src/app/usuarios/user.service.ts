@@ -11,6 +11,9 @@ import { env } from 'src/app/envs/env';
 })
 export class UserService {
 
+private  _authUser$ = new BehaviorSubject<users | undefined>(undefined);
+public authUser$ = this._authUser$.asObservable();
+
 private  _user$ = new BehaviorSubject<users | undefined>(undefined);
 private user$ = this._user$.asObservable();
 
@@ -26,6 +29,8 @@ private teachers$ = this._teachers$.asObservable();
 private _isLoading$ = new BehaviorSubject<boolean>(false);
 public isLoading$ = this._isLoading$.asObservable();
 
+
+
   constructor(private client: HttpClient, private notifier: NotifierService) {}
 
     isTeacher(data: users | teachers){
@@ -35,7 +40,6 @@ public isLoading$ = this._isLoading$.asObservable();
     getUsers(): Observable<users[]>{
       this._isLoading$.next(true);
       setTimeout(() => {
-        // return this.USERS_DATA;
         this.client.get<users[]>(env.baseApiUrl + '/users').pipe(take(1)).subscribe({
           next: (users) => {
             this._users$.next(users);
@@ -52,7 +56,6 @@ public isLoading$ = this._isLoading$.asObservable();
           }
         })
       }, 1000);
-      // this._users$.next(this.USERS_DATA);
       return this.users$;
     }
 
@@ -77,7 +80,6 @@ public isLoading$ = this._isLoading$.asObservable();
           }
         })
       }, 1000);
-      // this._teachers$.next(this.TEACHERS_DATA);
       return this.teachers$;
     }
 
@@ -95,15 +97,29 @@ public isLoading$ = this._isLoading$.asObservable();
     }
     
     getUserById(id: string): Observable<users | undefined> {
-      this.client.get<users[]>(env.baseApiUrl + '/users').pipe(take(1)).subscribe({
-        next: (users) => {
-          console.log('Usuarios encontrados: ', JSON.stringify(users));
-          let user = users.find((user) => user.id === Number(id));
+      this.client.get<users>(env.baseApiUrl + `/users/${id}`).pipe(take(1)).subscribe({
+        next: (user) => {
           this._user$.next(user);
+        },
+        error: (error) => {
+          this._user$.next(undefined);
+          console.log("Se presenta el error: ", error)
         }
       })
-      // const user = this.USERS_DATA.find((user) => user.id === Number(id));
       return this.user$;
+    }
+    
+    getUserByEmail(email: string): Observable<users | undefined> {
+      this.client.get<users[]>(env.baseApiUrl + `/users?correo=${email}`).pipe(take(1)).subscribe({
+        next: (registeredUser) => {
+          this._authUser$.next(registeredUser[0]);
+        },
+        error: (error) => {
+          this._authUser$.next(undefined);
+          console.log("Se presenta el error: ", error)
+        }
+      })
+      return this.authUser$;
     }
 
     createUser(user: users | teachers): void {

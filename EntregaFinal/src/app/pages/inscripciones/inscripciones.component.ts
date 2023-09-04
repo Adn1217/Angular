@@ -1,14 +1,18 @@
-import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators  } from '@angular/forms';
-import { enrollments } from 'src/app/usuarios/modelos';
-import { Observable, takeUntil, Subject, Subscription, BehaviorSubject } from 'rxjs';
+import { enrollments, userRol } from 'src/app/usuarios/modelos';
+import { Observable, takeUntil, Subject, Subscription, BehaviorSubject, take } from 'rxjs';
 import { NotifierService } from 'src/app/core/services/notifier.service';
-import { Router } from '@angular/router';
 import { InscripcionesService } from './inscripciones.service';
+import { Store } from '@ngrx/store';
+import { inscripcionesActions } from 'src/app/store/actions/inscripciones.actions';
+import { selectEnrollmentList, selectEnrollmentListValue } from 'src/app/store/selectors/inscripciones.selectors';
+import { selectAuthUserValue } from 'src/app/store/selectors/auth.selectors';
+import { InscripcionesActions } from './store/inscripciones.actions';
 
 interface EnrollmentModel {
-  idCurso: FormControl<number| null>;
-  idAlumno: FormControl<number | null>;
+  courseId: FormControl<number| null>;
+  userId: FormControl<number | null>;
   // profesor: FormControl<string | null>;
 }
 
@@ -17,11 +21,11 @@ interface EnrollmentModel {
   templateUrl: './inscripciones.component.html',
   styleUrls: ['./inscripciones.component.css']
 })
-export class InscripcionesComponent {
+export class InscripcionesComponent implements OnInit, OnDestroy {
 
   enrollmentModel : FormGroup<EnrollmentModel> = this.formBuilder.group({
-      idCurso: [0, [Validators.required]],
-      idAlumno: [0, [Validators.required]],
+      courseId: [0, [Validators.required]],
+      userId: [0, [Validators.required]],
       // profesor: ['', [Validators.required, Validators.minLength(minCharUserLength)]],
       })
   
@@ -34,21 +38,49 @@ export class InscripcionesComponent {
   isLoading$: Observable<boolean>;
   editionNote: string = '';
 
+  userRol: userRol = null;
+
   @Input()
   ingreso: boolean = false;
 
   // @Input()
   showForm: boolean = false;
   
-  constructor(private formBuilder: FormBuilder, private enrollmentService: InscripcionesService, private notifier: NotifierService, public router: Router){
+  constructor(private formBuilder: FormBuilder, private enrollmentService: InscripcionesService, private notifier: NotifierService, private store: Store){
     this.isLoading$ = this.enrollmentService.isLoading$;
     this.enrollmentList = this.enrollmentService.getEnrollments().pipe(takeUntil(this.destroyed)) // TakeUntil no es necesario con pipe async.
     // this.userList = this.userListObserver;
-    this.enrollmentList.subscribe({
-      next: (enrollments) => {
-        console.log('Inscripciones: ', enrollments);
+    // this.enrollmentList.subscribe({
+    //   next: (enrollments) => {
+    //     console.log('Inscripciones: ', enrollments);
+    //   }
+    // })
+
+    // this.store.select(selectEnrollmentList).pipe(take(1)).subscribe({
+    //   next: (enrollmentList) => {
+    //     console.log('EnrollmentList: ', enrollmentList)
+    //   }
+    // })
+    
+    this.store.select(selectEnrollmentListValue).subscribe({
+      next: (enrollmentList) => {
+        console.log('EnrollmentList: ', enrollmentList)
       }
     })
+    
+    this.store.select(selectAuthUserValue).subscribe({
+      next: (authUser) => {
+        if(authUser){
+          this.userRol = authUser?.role
+        }
+      }
+    })
+  }
+
+  ngOnInit(): void {
+
+    this.store.dispatch(InscripcionesActions.loadInscripciones())
+
   }
 
   ngOnDestroy(): void {
@@ -94,19 +126,14 @@ export class InscripcionesComponent {
     }
   }
   
-  navigateTo(page: string){
-    console.log(page);
-    // this.router.navigate([`${page}`]);
-  }
-
   handleSubmit(event: Event){
    
     // this.showFormChange.emit();
     this.showForm = !this.showForm;
     const newEnrollment = {
       id: new Date().getTime(),
-      idCurso: this.enrollmentModel.value.idCurso || 0,
-      idAlumno: this.enrollmentModel.value.idAlumno || 0,
+      courseId: this.enrollmentModel.value.courseId || 0,
+      userId: this.enrollmentModel.value.userId || 0,
       // profesor: this.userModel.value.edad || 18,
     }
 
@@ -125,9 +152,10 @@ export class InscripcionesComponent {
     let confirmation = await confirmModal.fire();
     
     if(enrollmentToDelete && confirmation.isConfirmed){
-      this.enrollmentService.deleteEnrollment(enrollmentToDelete);
+      // this.enrollmentService.deleteEnrollment(enrollmentToDelete);
+      this.store.dispatch(inscripcionesActions.delete({enrollmentToDelete}))
       this.notifier.showSuccessToast(`Se ha eliminado la inscripción con id: ${enrollmentToDelete.id}`,'', 3000, false)
-      console.log("Se elimina inscrición con id: ", enrollmentToDelete.id)
+      console.log("Se elimina inscripción con id: ", enrollmentToDelete.id)
       }
   }
 
@@ -155,8 +183,8 @@ export class InscripcionesComponent {
         if(enrollmentToUpdate && this.enrollmentModel.status === 'VALID'){
 
           const updatedEnrollment = {
-            idCurso: this.enrollmentModel.value.idCurso || 0,
-            idAlumno: this.enrollmentModel.value.idAlumno || 0,
+            courseId: this.enrollmentModel.value.courseId || 0,
+            userId: this.enrollmentModel.value.userId || 0,
           // profesor: this.courseModel.value.usuario || '',
           }
           this.enrollmentService.updateEnrollment({id: id, ...updatedEnrollment});

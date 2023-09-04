@@ -1,6 +1,8 @@
 import {Component, Input, Output, EventEmitter, OnChanges} from '@angular/core';
-import { users, teachers, courses, enrollments } from '../modelos';
+import { users, teachers, courses, enrollments, userRol } from '../modelos';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { selectAuthUserValue } from 'src/app/store/selectors/auth.selectors';
 
 
 
@@ -12,9 +14,21 @@ import { Router } from '@angular/router';
 
 export class TablaComponent implements OnChanges {
 
-  constructor(private router: Router ){}
+  constructor(private router: Router, private store: Store){
 
-  displayedColumns: string[] = ['id', 'nombre completo', 'edad', 'correo', 'acciones'];
+    this.store.select(selectAuthUserValue).subscribe({
+      next: (authUser) => {
+        if(authUser){
+          this.userRol = authUser?.role
+        }
+      }
+    })
+  }
+
+  displayedColumns: string[] = ['id', 'nombre completo', 'edad', 'correo', 'rol', 'acciones'];
+
+  userRol: userRol = null
+
 
   @Input()
   showDetails: boolean = false;
@@ -57,7 +71,7 @@ export class TablaComponent implements OnChanges {
   }
   
   handleUpdate(entity: users | teachers | courses | enrollments ){
-    if('idCurso' in entity){
+    if('courseId' in entity){
       this.handleUpdateEnrollment(entity);
     }else if ('curso' in entity){
       this.handleUpdateCourse(entity);
@@ -67,7 +81,7 @@ export class TablaComponent implements OnChanges {
   }
   
   handleDelete(entity: users | teachers | courses | enrollments ){
-    if('idCurso' in entity){
+    if('courseId' in entity){
       this.handleDeleteEnrollment(entity);
     }else if ('curso' in entity){
       this.handleDeleteCourse(entity);
@@ -99,7 +113,7 @@ export class TablaComponent implements OnChanges {
   ngOnChanges(){
     console.log(this.dataSource);
     if(this.title === 'Profesores'){
-      this.displayedColumns = ['id', 'nombre completo', 'edad', 'correo', 'nivel académico', 'materias', 'acciones'];
+      this.displayedColumns = ['id', 'nombre completo', 'edad', 'correo', 'nivel académico', 'materias', 'rol', 'acciones'];
     }else if (this.title === 'Cursos'){
       this.displayedColumns = ['id', 'Curso', 'Créditos', 'acciones'];
     }else if (this.title === 'Inscripciones'){

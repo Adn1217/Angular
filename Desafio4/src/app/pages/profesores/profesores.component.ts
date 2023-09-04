@@ -112,7 +112,9 @@ export class ProfesoresComponent implements OnDestroy {
       nivelAcademico: this.userModel.value.nivelAcademico || '',
       materias: [this.userModel.value.materias] || [''],
       correo: this.userModel.value.correo || '',
-      password: this.userModel.value.password || ''}
+      password: this.userModel.value.password || '',
+      role: 'user'
+    }
 
     this.userService.createUser(newTeacher);
     this.userModel.reset();
@@ -150,14 +152,17 @@ export class ProfesoresComponent implements OnDestroy {
         // const userToUpdate = this.userList.find((user) => user.id === id);
         if(userToUpdate && this.userModel.status === 'VALID'){
 
-          const updatedUser = {nombres: this.userModel.value.nombres || '',
-          apellidos: this.userModel.value.apellidos || '',
-          usuario: this.userModel.value.usuario || '',
-          edad: this.userModel.value.edad || 18,
-          nivelAcademico: this.userModel.value.nivelAcademico || '',
-          materias: this.userModel.value.materias || [''],
-          correo: this.userModel.value.correo || '',
-          password: this.userModel.value.password || ''}
+          const updatedUser = {
+            nombres: this.userModel.value.nombres || '',
+            apellidos: this.userModel.value.apellidos || '',
+            usuario: this.userModel.value.usuario || '',
+            edad: this.userModel.value.edad || 18,
+            nivelAcademico: this.userModel.value.nivelAcademico || '',
+            materias: this.userModel.value.materias || [''],
+            correo: this.userModel.value.correo || '',
+            password: this.userModel.value.password || '',
+            role: 'user'
+          }
           this.userService.updateUser({id: id, ...updatedUser});
 
           this.userModel.reset();

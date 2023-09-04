@@ -1,9 +1,12 @@
 import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators  } from '@angular/forms';
-import { users } from 'src/app/usuarios/modelos';
+import { userRol, users } from 'src/app/usuarios/modelos';
 import { UserService } from 'src/app/usuarios/user.service';
 import { Observable, takeUntil, Subject, Subscription, BehaviorSubject } from 'rxjs';
 import { NotifierService } from 'src/app/core/services/notifier.service';
+import { Store } from '@ngrx/store';
+import { selectAuthUserValue } from 'src/app/store/selectors/auth.selectors';
+import { Router } from '@angular/router';
 
 
 const minCharPwdLength: number = 8;
@@ -14,7 +17,7 @@ interface RegisterModel {
   usuario: FormControl<string | null>;
   edad: FormControl<number | null>;
   correo: FormControl<string | null>;
-  password: FormControl<string | null>
+  password: FormControl<string | null>;
 }
   
 @Component({
@@ -32,7 +35,7 @@ export class RegistroComponent implements OnDestroy {
       usuario: ['', [Validators.required, Validators.minLength(minCharUserLength)]],
       edad: [0, [Validators.required]],
       correo: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(minCharPwdLength)]]
+      password: ['', [Validators.required, Validators.minLength(minCharPwdLength)]],
       })
   
   userList: Observable<users[]>
@@ -42,6 +45,8 @@ export class RegistroComponent implements OnDestroy {
   destroyed = new Subject<boolean>(); 
   isLoading$: Observable<boolean>;
   editionNote = ''
+  
+  userRol: userRol = null
 
   @Input()
   ingreso: boolean = false;
@@ -49,11 +54,19 @@ export class RegistroComponent implements OnDestroy {
   // @Input()
   showForm: boolean = false;
   
-  constructor(private formBuilder: FormBuilder, private userService: UserService, private notifier: NotifierService){
+  constructor(private formBuilder: FormBuilder, private userService: UserService, private notifier: NotifierService, private store: Store, public router: Router){
 
     this.isLoading$ = this.userService.isLoading$;
     this.userListObserver = userService.getUsers().pipe(takeUntil(this.destroyed));
     this.userList = this.userListObserver; // Reemplaza la subscripcion al usar pipe async.
+
+    this.store.select(selectAuthUserValue).subscribe({
+      next: (authUser) => {
+        if(authUser){
+          this.userRol = authUser?.role
+        }
+      }
+    })
     }
 
   ngOnDestroy(): void {
@@ -109,7 +122,9 @@ export class RegistroComponent implements OnDestroy {
       usuario: this.userModel.value.usuario || '',
       edad: this.userModel.value.edad || 18,
       correo: this.userModel.value.correo || '',
-      password: this.userModel.value.password || ''}
+      password: this.userModel.value.password || '',
+      role: 'user' as const
+    }
 
     this.userService.createUser(newUser);
     this.userModel.reset();
@@ -154,7 +169,10 @@ export class RegistroComponent implements OnDestroy {
         usuario: this.userModel.value.usuario || '',
         edad: this.userModel.value.edad || 18,
         correo: this.userModel.value.correo || '',
-        password: this.userModel.value.password || ''}
+        password: this.userModel.value.password || '',
+        role: 'user' as const
+        }
+
         this.userService.updateUser({id: id, ...updatedUser});
  
         this.userModel.reset();

@@ -36,3 +36,8 @@ export interface enrollments {
     courseId: number;
     userId: number;
   }
+
+export interface enrollmentsWithCourseAndUser extends enrollments {
+    course: courses;
+    user: users;
+  }

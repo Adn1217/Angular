@@ -49,7 +49,7 @@ export class InscripcionesComponent implements OnInit, OnDestroy {
   
   constructor(private formBuilder: FormBuilder, private enrollmentService: InscripcionesService, private notifier: NotifierService, private store: Store){
     this.isLoading$ = this.enrollmentService.isLoading$;
-    this.enrollmentList = this.enrollmentService.getEnrollments().pipe(takeUntil(this.destroyed)) // TakeUntil no es necesario con pipe async.
+    // this.enrollmentList = this.enrollmentService.getEnrollments().pipe(takeUntil(this.destroyed)) // TakeUntil no es necesario con pipe async.
     // this.userList = this.userListObserver;
     // this.enrollmentList.subscribe({
     //   next: (enrollments) => {
@@ -62,10 +62,11 @@ export class InscripcionesComponent implements OnInit, OnDestroy {
     //     console.log('EnrollmentList: ', enrollmentList)
     //   }
     // })
-    
-    this.store.select(selectEnrollmentListValue).pipe(takeUntil(this.destroyed)).subscribe({
+    this.enrollmentList = this.store.select(selectEnrollmentListValue);
+    this.enrollmentList.pipe(takeUntil(this.destroyed)).subscribe({
       next: (enrollmentList) => {
         console.log('EnrollmentList: ', enrollmentList)
+
       }
     })
     
@@ -79,9 +80,7 @@ export class InscripcionesComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-
     this.store.dispatch(InscripcionesActions.loadInscripciones())
-
   }
 
   ngOnDestroy(): void {

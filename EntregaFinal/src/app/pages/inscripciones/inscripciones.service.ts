@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject, Observable, take, mergeMap, map } from 'rxjs'
-import { users, teachers, enrollments } from 'src/app/usuarios/modelos';
+import { users, teachers, enrollments, enrollmentsWithCourseAndUser } from 'src/app/usuarios/modelos';
 import { HttpClient } from '@angular/common/http';
 import { NotifierService } from 'src/app/core/services/notifier.service';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -16,6 +16,9 @@ private enrollment$ = this._enrollment$.asObservable();
 
 private _enrollments$ = new BehaviorSubject<enrollments[]>([]);
 private enrollments$ = this._enrollments$.asObservable();
+
+private _enrollmentsWithCourseAndUsers$ = new BehaviorSubject<enrollmentsWithCourseAndUser[]>([]);
+private enrollmentsWithCourseAndUsers$ = this._enrollmentsWithCourseAndUsers$.asObservable();
       
 private _isLoading$ = new BehaviorSubject<boolean>(false);
 public isLoading$ = this._isLoading$.asObservable();
@@ -25,7 +28,7 @@ public isLoading$ = this._isLoading$.asObservable();
     getEnrollments(): Observable<enrollments[]>{
       this._isLoading$.next(true);
       setTimeout(() => {
-        this.client.get<enrollments[]>(env.baseApiUrl + '/enrollments').pipe(take(1)).subscribe({
+        this.client.get<enrollments[]>(env.baseApiUrl + '/enrollments').subscribe({
           next: (enrollments) => {
             this._enrollments$.next(enrollments);
             this._isLoading$.next(false);
@@ -42,6 +45,28 @@ public isLoading$ = this._isLoading$.asObservable();
         })
       }, 1000);
       return this.enrollments$;
+    }
+    
+    getEnrollmentsWithCourseAndUser(): Observable<enrollmentsWithCourseAndUser[]>{
+      this._isLoading$.next(true);
+      setTimeout(() => {
+        this.client.get<enrollmentsWithCourseAndUser[]>(env.baseApiUrl + '/enrollments?_expand=user&_expand=course').pipe(take(1)).subscribe({
+          next: (enrollments) => {
+            this._enrollmentsWithCourseAndUsers$.next(enrollments);
+            this._isLoading$.next(false);
+          },
+          error: (err) => {
+            if(err instanceof HttpErrorResponse){
+              if(err.status === 500){
+                this.notifier.showError('','Ha ocurrido un error en el servidor');
+              }
+            }else{
+              this.notifier.showError('', 'Ha ocurrido un error al consultar inscripciones.');
+            }
+          }
+        })
+      }, 1000);
+      return this.enrollmentsWithCourseAndUsers$;
     }
 
     getEnrollmentById(id: string): Observable<enrollments | undefined> {

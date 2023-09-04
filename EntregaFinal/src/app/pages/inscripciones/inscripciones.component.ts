@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators  } from '@angular/forms';
 import { enrollments, userRol } from 'src/app/usuarios/modelos';
 import { Observable, takeUntil, Subject, Subscription, BehaviorSubject, take } from 'rxjs';
@@ -8,6 +8,7 @@ import { Store } from '@ngrx/store';
 import { inscripcionesActions } from 'src/app/store/actions/inscripciones.actions';
 import { selectEnrollmentList, selectEnrollmentListValue } from 'src/app/store/selectors/inscripciones.selectors';
 import { selectAuthUserValue } from 'src/app/store/selectors/auth.selectors';
+import { InscripcionesActions } from './store/inscripciones.actions';
 
 interface EnrollmentModel {
   courseId: FormControl<number| null>;
@@ -20,7 +21,7 @@ interface EnrollmentModel {
   templateUrl: './inscripciones.component.html',
   styleUrls: ['./inscripciones.component.css']
 })
-export class InscripcionesComponent {
+export class InscripcionesComponent implements OnInit, OnDestroy {
 
   enrollmentModel : FormGroup<EnrollmentModel> = this.formBuilder.group({
       courseId: [0, [Validators.required]],
@@ -74,6 +75,12 @@ export class InscripcionesComponent {
         }
       }
     })
+  }
+
+  ngOnInit(): void {
+
+    this.store.dispatch(InscripcionesActions.loadInscripciones())
+
   }
 
   ngOnDestroy(): void {

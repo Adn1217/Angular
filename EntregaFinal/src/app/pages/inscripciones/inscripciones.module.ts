@@ -5,6 +5,10 @@ import { RouterModule } from '@angular/router';
 import { InscripcionesRoutingModule } from './inscripciones-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { UserModule } from 'src/app/usuarios/usuarios.module';
+import { EffectsModule } from '@ngrx/effects';
+import { InscripcionesEffects } from './store/inscripciones.effects';
+import { StoreModule } from '@ngrx/store';
+import { inscripcionesFeature } from './store/inscripciones.reducer';
 
 
 
@@ -17,7 +21,9 @@ import { UserModule } from 'src/app/usuarios/usuarios.module';
     RouterModule,
     ReactiveFormsModule,
     InscripcionesRoutingModule,
-    UserModule
+    UserModule,
+    EffectsModule.forFeature([InscripcionesEffects]),
+    StoreModule.forFeature(inscripcionesFeature)
   ],
 })
 export class InscripcionesModule { }

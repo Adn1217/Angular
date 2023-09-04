@@ -6,11 +6,11 @@ export const inscripcionesFeatureKey = 'enrollment'
 export const authFeatureKey = 'auth'
 
 export interface appReducer {
-    [inscripcionesFeatureKey]: enrollmentState,
+    // [inscripcionesFeatureKey]: enrollmentState,
     [authFeatureKey]: authUserState
 }
 
 export const appReducer: ActionReducerMap<appReducer> = {
-    [inscripcionesFeatureKey]: inscripcionesReducer,
+    // [inscripcionesFeatureKey]: inscripcionesReducer,
     [authFeatureKey]: authReducer
 }

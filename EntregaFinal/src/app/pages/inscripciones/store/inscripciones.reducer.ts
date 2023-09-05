@@ -72,6 +72,23 @@ export const reducer = createReducer(
       error: action.error
     }
   }),
+  on(InscripcionesActions.createInscripcion, state => {
+    return {
+       ...state,
+    }
+  }),
+  on(InscripcionesActions.createInscripcionSuccess, (state, action) => {
+    return {
+      ...state,
+      enrollmentList: action.enrollmentList
+    }
+  }),
+  on(InscripcionesActions.createInscripcionFailure, (state, action) => {
+    return {
+      ...state,
+      error: action.error
+    }
+  }),
   on(InscripcionesActions.delete, (currentState) => {
         
         return {

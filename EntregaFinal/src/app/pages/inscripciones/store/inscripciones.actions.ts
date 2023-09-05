@@ -14,6 +14,9 @@ export const InscripcionesActions = createActionGroup({
     'Load Courses': emptyProps(),
     'Load Courses Success': props<{coursesList: courses[]}>(),
     'Load Courses Failure': props<{error: HttpErrorResponse}>(),
+    'Create Inscripcion': props<{enrollment: enrollments}>(),
+    'Create Inscripcion Success': props<{enrollmentList: enrollments[]}>(),
+    'Create Inscripcion Failure': props<{error: HttpErrorResponse}>(),
     'delete': props<{enrollmentToDelete: enrollments}>()
   }
 });

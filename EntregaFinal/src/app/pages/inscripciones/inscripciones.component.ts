@@ -59,6 +59,7 @@ export class InscripcionesComponent implements OnInit, OnDestroy {
   
   constructor(private formBuilder: FormBuilder, private enrollmentService: InscripcionesService, private notifier: NotifierService, private store: Store, private userService: UserService, private router: Router){
     this.isLoading$ = this.enrollmentService.isLoading$;
+    this.store.dispatch(InscripcionesActions.loadInscripciones())
     // this.enrollmentList = this.enrollmentService.getEnrollments().pipe(takeUntil(this.destroyed)) // TakeUntil no es necesario con pipe async.
     // this.userList = this.userListObserver;
     // this.enrollmentList.subscribe({
@@ -82,7 +83,6 @@ export class InscripcionesComponent implements OnInit, OnDestroy {
         this.courseIdChange(courseSelected);
       }
     })
-    console.log('FormModel: ',this.enrollmentModel.valid)
     this.enrollmentList$ = this.store.select(selectEnrollmentListValue);
     this.enrollmentList$.pipe(takeUntil(this.destroyed)).subscribe({
       next: (enrollmentList) => {
@@ -133,7 +133,7 @@ export class InscripcionesComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.store.dispatch(InscripcionesActions.loadInscripciones())
+    // this.store.dispatch(InscripcionesActions.loadInscripciones())
   }
 
   ngOnDestroy(): void {
@@ -224,8 +224,10 @@ export class InscripcionesComponent implements OnInit, OnDestroy {
       // profesor: this.userModel.value.edad || 18,
     }
 
-    this.enrollmentService.createEnrollment(newEnrollment);
+    // this.enrollmentService.createEnrollment(newEnrollment);
+    this.store.dispatch(InscripcionesActions.createInscripcion({enrollment: newEnrollment}))
     this.enrollmentModel.reset();
+    // this.enrollmentList$ = this.store.select(selectEnrollmentListValue);
   }
 
   handleCancel(event: Event){
@@ -272,10 +274,11 @@ export class InscripcionesComponent implements OnInit, OnDestroy {
         if(enrollmentToUpdate && this.enrollmentModel.status === 'VALID'){
 
           const updatedEnrollment = {
-            courseId: this.enrollmentModel.value.courseId || 0,
-            userId: this.enrollmentModel.value.userId || 0,
+            courseId: this.enrollmentModel.getRawValue().courseId || 0,
+            userId: this.enrollmentModel.getRawValue().userId || 0,
           // profesor: this.courseModel.value.usuario || '',
           }
+          console.log('Inscripcion actualizada: ', updatedEnrollment)
           this.enrollmentService.updateEnrollment({id: id, ...updatedEnrollment});
 
           this.enrollmentModel.reset();

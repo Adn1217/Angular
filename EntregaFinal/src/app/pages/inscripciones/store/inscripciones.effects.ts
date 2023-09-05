@@ -51,6 +51,18 @@ export class InscripcionesEffects {
       )
     )
   });
+  
+  createInscripciones$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(InscripcionesActions.createInscripcion),
+      concatMap(({enrollment}) => 
+        this.service.createEnrollment2(enrollment).pipe(
+          map(data => InscripcionesActions.createInscripcionSuccess({enrollmentList: data})),
+          catchError(error => of(InscripcionesActions.createInscripcionFailure({error})))
+        )
+      )
+    )
+  });
 
   handleError(error: HttpErrorResponse){
     console.log('Se ha presentado el siguente error: ', error);

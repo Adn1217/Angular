@@ -88,17 +88,65 @@ public isLoading$ = this._isLoading$.asObservable();
       return this.enrollment$;
     }
 
-    createEnrollment(enrollment: enrollments ): void {
+    createEnrollment(enrollment: enrollments ): Observable<enrollments[]> {
       console.log('Inscripción: ', enrollment);
-      this.client.post<enrollments>(env.baseApiUrl + '/enrollments', enrollment).pipe(
+      const reqHTTP$ = this.client.post<enrollments>(env.baseApiUrl + '/enrollments', enrollment)
+      reqHTTP$.pipe(
         mergeMap((createdEnrollment) => this.enrollments$.pipe(
           take(1),
           map((enrollmentsList) => [...enrollmentsList, createdEnrollment])))
       ).subscribe({
         next: (enrollmentList) => {
+          console.log('Lista de inscripciones: ', enrollmentList)
           this._enrollments$.next([...enrollmentList]);
+        },
+        error: (err) => {
+          console.log('Ha ocurrido error: ', err);
+          if(err instanceof HttpErrorResponse){
+            this._enrollments$.error(err);
+            if(err.status === 500){
+              this.notifier.showError('',`Se ha presentado error ${err.status}. Error en el servidor.`);
+            }else if(err.status === 404){
+              this.notifier.showError('',`Se ha presentado error ${err.status}. No se encuentra el servicio solicitado.`);
+            }else{
+              this.notifier.showError('',`Se presenta error ${err.status} al consumir el servicio`);
+            }
+          }else{
+            this.notifier.showError('', 'Ha ocurrido un error al consultar inscripciones.');
+          }
         }
       })
+      return this.enrollments$;
+    }
+    
+    createEnrollment2(enrollment: enrollments ): Observable<enrollments[]> {
+      console.log('Inscripción: ', enrollment);
+      const reqHTTP$ = this.client.post<enrollments>(env.baseApiUrl + '/enrollments', enrollment)
+      reqHTTP$.pipe(take(1)).subscribe({
+        next: () => {
+          this.getEnrollmentsWithCourseAndUser().pipe(take(1)).subscribe({
+            next: (enrollmentList) => {
+              this._enrollmentsWithCourseAndUsers$.next([...enrollmentList]);
+            }
+          })
+        },
+        error: (err) => {
+          console.log('Ha ocurrido error: ', err);
+          if(err instanceof HttpErrorResponse){
+            this._enrollments$.error(err);
+            if(err.status === 500){
+              this.notifier.showError('',`Se ha presentado error ${err.status}. Error en el servidor.`);
+            }else if(err.status === 404){
+              this.notifier.showError('',`Se ha presentado error ${err.status}. No se encuentra el servicio solicitado.`);
+            }else{
+              this.notifier.showError('',`Se presenta error ${err.status} al consumir el servicio`);
+            }
+          }else{
+            this.notifier.showError('', 'Ha ocurrido un error al consultar inscripciones.');
+          }
+        }
+      })
+      return this.enrollmentsWithCourseAndUsers$;
     }
 
     updateEnrollment(enrollmentToUpdate: enrollments): void {

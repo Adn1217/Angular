@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators  } from '@angular/forms';
-import { enrollments, userRol } from 'src/app/usuarios/modelos';
+import { enrollments, enrollmentsWithCourseAndUser, userRol } from 'src/app/usuarios/modelos';
 import { Observable, takeUntil, Subject, Subscription, BehaviorSubject, take } from 'rxjs';
 import { NotifierService } from 'src/app/core/services/notifier.service';
 import { InscripcionesService } from './inscripciones.service';
@@ -168,7 +168,7 @@ export class InscripcionesComponent implements OnInit, OnDestroy {
     this.showForm = false;
   }
 
-  async handleDeleteEnrollment(enrollmentToDelete: enrollments ){
+  async handleDeleteEnrollment(enrollmentToDelete: enrollmentsWithCourseAndUser ){
     let confirmModal = this.notifier.getConfirm('',`¿Está seguro que desea eliminar la inscripción ${enrollmentToDelete.id}?`, 'warning');
     let confirmation = await confirmModal.fire();
     
@@ -180,10 +180,10 @@ export class InscripcionesComponent implements OnInit, OnDestroy {
       }
   }
 
-  handleUpdateEnrollment(originalEnrollment: enrollments){
+  handleUpdateEnrollment(originalEnrollment: enrollmentsWithCourseAndUser){
 
       console.log('Inscripción: ', originalEnrollment);
-      const {id, ...rest} = originalEnrollment;
+      const {id, user, course, ...rest} = originalEnrollment;
       const enrollmentUpdatedInForm = {...rest};
       this.editionNote = 'Recuerde, pare editar seleccionar nuevamente el lápiz.'
 

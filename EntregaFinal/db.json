@@ -152,11 +152,6 @@
   ],
   "enrollments": [
     {
-      "id": 1,
-      "courseId": 5,
-      "userId": 2
-    },
-    {
       "id": 2,
       "courseId": 3,
       "userId": 3
@@ -170,6 +165,11 @@
       "id": 1693874594972,
       "courseId": 5,
       "userId": 3
+    },
+    {
+      "id": 1693889413251,
+      "courseId": 2,
+      "userId": 1
     }
   ]
 }

@@ -2,7 +2,7 @@
     <mat-drawer #drawer class="sidenav" mode="side" [opened]="sideBarOpen">
         <mat-nav-list class="sideNavList">
             <div>
-                <a routerLink="home" mat-list-item>
+                <a routerLink="home" routerLinkActive="active-link" mat-list-item>
                     <div>
                         <h1>Inicio</h1>
                     </div>
@@ -12,22 +12,23 @@
                         <h1>Profesores</h1>
                     </div>
                 </a>
-                <a *ngIf="(authUser$ | async)?.role ==='admin'" routerLink="admins" mat-list-item>
+                <a *ngIf="(authUser$ | async)?.role ==='admin'" routerLink="admins" routerLinkActive="active-link"
+                    mat-list-item>
                     <div>
                         <h1>Administradores</h1>
                     </div>
                 </a>
-                <a routerLink="register" mat-list-item>
+                <a routerLink="register" routerLinkActive="active-link" mat-list-item>
                     <div>
                         <h1>Estudiantes</h1>
                     </div>
                 </a>
-                <a routerLink="courses" mat-list-item>
+                <a routerLink="courses" routerLinkActive="active-link" mat-list-item>
                     <div>
                         <h1>Cursos</h1>
                     </div>
                 </a>
-                <a routerLink="enrollments" mat-list-item>
+                <a routerLink="enrollments" routerLinkActive="active-link" mat-list-item>
                     <div>
                         <h1>Inscripciones</h1>
                     </div>

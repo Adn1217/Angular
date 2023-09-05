@@ -56,3 +56,7 @@ button {
 .model {
     width: 40%
 }
+
+.mat-mdc-form-field {
+    display:block
+}

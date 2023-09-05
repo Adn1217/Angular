@@ -6,6 +6,8 @@ import { Observable, EMPTY, of } from 'rxjs';
 import { InscripcionesActions } from './inscripciones.actions';
 import { InscripcionesService } from '../inscripciones.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { UserService } from 'src/app/usuarios/user.service';
+import { CourseService } from '../../cursos/course.service';
 
 @Injectable()
 export class InscripcionesEffects {
@@ -25,12 +27,36 @@ export class InscripcionesEffects {
       )
     )
   });
+  
+  loadUsers$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(InscripcionesActions.loadUsers),
+      concatMap(() => 
+        this.userService.getUsers().pipe(
+          map(data => InscripcionesActions.loadUsersSuccess({usersList: data})),
+          catchError(error => of(InscripcionesActions.loadUsersFailure({error})))
+        )
+      )
+    )
+  });
+  
+  loadCourses$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(InscripcionesActions.loadCourses),
+      concatMap(() => 
+        this.courseService.getCourses().pipe(
+          map(data => InscripcionesActions.loadCoursesSuccess({coursesList: data})),
+          catchError(error => of(InscripcionesActions.loadCoursesFailure({error})))
+        )
+      )
+    )
+  });
 
   handleError(error: HttpErrorResponse){
     console.log('Se ha presentado el siguente error: ', error);
     return InscripcionesActions.loadInscripcionesFailure({error});
   }
-  constructor(private actions$: Actions, private service: InscripcionesService) {
+  constructor(private actions$: Actions, private service: InscripcionesService, private userService: UserService, private courseService: CourseService) {
 
   }
 }

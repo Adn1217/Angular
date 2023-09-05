@@ -89,6 +89,7 @@ public isLoading$ = this._isLoading$.asObservable();
     }
 
     createEnrollment(enrollment: enrollments ): void {
+      console.log('Inscripción: ', enrollment);
       this.client.post<enrollments>(env.baseApiUrl + '/enrollments', enrollment).pipe(
         mergeMap((createdEnrollment) => this.enrollments$.pipe(
           take(1),

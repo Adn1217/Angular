@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators  } from '@angular/forms';
-import { enrollments, enrollmentsWithCourseAndUser, userRol } from 'src/app/usuarios/modelos';
+import { courses, enrollments, enrollmentsWithCourseAndUser, userRol, users } from 'src/app/usuarios/modelos';
 import { Observable, takeUntil, Subject, Subscription, BehaviorSubject, take } from 'rxjs';
 import { NotifierService } from 'src/app/core/services/notifier.service';
 import { InscripcionesService } from './inscripciones.service';
@@ -9,7 +9,7 @@ import { inscripcionesActions } from 'src/app/store/actions/inscripciones.action
 // import { selectEnrollmentList, selectEnrollmentListValue } from 'src/app/store/selectors/inscripciones.selectors';
 import { selectAuthUserValue } from 'src/app/store/selectors/auth.selectors';
 import { InscripcionesActions } from './store/inscripciones.actions';
-import { selectEnrollmentListValue } from './store/inscripciones.selectors';
+import { selectCoursesListValue, selectEnrollmentListValue, selectUsersListValue } from './store/inscripciones.selectors';
 import { UserService } from 'src/app/usuarios/user.service';
 import { authActions } from 'src/app/store/actions/auth.actions';
 import { Router } from '@angular/router';
@@ -17,6 +17,8 @@ import { Router } from '@angular/router';
 interface EnrollmentModel {
   courseId: FormControl<number| null>;
   userId: FormControl<number | null>;
+  user: FormControl<string | null>;
+  course: FormControl<string | null>;
   // profesor: FormControl<string | null>;
 }
 
@@ -28,12 +30,16 @@ interface EnrollmentModel {
 export class InscripcionesComponent implements OnInit, OnDestroy {
 
   enrollmentModel : FormGroup<EnrollmentModel> = this.formBuilder.group({
-      courseId: [0, [Validators.required]],
-      userId: [0, [Validators.required]],
+      courseId: [{value:0, disabled:true}, [Validators.required]],
+      userId: [{value: 0, disabled: true}, [Validators.required]],
+      course: ['', [Validators.required]],
+      user: ['', [Validators.required]]
       // profesor: ['', [Validators.required, Validators.minLength(minCharUserLength)]],
       })
   
-  enrollmentList: Observable<enrollments[]>;
+  enrollmentList$: Observable<enrollments[]>;
+  usersList$: Observable<users[]>;
+  coursesList$: Observable<courses[]>;
 
   // userListObserver: Observable<teachers[]>;
   courseListSubscription?: Subscription;
@@ -41,7 +47,8 @@ export class InscripcionesComponent implements OnInit, OnDestroy {
   showDetails: boolean = false;
   isLoading$: Observable<boolean>;
   editionNote: string = '';
-
+  userChanges: Subscription;
+  courseChanges: Subscription;
   userRol: userRol = null;
 
   @Input()
@@ -65,10 +72,35 @@ export class InscripcionesComponent implements OnInit, OnDestroy {
     //     console.log('EnrollmentList: ', enrollmentList)
     //   }
     // })
-    this.enrollmentList = this.store.select(selectEnrollmentListValue);
-    this.enrollmentList.pipe(takeUntil(this.destroyed)).subscribe({
+    this.userChanges = this.enrollmentModel.controls.user.valueChanges.subscribe({
+      next: (userSelected) => {
+        this.userIdChange(userSelected);
+      }
+    })
+    this.courseChanges = this.enrollmentModel.controls.course.valueChanges.subscribe({
+      next: (courseSelected) => {
+        this.courseIdChange(courseSelected);
+      }
+    })
+    console.log('FormModel: ',this.enrollmentModel.valid)
+    this.enrollmentList$ = this.store.select(selectEnrollmentListValue);
+    this.enrollmentList$.pipe(takeUntil(this.destroyed)).subscribe({
       next: (enrollmentList) => {
         console.log('EnrollmentList: ', enrollmentList)
+      }
+    })
+    
+    this.usersList$ = this.store.select(selectUsersListValue);
+    this.usersList$.pipe(take(1)).subscribe({
+      next: (usersList) => {
+        console.log('usersList: ', usersList)
+      }
+    })
+    
+    this.coursesList$ = this.store.select(selectCoursesListValue);
+    this.coursesList$.pipe(take(1)).subscribe({
+      next: (coursesList) => {
+        console.log('coursesList: ', coursesList)
       }
     })
     
@@ -117,10 +149,43 @@ export class InscripcionesComponent implements OnInit, OnDestroy {
   @Output()
   showFormChange = new EventEmitter();
 
-  handleChangeView(event: Event){
-    event.preventDefault();
-    this.ingresoChange.emit(!this.ingreso)
-    this.changeView.emit(event);
+  userIdChange(userSelected: string | null){
+    console.log('Usuario elegido: ', userSelected);
+    let id: number | undefined = 0;
+    this.usersList$.subscribe({
+      next: (userList) => {
+        userList.map((user) => {
+          if(user.nombres === userSelected){
+            id = user.id 
+            this.enrollmentModel.controls.userId.setValue(id);
+          }
+        })
+      }
+    })
+    console.log('FormModel: ',this.enrollmentModel.getRawValue())
+  }
+  
+  courseIdChange(courseSelected: string | null){
+    console.log('Curso elegido: ', courseSelected);
+    let id: number | undefined = 0;
+    this.coursesList$.subscribe({
+      next: (courseList) => {
+        courseList.map((course) => {
+          if(course.curso === courseSelected){
+            id = course.id 
+            this.enrollmentModel.controls.courseId.setValue(id);
+            // this.enrollmentModel.patchValue({courseId: id})
+          }
+        })
+      }
+    })
+    console.log('FormModel: ',this.enrollmentModel.getRawValue())
+  }
+
+  handleShowForm(event: Event){
+    this.showForm = !this.showForm
+    this.store.dispatch(InscripcionesActions.loadUsers());
+    this.store.dispatch(InscripcionesActions.loadCourses());
   }
 
   getFieldControl(field: string): FormControl {
@@ -151,10 +216,11 @@ export class InscripcionesComponent implements OnInit, OnDestroy {
    
     // this.showFormChange.emit();
     this.showForm = !this.showForm;
+    console.log('Modelo: ', this.enrollmentModel.value)
     const newEnrollment = {
       id: new Date().getTime(),
-      courseId: this.enrollmentModel.value.courseId || 0,
-      userId: this.enrollmentModel.value.userId || 0,
+      courseId: this.enrollmentModel.getRawValue().courseId || 0,
+      userId: this.enrollmentModel.getRawValue().userId || 0,
       // profesor: this.userModel.value.edad || 18,
     }
 
@@ -173,7 +239,7 @@ export class InscripcionesComponent implements OnInit, OnDestroy {
     let confirmation = await confirmModal.fire();
     
     if(enrollmentToDelete && confirmation.isConfirmed){
-      // this.enrollmentService.deleteEnrollment(enrollmentToDelete);
+      this.enrollmentService.deleteEnrollment(enrollmentToDelete);
       this.store.dispatch(inscripcionesActions.delete({enrollmentToDelete}))
       this.notifier.showSuccessToast(`Se ha eliminado la inscripción con id: ${enrollmentToDelete.id}`,'', 3000, false)
       console.log("Se elimina inscripción con id: ", enrollmentToDelete.id)
@@ -182,9 +248,11 @@ export class InscripcionesComponent implements OnInit, OnDestroy {
 
   handleUpdateEnrollment(originalEnrollment: enrollmentsWithCourseAndUser){
 
+      this.store.dispatch(InscripcionesActions.loadUsers());
+      this.store.dispatch(InscripcionesActions.loadCourses());
       console.log('Inscripción: ', originalEnrollment);
-      const {id, user, course, ...rest} = originalEnrollment;
-      const enrollmentUpdatedInForm = {...rest};
+      const {id, ...rest} = originalEnrollment;
+      const enrollmentUpdatedInForm = {...rest, user: originalEnrollment.user.nombres, course: originalEnrollment.course.curso};
       this.editionNote = 'Recuerde, pare editar seleccionar nuevamente el lápiz.'
 
       if(!this.showForm){
@@ -195,7 +263,7 @@ export class InscripcionesComponent implements OnInit, OnDestroy {
         this.enrollmentModel.setValue(enrollmentUpdatedInForm);
       }else{
         let enrollmentToUpdate: enrollments | undefined;
-        this.enrollmentList.pipe(take(1)).subscribe({
+        this.enrollmentList$.pipe(take(1)).subscribe({
           next: (enrollments) => {
             enrollmentToUpdate = enrollments.find((enrollment) => enrollment.id === id);
           }

@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { authActions } from 'src/app/store/actions/auth.actions';
 import { selectAuthUserValue } from 'src/app/store/selectors/auth.selectors';
 import { users } from 'src/app/usuarios/modelos';
@@ -14,8 +14,9 @@ import { users } from 'src/app/usuarios/modelos';
 export class SideNavComponent {
 
   authUser$: Observable<users | null> = this.store.select(selectAuthUserValue)
+  // public activatedRoute$: Observable<UrlSegment[]> = this.activatedRoute.url;
 
-  constructor(private store: Store, private router: Router){
+  constructor(private store: Store, private router: Router ){
   }
   
   @Input()

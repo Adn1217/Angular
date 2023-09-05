@@ -38,7 +38,12 @@ public isLoading$ = this._isLoading$.asObservable();
           error: (err) => {
             if(err instanceof HttpErrorResponse){
               if(err.status === 500){
+                this._courses$.error(err);
                 this.notifier.showError('','Ha ocurrido un error en el servidor');
+              }else if(err.status === 404){
+                this.notifier.showError('',`Se ha presentado error ${err.status}. No se encuentra el servicio solicitado.`);
+              }else{
+                this.notifier.showError('',`Se presenta error ${err.status} al consumir el servicio`);
               }
             }else{
               this.notifier.showError('', 'Ha ocurrido un error al consultar cursos.');

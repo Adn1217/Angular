@@ -10,7 +10,6 @@ import { users } from 'src/app/usuarios/modelos';
 })
 export class HomeComponent {
 
-  // authUserName: Observable<any> = this.userService.authUser$;
   private authUserName = new BehaviorSubject<string>('');
   public authUserName$ = this.authUserName.asObservable();
 
@@ -21,14 +20,11 @@ export class HomeComponent {
       return newUser
     })).subscribe({
       next: (user) => {
-        // console.log('usuario completo: ', user);
         if(user && user.nombres){
-          // this.authUserName = user.nombreCompleto;
           this.authUserName.next(user.nombreCompleto)
         }else{
           const authUser = localStorage.getItem('AuthUser');
           const authUserJSON = authUser && JSON.parse(authUser);
-          console.log(authUserJSON.id.toString());
           this.authUserName$ = this.userService.getUserById(authUserJSON.id.toString()).pipe(map( (user) => {
             const nombreCompleto = user?.nombres + ' ' + user?.apellidos
             return nombreCompleto 

@@ -24,11 +24,4 @@ describe('AppComponent', () => {
         expect(app.title).toEqual('Entrega 3');
     })
     
-    // it(`should render title 'Entrega 3'`, () => {
-    //     const fixture = TestBed.createComponent(AppComponent);
-    //     fixture.detectChanges();
-    //     const compiled = fixture.nativeElement as HTMLElement;
-
-    //     expect(compiled.querySelector('.toolBar span')?.textContent).toContain('Entrega 3');
-    // })
 })

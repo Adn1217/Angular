@@ -71,25 +71,13 @@ export class InscripcionesComponent implements OnInit, OnDestroy {
       }
     })
     this.enrollmentList$ = this.store.select(selectEnrollmentListValue);
-    this.enrollmentList$.pipe(takeUntil(this.destroyed)).subscribe({
-      next: (enrollmentList) => {
-        console.log('EnrollmentList: ', enrollmentList)
-      }
-    })
+    this.enrollmentList$.pipe(takeUntil(this.destroyed)).subscribe()
     
     this.usersList$ = this.store.select(selectUsersListValue);
-    this.usersList$.pipe(take(1)).subscribe({
-      next: (usersList) => {
-        console.log('usersList: ', usersList)
-      }
-    })
+    this.usersList$.pipe(take(1)).subscribe()
     
     this.coursesList$ = this.store.select(selectCoursesListValue);
-    this.coursesList$.pipe(take(1)).subscribe({
-      next: (coursesList) => {
-        console.log('coursesList: ', coursesList)
-      }
-    })
+    this.coursesList$.pipe(take(1)).subscribe()
     
     this.store.select(selectAuthUserValue).pipe(take(1)).subscribe({
       next: (authUser) => {
@@ -103,7 +91,6 @@ export class InscripcionesComponent implements OnInit, OnDestroy {
             const regUser = this.userService.getUserById(authUserJSON.id);
             regUser.subscribe({
               next: (regUser) => {
-                console.log('Usuario regUser: ', regUser);
                 if(regUser){
                   this.store.dispatch(authActions.setAuthUser({authUser: regUser}))
                 }else{
@@ -137,7 +124,6 @@ export class InscripcionesComponent implements OnInit, OnDestroy {
   showFormChange = new EventEmitter();
 
   userIdChange(userSelected: string | null){
-    console.log('Usuario elegido: ', userSelected);
     let id: number | undefined = 0;
     this.usersList$.subscribe({
       next: (userList) => {
@@ -149,11 +135,9 @@ export class InscripcionesComponent implements OnInit, OnDestroy {
         })
       }
     })
-    console.log('FormModel: ',this.enrollmentModel.getRawValue())
   }
   
   courseIdChange(courseSelected: string | null){
-    console.log('Curso elegido: ', courseSelected);
     let id: number | undefined = 0;
     this.coursesList$.subscribe({
       next: (courseList) => {
@@ -161,12 +145,10 @@ export class InscripcionesComponent implements OnInit, OnDestroy {
           if(course.curso === courseSelected){
             id = course.id 
             this.enrollmentModel.controls.courseId.setValue(id);
-            // this.enrollmentModel.patchValue({courseId: id})
           }
         })
       }
     })
-    console.log('FormModel: ',this.enrollmentModel.getRawValue())
   }
 
   handleShowForm(event: Event){
@@ -177,20 +159,16 @@ export class InscripcionesComponent implements OnInit, OnDestroy {
 
   handleSubmit(event: Event){
    
-    // this.showFormChange.emit();
     this.showForm = !this.showForm;
     console.log('Modelo: ', this.enrollmentModel.value)
     const newEnrollment = {
       id: new Date().getTime(),
       courseId: this.enrollmentModel.getRawValue().courseId || 0,
       userId: this.enrollmentModel.getRawValue().userId || 0,
-      // profesor: this.userModel.value.edad || 18,
     }
 
-    // this.enrollmentService.createEnrollment(newEnrollment);
     this.store.dispatch(InscripcionesActions.createInscripcion({enrollment: newEnrollment}));
     this.enrollmentModel.reset();
-    // this.enrollmentList$ = this.store.select(selectEnrollmentListValue);
   }
 
   handleCancel(event: Event){
@@ -204,7 +182,6 @@ export class InscripcionesComponent implements OnInit, OnDestroy {
     let confirmation = await confirmModal.fire();
     
     if(enrollmentToDelete && confirmation.isConfirmed){
-      // this.enrollmentService.deleteEnrollment(enrollmentToDelete);
       this.store.dispatch(InscripcionesActions.deleteInscripcion({enrollment: enrollmentToDelete}));
       this.notifier.showSuccessToast(`Se ha eliminado la inscripción con id: ${enrollmentToDelete.id}`,'', 3000, false)
       console.log("Se elimina inscripción con id: ", enrollmentToDelete.id)
@@ -223,7 +200,6 @@ export class InscripcionesComponent implements OnInit, OnDestroy {
       if(!this.showForm){
         this.enrollmentModel.setValue(enrollmentUpdatedInForm);
         this.showForm = !this.showForm;
-        // this.showFormChange.emit();
       }else if (this.showForm && this.enrollmentModel.status === 'INVALID'){
         this.enrollmentModel.setValue(enrollmentUpdatedInForm);
       }else{
@@ -233,26 +209,20 @@ export class InscripcionesComponent implements OnInit, OnDestroy {
             enrollmentToUpdate = enrollments.find((enrollment) => enrollment.id === id);
           }
         })
-        // const userToUpdate = this.userList.find((user) => user.id === id);
         if(enrollmentToUpdate && this.enrollmentModel.status === 'VALID'){
 
           const updatedEnrollment = {
             id: id,
             courseId: this.enrollmentModel.getRawValue().courseId || 0,
             userId: this.enrollmentModel.getRawValue().userId || 0,
-          // profesor: this.courseModel.value.usuario || '',
           }
-          console.log('Inscripcion actualizada: ', updatedEnrollment)
-          // this.enrollmentService.updateEnrollment({id: id, ...updatedEnrollment});
 
           this.store.dispatch(InscripcionesActions.updateInscripcion({enrollment: updatedEnrollment}))
           this.enrollmentModel.reset();
           this.editionNote = ''
 
           this.showForm = !this.showForm;
-          // this.showFormChange.emit();
           this.notifier.showSuccess('',`Se ha actualizado la inscripción con id: ${enrollmentToUpdate.id}`)
-          // alert(`Se ha actualizado el usuario con id: ${userToUpdate.id}`)
         }else{
           this.enrollmentModel.markAllAsTouched;
         }

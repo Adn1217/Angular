@@ -17,12 +17,9 @@ export class InscripcionesEffects {
     return this.actions$.pipe(
       ofType(InscripcionesActions.loadInscripciones),
       concatMap(() => 
-      /** An EMPTY observable only emits completion. Replace with your own observable API request */
-      // EMPTY as Observable<{ type: string }>)
         this.service.getEnrollmentsWithCourseAndUser().pipe(
           map(data => InscripcionesActions.loadInscripcionesSuccess({enrollmentList: data})),
           catchError(error => of(this.handleError(error)))
-          // map(data => InscripcionesActions.loadInscripcionesSucess({data})),
         )
       )
     )
@@ -34,8 +31,7 @@ export class InscripcionesEffects {
       concatMap(() => 
         this.userService.getUsers().pipe(
           map(data => InscripcionesActions.loadUsersSuccess({usersList: data})),
-          catchError(error => of(InscripcionesActions.loadUsersFailure({error}))),
-          repeat()
+          catchError(error => of(InscripcionesActions.loadUsersFailure({error})))
         )
       )
     )
@@ -47,8 +43,7 @@ export class InscripcionesEffects {
       concatMap(() => 
         this.courseService.getCourses().pipe(
           map(data => InscripcionesActions.loadCoursesSuccess({coursesList: data})),
-          catchError(error => of(InscripcionesActions.loadCoursesFailure({error}))),
-          repeat()
+          catchError(error => of(InscripcionesActions.loadCoursesFailure({error})))
         )
       )
     )
@@ -58,10 +53,9 @@ export class InscripcionesEffects {
     return this.actions$.pipe(
       ofType(InscripcionesActions.createInscripcion),
       concatMap(({enrollment}) => 
-        this.service.createEnrollment2(enrollment).pipe(
+        this.service.createEnrollment(enrollment).pipe(
           map(data => InscripcionesActions.createInscripcionSuccess({enrollmentList: data})),
-          catchError(error => of(InscripcionesActions.createInscripcionFailure({error}))),
-          repeat()
+          catchError(error => of(InscripcionesActions.createInscripcionFailure({error})))
         )
       )
     )
@@ -71,10 +65,9 @@ export class InscripcionesEffects {
     return this.actions$.pipe(
       ofType(InscripcionesActions.updateInscripcion),
       concatMap(({enrollment}) => 
-        this.service.updateEnrollment2(enrollment).pipe(
+        this.service.updateEnrollment(enrollment).pipe(
           map(data => InscripcionesActions.updateInscripcionSuccess({enrollmentList: data})),
-          catchError(error => of(InscripcionesActions.updateInscripcionFailure({error}))),
-          repeat()
+          catchError(error => of(InscripcionesActions.updateInscripcionFailure({error})))
         )
       )
     )
@@ -84,12 +77,11 @@ export class InscripcionesEffects {
     return this.actions$.pipe(
       ofType(InscripcionesActions.deleteInscripcion),
       concatMap(({enrollment}) => 
-        this.service.deleteEnrollment2(enrollment).pipe(
+        this.service.deleteEnrollment(enrollment).pipe(
           map(data => InscripcionesActions.deleteInscripcionSuccess({enrollmentList: data})),
           catchError(error => of(InscripcionesActions.deleteInscripcionFailure({error}))),
         )
-      ),
-      repeat()
+      )
     )
   });
 

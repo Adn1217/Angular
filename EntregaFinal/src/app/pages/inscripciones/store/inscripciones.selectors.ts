@@ -6,8 +6,6 @@ export const selectEnrollmentState = createFeatureSelector<fromInscripciones.enr
   fromInscripciones.inscripcionesFeatureKey
 );
 
-// export const selectEnrollmentList = createFeatureSelector<fromInscripciones.enrollmentState>(inscripcionesFeatureKey);
-
 export const selectEnrollmentListValue = createSelector(selectEnrollmentState,
     (state) => state.enrollmentList
     );

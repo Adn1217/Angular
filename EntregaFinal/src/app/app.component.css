@@ -1,7 +1,5 @@
 .title {
     padding: 10px;
-    /* justify-content: center;
-    align-items: center; */
     min-width: 340px;
     font-size: 2rem;
 }
@@ -12,7 +10,6 @@
 .mat-drawer-container {
     background-color: #303030;
     color: #fff;
-    /* height: 90%; */
 }
 
 .login {

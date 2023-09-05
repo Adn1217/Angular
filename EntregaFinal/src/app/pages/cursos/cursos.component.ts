@@ -16,7 +16,6 @@ const maxCreditNumber: number = 20;
 interface CourseModel {
   curso: FormControl<string| null>;
   creditos: FormControl<number | null>;
-  // profesor: FormControl<string | null>;
 }
 
 @Component({
@@ -29,12 +28,10 @@ export class CursosComponent {
   courseModel : FormGroup<CourseModel> = this.formBuilder.group({
       curso: ['', [Validators.required]],
       creditos: [0, [Validators.required]],
-      // profesor: ['', [Validators.required, Validators.minLength(minCharUserLength)]],
       })
   
   courseList: Observable<courses[]>;
 
-  // userListObserver: Observable<teachers[]>;
   courseListSubscription?: Subscription;
   destroyed = new Subject<boolean>(); 
   showDetails: boolean = false;
@@ -45,18 +42,11 @@ export class CursosComponent {
   @Input()
   ingreso: boolean = false;
 
-  // @Input()
   showForm: boolean = false;
   
   constructor(private formBuilder: FormBuilder, private courseService: CourseService, private notifier: NotifierService, public router: Router, private store: Store, private userService: UserService){
     this.isLoading$ = this.courseService.isLoading$;
-    this.courseList = courseService.getCourses().pipe(takeUntil(this.destroyed)) // TakeUntil no es necesario con pipe async.
-    // this.userList = this.userListObserver;
-    // this.courseList.subscribe({
-    //   next: (courses) => {
-    //     console.log('Cursos: ', courses);
-    //   }
-    // })
+    this.courseList = courseService.getCourses().pipe(takeUntil(this.destroyed));  
     this.store.select(selectAuthUserValue).pipe(take(1)).subscribe({
       next: (authUser) => {
         if(authUser){
@@ -69,7 +59,6 @@ export class CursosComponent {
             const regUser$ = this.userService.getUserById(authUserJSON.id);
             regUser$.pipe(skip(1)).subscribe({
               next: (regUser) => {
-                console.log('Usuario regUser: ', regUser);
                 if(regUser){
                   this.store.dispatch(authActions.setAuthUser({authUser: regUser}))
                 }else{
@@ -128,20 +117,13 @@ export class CursosComponent {
     }
   }
   
-  navigateTo(page: string){
-    console.log(page);
-    // this.router.navigate([`${page}`]);
-  }
-
   handleSubmit(event: Event){
    
-    // this.showFormChange.emit();
     this.showForm = !this.showForm;
     const newCourse = {
       id: new Date().getTime(),
       curso: this.courseModel.value.curso || '',
       creditos: this.courseModel.value.creditos || 0,
-      // profesor: this.userModel.value.edad || 18,
     }
 
     this.courseService.createCourse(newCourse);
@@ -161,13 +143,11 @@ export class CursosComponent {
     if(courseToDelete && confirmation.isConfirmed){
       this.courseService.deleteUser(courseToDelete);
       this.notifier.showSuccessToast(`Se ha eliminado el curso con id: ${courseToDelete.id}`,'', 3000, false)
-      console.log("Se elimina curso con id: ", courseToDelete.id)
       }
   }
 
   handleUpdateCourse(originalCourse: courses){
 
-      console.log('Curso: ', originalCourse);
       const {id, ...rest} = originalCourse;
       const courseUpdatedInForm = {...rest};
       this.editionNote = 'Recuerde, pare editar seleccionar nuevamente el lápiz.'
@@ -175,7 +155,6 @@ export class CursosComponent {
       if(!this.showForm){
         this.courseModel.setValue(courseUpdatedInForm);
         this.showForm = !this.showForm;
-        // this.showFormChange.emit();
       }else if (this.showForm && this.courseModel.status === 'INVALID'){
         this.courseModel.setValue(courseUpdatedInForm);
       }else{
@@ -185,13 +164,11 @@ export class CursosComponent {
             courseToUpdate = courses.find((course) => course.id === id);
           }
         })
-        // const userToUpdate = this.userList.find((user) => user.id === id);
         if(courseToUpdate && this.courseModel.status === 'VALID'){
 
           const updatedCourse = {
             curso: this.courseModel.value.curso || '',
             creditos: this.courseModel.value.creditos || 0,
-          // profesor: this.courseModel.value.usuario || '',
           }
           this.courseService.updateUser({id: id, ...updatedCourse});
 
@@ -199,9 +176,7 @@ export class CursosComponent {
           this.editionNote = ''
 
           this.showForm = !this.showForm;
-          // this.showFormChange.emit();
           this.notifier.showSuccess('',`Se ha actualizado el profesor con id: ${courseToUpdate.id}`)
-          // alert(`Se ha actualizado el usuario con id: ${userToUpdate.id}`)
         }else{
           this.courseModel.markAllAsTouched;
         }

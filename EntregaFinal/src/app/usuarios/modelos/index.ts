@@ -28,7 +28,6 @@ export interface courses {
     id: number;
     curso: string;
     creditos: number;
-    // profesor: number;
   }
 
 export interface enrollments {

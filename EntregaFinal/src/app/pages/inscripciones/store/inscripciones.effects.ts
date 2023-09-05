@@ -5,6 +5,7 @@ import { catchError, concatMap, map } from 'rxjs/operators';
 import { Observable, EMPTY, of } from 'rxjs';
 import { InscripcionesActions } from './inscripciones.actions';
 import { InscripcionesService } from '../inscripciones.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable()
 export class InscripcionesEffects {
@@ -18,13 +19,17 @@ export class InscripcionesEffects {
       // EMPTY as Observable<{ type: string }>)
         this.service.getEnrollmentsWithCourseAndUser().pipe(
           map(data => InscripcionesActions.loadInscripcionesSuccess({enrollmentList: data})),
-          catchError(error => of(InscripcionesActions.loadInscripcionesFailure({error})))
+          catchError(error => of(this.handleError(error)))
           // map(data => InscripcionesActions.loadInscripcionesSucess({data})),
         )
       )
     )
   });
 
+  handleError(error: HttpErrorResponse){
+    console.log('Se ha presentado el siguente error: ', error);
+    return InscripcionesActions.loadInscripcionesFailure({error});
+  }
   constructor(private actions$: Actions, private service: InscripcionesService) {
 
   }

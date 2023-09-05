@@ -50,15 +50,23 @@ public isLoading$ = this._isLoading$.asObservable();
     getEnrollmentsWithCourseAndUser(): Observable<enrollmentsWithCourseAndUser[]>{
       this._isLoading$.next(true);
       setTimeout(() => {
-        this.client.get<enrollmentsWithCourseAndUser[]>(env.baseApiUrl + '/enrollments?_expand=user&_expand=course').pipe(take(1)).subscribe({
+        const reqHTTP$ = this.client.get<enrollmentsWithCourseAndUser[]>(env.baseApiUrl + '/enrollments?_expand=user&_expand=course').pipe(take(1))
+        
+        reqHTTP$.subscribe({
           next: (enrollments) => {
             this._enrollmentsWithCourseAndUsers$.next(enrollments);
             this._isLoading$.next(false);
           },
           error: (err) => {
+            console.log('Ha ocurrido error: ', err);
             if(err instanceof HttpErrorResponse){
+              this._enrollmentsWithCourseAndUsers$.error(err);
               if(err.status === 500){
-                this.notifier.showError('','Ha ocurrido un error en el servidor');
+                this.notifier.showError('',`Se ha presentado error ${err.status}. Error en el servidor.`);
+              }else if(err.status === 404){
+                this.notifier.showError('',`Se ha presentado error ${err.status}. No se encuentra el servicio solicitado.`);
+              }else{
+                this.notifier.showError('',`Se presenta error ${err.status} al consumir el servicio`);
               }
             }else{
               this.notifier.showError('', 'Ha ocurrido un error al consultar inscripciones.');

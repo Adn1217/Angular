@@ -1,10 +1,14 @@
 import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators  } from '@angular/forms';
-import { courses } from 'src/app/usuarios/modelos';
-import { Observable, takeUntil, Subject, Subscription, BehaviorSubject, take } from 'rxjs';
+import { courses, userRol } from 'src/app/usuarios/modelos';
+import { Observable, takeUntil, Subject, Subscription, BehaviorSubject, take, skip } from 'rxjs';
 import { NotifierService } from 'src/app/core/services/notifier.service';
 import { Router } from '@angular/router';
 import { CourseService } from './course.service';
+import { Store } from '@ngrx/store';
+import { selectAuthUserValue } from 'src/app/store/selectors/auth.selectors';
+import { UserService } from 'src/app/usuarios/user.service';
+import { authActions } from 'src/app/store/actions/auth.actions';
 
 
 const minCreditNumber: number = 1;
@@ -36,6 +40,7 @@ export class CursosComponent {
   showDetails: boolean = false;
   isLoading$: Observable<boolean>;
   editionNote: string = '';
+  userRol: userRol = null
 
   @Input()
   ingreso: boolean = false;
@@ -43,7 +48,7 @@ export class CursosComponent {
   // @Input()
   showForm: boolean = false;
   
-  constructor(private formBuilder: FormBuilder, private courseService: CourseService, private notifier: NotifierService, public router: Router){
+  constructor(private formBuilder: FormBuilder, private courseService: CourseService, private notifier: NotifierService, public router: Router, private store: Store, private userService: UserService){
     this.isLoading$ = this.courseService.isLoading$;
     this.courseList = courseService.getCourses().pipe(takeUntil(this.destroyed)) // TakeUntil no es necesario con pipe async.
     // this.userList = this.userListObserver;
@@ -52,6 +57,32 @@ export class CursosComponent {
     //     console.log('Cursos: ', courses);
     //   }
     // })
+    this.store.select(selectAuthUserValue).pipe(take(1)).subscribe({
+      next: (authUser) => {
+        if(authUser){
+          this.userRol = authUser?.role
+        }else{
+          const authUser = localStorage.getItem('AuthUser');
+          const authUserJSON = authUser && JSON.parse(authUser);
+          this.userRol = authUserJSON?.role;
+          if(authUserJSON?.id){
+            const regUser$ = this.userService.getUserById(authUserJSON.id);
+            regUser$.pipe(skip(1)).subscribe({
+              next: (regUser) => {
+                console.log('Usuario regUser: ', regUser);
+                if(regUser){
+                  this.store.dispatch(authActions.setAuthUser({authUser: regUser}))
+                }else{
+                  localStorage.removeItem('AuthUser') 
+                  this.store.dispatch(authActions.logoutAuthUser())
+                  this.router.navigate(['/login'])
+                }
+              }
+            })
+          }
+        }
+      }
+    })
   }
 
   ngOnDestroy(): void {

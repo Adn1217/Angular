@@ -10,6 +10,9 @@ import { inscripcionesActions } from 'src/app/store/actions/inscripciones.action
 import { selectAuthUserValue } from 'src/app/store/selectors/auth.selectors';
 import { InscripcionesActions } from './store/inscripciones.actions';
 import { selectEnrollmentListValue } from './store/inscripciones.selectors';
+import { UserService } from 'src/app/usuarios/user.service';
+import { authActions } from 'src/app/store/actions/auth.actions';
+import { Router } from '@angular/router';
 
 interface EnrollmentModel {
   courseId: FormControl<number| null>;
@@ -47,7 +50,7 @@ export class InscripcionesComponent implements OnInit, OnDestroy {
   // @Input()
   showForm: boolean = false;
   
-  constructor(private formBuilder: FormBuilder, private enrollmentService: InscripcionesService, private notifier: NotifierService, private store: Store){
+  constructor(private formBuilder: FormBuilder, private enrollmentService: InscripcionesService, private notifier: NotifierService, private store: Store, private userService: UserService, private router: Router){
     this.isLoading$ = this.enrollmentService.isLoading$;
     // this.enrollmentList = this.enrollmentService.getEnrollments().pipe(takeUntil(this.destroyed)) // TakeUntil no es necesario con pipe async.
     // this.userList = this.userListObserver;
@@ -66,7 +69,6 @@ export class InscripcionesComponent implements OnInit, OnDestroy {
     this.enrollmentList.pipe(takeUntil(this.destroyed)).subscribe({
       next: (enrollmentList) => {
         console.log('EnrollmentList: ', enrollmentList)
-
       }
     })
     
@@ -74,6 +76,25 @@ export class InscripcionesComponent implements OnInit, OnDestroy {
       next: (authUser) => {
         if(authUser){
           this.userRol = authUser?.role
+        }else{
+          const authUser = localStorage.getItem('AuthUser');
+          const authUserJSON = authUser && JSON.parse(authUser);
+          this.userRol = authUserJSON?.role;
+          if(authUserJSON?.id){
+            const regUser = this.userService.getUserById(authUserJSON.id);
+            regUser.subscribe({
+              next: (regUser) => {
+                console.log('Usuario regUser: ', regUser);
+                if(regUser){
+                  this.store.dispatch(authActions.setAuthUser({authUser: regUser}))
+                }else{
+                  localStorage.removeItem('AuthUser') 
+                  this.store.dispatch(authActions.logoutAuthUser())
+                  this.router.navigate(['/login'])
+                }
+              }
+            })
+          }
         }
       }
     })

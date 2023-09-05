@@ -5,11 +5,24 @@ import { IngresoService } from 'src/app/formulario/ingreso/services/ingreso.serv
 export const authGuard: CanActivateFn = (route, state) => {
 
   const router = inject(Router);
-  const authService = inject(IngresoService)
-  
-  if(authService.isAuthenticated()){
+  const authService = inject(IngresoService);
+  const authUser = localStorage.getItem('AuthUser');
+  if(authService.isAuthenticated() || authUser ){
     return true
   }else{
     return router.createUrlTree(['/login']);
   }
 };
+
+export const authAdminGuard: CanActivateFn = (route, state) => {
+
+  const router = inject(Router);
+  // const authService = inject(IngresoService);
+  const authUser = localStorage.getItem('AuthUser');
+  if(authUser && JSON.parse(authUser).role === 'admin'){
+    return true
+  }else{
+    return router.createUrlTree(['/login']);
+  }
+};
+

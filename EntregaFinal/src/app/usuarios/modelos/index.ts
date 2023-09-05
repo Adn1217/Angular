@@ -28,11 +28,15 @@ export interface courses {
     id: number;
     curso: string;
     creditos: number;
-    // profesor: number;
   }
 
 export interface enrollments {
     id: number;
     courseId: number;
     userId: number;
+  }
+
+export interface enrollmentsWithCourseAndUser extends enrollments {
+    course: courses;
+    user: users;
   }

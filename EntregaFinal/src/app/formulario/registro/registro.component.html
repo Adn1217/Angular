@@ -1,5 +1,5 @@
 <div>
-    <div class="screen" *ngIf="this.router.url === '/register'; else detailsContainer">
+    <div class="screen">
         <form class="mb-9 form" [formGroup]="userModel" *ngIf="this.showForm;">
             <div class="mb-3">
                 <label for="exampleInputName" class="form-label">Nombres</label>
@@ -103,9 +103,4 @@
             </ng-template>
         </div>
     </div>
-    <ng-template #detailsContainer>
-        <div>
-            <router-outlet></router-outlet>
-        </div>
-    </ng-template>
 </div>

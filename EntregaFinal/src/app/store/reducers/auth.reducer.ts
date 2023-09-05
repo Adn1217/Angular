@@ -20,7 +20,7 @@ export const authReducer = createReducer(
         }
     }),
     on(authActions.logoutAuthUser, (currentState) => {
-        
+        localStorage.removeItem('AuthUser');
         return {
             authUser: null
         }

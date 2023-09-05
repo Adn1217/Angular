@@ -1,4 +1,7 @@
-.sidenav-container {
+  a {
+    padding-top: 8%;
+  }
+  .sidenav-container {
     /* display: flex; */
     /* flex: 1; */
     width: 100%;
@@ -44,4 +47,8 @@
     justify-content: space-between;
     height: 100%;
     overflow: hidden !important
+  }
+
+  .active-link {
+    background-color: gray
   }

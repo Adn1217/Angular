@@ -1,31 +1,128 @@
 import { createFeature, createReducer, on } from '@ngrx/store';
 import { InscripcionesActions } from './inscripciones.actions';
+import { courses, enrollments, users } from 'src/app/usuarios/modelos';
+import { HttpErrorResponse } from '@angular/common/http';
 
 export const inscripcionesFeatureKey = 'enrollments';
 
 export interface enrollmentState {
-    enrollmentList: Number[]
+    enrollmentList: enrollments[],
+    usersList: users[],
+    coursesList: courses[],
+    error: HttpErrorResponse | null
 }
 
 export const initialState: enrollmentState = {
-    enrollmentList: []
+    enrollmentList: [],
+    usersList: [],
+    coursesList: [],
+    error: null
 }
 
 export const reducer = createReducer(
   initialState,
   on(InscripcionesActions.loadInscripciones, state => {
     return {
-       enrollmentList: [1,2,3,4,5] 
+       ...state,
     }
-  }
-),
-  on(InscripcionesActions.delete, (currentState) => {
-        
-        return {
-            enrollmentList: [...currentState.enrollmentList, Math.round(Number(Math.random())*100)]
-        }
-    })
-
+  }),
+  on(InscripcionesActions.loadInscripcionesSuccess, (state, action) => {
+    return {
+      ...state,
+      enrollmentList: action.enrollmentList
+    }
+  }),
+  on(InscripcionesActions.loadInscripcionesFailure, (state, action) => {
+    return {
+      ...state,
+      error: action.error
+    }
+  }),
+  on(InscripcionesActions.loadUsers, state => {
+    return {
+       ...state,
+    }
+  }),
+  on(InscripcionesActions.loadUsersSuccess, (state, action) => {
+    return {
+      ...state,
+      usersList: action.usersList
+    }
+  }),
+  on(InscripcionesActions.loadUsersFailure, (state, action) => {
+    return {
+      ...state,
+      error: action.error
+    }
+  }),
+  on(InscripcionesActions.loadCourses, state => {
+    return {
+       ...state,
+    }
+  }),
+  on(InscripcionesActions.loadCoursesSuccess, (state, action) => {
+    return {
+      ...state,
+      coursesList: action.coursesList
+    }
+  }),
+  on(InscripcionesActions.loadCoursesFailure, (state, action) => {
+    return {
+      ...state,
+      error: action.error
+    }
+  }),
+  on(InscripcionesActions.createInscripcion, state => {
+    return {
+       ...state,
+    }
+  }),
+  on(InscripcionesActions.createInscripcionSuccess, (state, action) => {
+    return {
+      ...state,
+      enrollmentList: action.enrollmentList
+    }
+  }),
+  on(InscripcionesActions.createInscripcionFailure, (state, action) => {
+    return {
+      ...state,
+      error: action.error
+    }
+  }),
+  on(InscripcionesActions.updateInscripcion, state => {
+    return {
+       ...state,
+    }
+  }),
+  on(InscripcionesActions.updateInscripcionSuccess, (state, action) => {
+    return {
+      ...state,
+      enrollmentList: action.enrollmentList
+    }
+  }),
+  on(InscripcionesActions.updateInscripcionFailure, (state, action) => {
+    return {
+      ...state,
+      error: action.error
+    }
+  }),
+  on(InscripcionesActions.deleteInscripcion, state => {
+    return {
+       ...state,
+    }
+  }),
+  on(InscripcionesActions.deleteInscripcionSuccess, (state, action) => {
+    return {
+      ...state,
+      enrollmentList: action.enrollmentList
+    }
+  }),
+  on(InscripcionesActions.deleteInscripcionFailure, (state, action) => {
+    return {
+      ...state,
+      error: action.error
+    }
+  }),
 );
 
 export const inscripcionesFeature = createFeature({

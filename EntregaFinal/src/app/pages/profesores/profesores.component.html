@@ -1,5 +1,5 @@
 <div>
-    <div class="screen" *ngIf="this.router.url === '/teachers'; else detailsContainer">
+    <div class="screen">
         <form class="mb-7 form" [formGroup]="userModel" *ngIf="this.showForm;">
             <div class="mb-3">
                 <label for="inputName" class="form-label">Nombres</label>
@@ -36,7 +36,6 @@
                 <div class="invalid-feedback">
                     {{this.userModel.controls.usuario.errors && (this.userModel.controls.usuario.errors | keyvalue |
                     errorMessagesControl)}}
-                    <!-- {{getFieldError("usuario")}} -->
                 </div>
             </div>
             <div class="mb-3 col-3">
@@ -52,7 +51,6 @@
                 class="invalid">
                 {{this.userModel.controls.edad.errors && (this.userModel.controls.edad.errors | keyvalue |
                 errorMessagesControl)}}
-                <!-- {{getFieldError("edad")}} -->
             </div>
             <div class="mb-3">
                 <label for="inputAcademicLevel" class="form-label">Nivel Académico</label>
@@ -65,7 +63,6 @@
                 <div class="invalid-feedback">
                     {{this.userModel.controls.usuario.errors && (this.userModel.controls.usuario.errors | keyvalue |
                     errorMessagesControl)}}
-                    <!-- {{getFieldError("usuario")}} -->
                 </div>
 
             </div>
@@ -80,7 +77,6 @@
                 <div class="invalid-feedback">
                     {{this.userModel.controls.usuario.errors && (this.userModel.controls.usuario.errors | keyvalue |
                     errorMessagesControl)}}
-                    <!-- {{getFieldError("usuario")}} -->
                 </div>
 
             </div>
@@ -116,7 +112,6 @@
                 <button (click)="handleSubmit($event)" type="submit"
                     [ngClass]="{'disabled': !userModel.controls.password.touched || userModel.status === 'INVALID'}"
                     class="btn btn-primary">Registrar</button>
-                <!-- <button routerLink="/login" class="btn btn-secondary">LogIn</button> -->
                 <button (click)="handleCancel($event)" class="btn btn-secondary">Cancelar</button>
             </div>
         </form>
@@ -135,9 +130,4 @@
             </ng-template>
         </div>
     </div>
-    <ng-template #detailsContainer>
-        <div>
-            <router-outlet></router-outlet>
-        </div>
-    </ng-template>
 </div>

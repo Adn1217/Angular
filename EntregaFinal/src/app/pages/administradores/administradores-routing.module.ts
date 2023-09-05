@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { IngresoComponent } from 'src/app/formulario/ingreso/ingreso.component';
+import { AdministradoresComponent } from './administradores.component';
 
 
 
@@ -11,7 +12,7 @@ import { IngresoComponent } from 'src/app/formulario/ingreso/ingreso.component';
     CommonModule,
     RouterModule.forChild([{
       path: '',
-      component: IngresoComponent
+      component: AdministradoresComponent
     }])
   ],
   exports: [RouterModule]

@@ -9,12 +9,15 @@ import { EffectsModule } from '@ngrx/effects';
 import { InscripcionesEffects } from './store/inscripciones.effects';
 import { StoreModule } from '@ngrx/store';
 import { inscripcionesFeature } from './store/inscripciones.reducer';
-
-
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { FullnamePipe } from 'src/app/shared/pipes/fullname.pipe';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
   declarations: [
-    InscripcionesComponent
+    InscripcionesComponent,
+    // FullnamePipe
   ],
   imports: [
     CommonModule,
@@ -22,8 +25,11 @@ import { inscripcionesFeature } from './store/inscripciones.reducer';
     ReactiveFormsModule,
     InscripcionesRoutingModule,
     UserModule,
+    SharedModule,
     EffectsModule.forFeature([InscripcionesEffects]),
-    StoreModule.forFeature(inscripcionesFeature)
+    StoreModule.forFeature(inscripcionesFeature),
+    MatFormFieldModule,
+    MatSelectModule
   ],
 })
 export class InscripcionesModule { }

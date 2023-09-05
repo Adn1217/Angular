@@ -29,7 +29,6 @@ public isLoading$ = this._isLoading$.asObservable();
     getCourses(): Observable<courses[]>{
       this._isLoading$.next(true);
       setTimeout(() => {
-        // return this.USERS_DATA;
         this.client.get<courses[]>(env.baseApiUrl + '/courses').pipe(take(1)).subscribe({
           next: (courses) => {
             this._courses$.next(courses);
@@ -38,7 +37,12 @@ public isLoading$ = this._isLoading$.asObservable();
           error: (err) => {
             if(err instanceof HttpErrorResponse){
               if(err.status === 500){
+                this._courses$.error(err);
                 this.notifier.showError('','Ha ocurrido un error en el servidor');
+              }else if(err.status === 404){
+                this.notifier.showError('',`Se ha presentado error ${err.status}. No se encuentra el servicio solicitado.`);
+              }else{
+                this.notifier.showError('',`Se presenta error ${err.status} al consumir el servicio`);
               }
             }else{
               this.notifier.showError('', 'Ha ocurrido un error al consultar cursos.');
@@ -46,19 +50,16 @@ public isLoading$ = this._isLoading$.asObservable();
           }
         })
       }, 1000);
-      // this._users$.next(this.USERS_DATA);
       return this.courses$;
     }
 
     getCourseById(id: string): Observable<courses | undefined> {
       this.client.get<courses[]>(env.baseApiUrl + '/users').pipe(take(1)).subscribe({
         next: (courses) => {
-          console.log('Cursos encontrados: ', JSON.stringify(courses));
           let course = courses.find((course) => course.id === Number(id));
           this._course$.next(course);
         }
       })
-      // const user = this.USERS_DATA.find((user) => user.id === Number(id));
       return this.course$;
     }
 
@@ -75,7 +76,6 @@ public isLoading$ = this._isLoading$.asObservable();
     }
 
     updateUser(courseToUpdate: courses): void {
-      console.log('Curso a Actualizar: ', courseToUpdate);
       const {id, ...rest} = courseToUpdate;
       this.client.put<courses>(env.baseApiUrl + `/courses/${id}`, courseToUpdate).pipe(
         take(1)).subscribe({
@@ -101,7 +101,6 @@ public isLoading$ = this._isLoading$.asObservable();
         },
         error: (error) => {
           this.notifier.showError('', 'Se ha presentado error al intentar eliminar la información.');
-          console.log("Se ha presentado error : ", error)
         }
       });
     }

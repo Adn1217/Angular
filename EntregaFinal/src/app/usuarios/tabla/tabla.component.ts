@@ -1,5 +1,5 @@
 import {Component, Input, Output, EventEmitter, OnChanges} from '@angular/core';
-import { users, teachers, courses, enrollments, userRol } from '../modelos';
+import { users, teachers, courses, enrollments, userRol, enrollmentsWithCourseAndUser } from '../modelos';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectAuthUserValue } from 'src/app/store/selectors/auth.selectors';
@@ -52,10 +52,10 @@ export class TablaComponent implements OnChanges {
   updateCourse = new EventEmitter<courses>();
   
   @Output()
-  updateEnrollment = new EventEmitter<enrollments>();
+  updateEnrollment = new EventEmitter<enrollmentsWithCourseAndUser>();
   
   @Output()
-  deleteEnrollment = new EventEmitter<enrollments>();
+  deleteEnrollment = new EventEmitter<enrollmentsWithCourseAndUser>();
 
   @Output()
   showDetailsChange = new EventEmitter<boolean>();
@@ -70,7 +70,7 @@ export class TablaComponent implements OnChanges {
     this.deleteUser.emit(user);
   }
   
-  handleUpdate(entity: users | teachers | courses | enrollments ){
+  handleUpdate(entity: users | teachers | courses | enrollmentsWithCourseAndUser ){
     if('courseId' in entity){
       this.handleUpdateEnrollment(entity);
     }else if ('curso' in entity){
@@ -80,7 +80,7 @@ export class TablaComponent implements OnChanges {
     }
   }
   
-  handleDelete(entity: users | teachers | courses | enrollments ){
+  handleDelete(entity: users | teachers | courses | enrollmentsWithCourseAndUser ){
     if('courseId' in entity){
       this.handleDeleteEnrollment(entity);
     }else if ('curso' in entity){
@@ -102,22 +102,21 @@ export class TablaComponent implements OnChanges {
     this.updateCourse.emit(course);
   }
   
-  handleUpdateEnrollment(enrollment: enrollments){
+  handleUpdateEnrollment(enrollment: enrollmentsWithCourseAndUser){
     this.updateEnrollment.emit(enrollment);
   }
   
-  handleDeleteEnrollment(enrollment: enrollments){
+  handleDeleteEnrollment(enrollment: enrollmentsWithCourseAndUser){
     this.deleteEnrollment.emit(enrollment);
   }
 
   ngOnChanges(){
-    console.log(this.dataSource);
     if(this.title === 'Profesores'){
       this.displayedColumns = ['id', 'nombre completo', 'edad', 'correo', 'nivel académico', 'materias', 'rol', 'acciones'];
     }else if (this.title === 'Cursos'){
       this.displayedColumns = ['id', 'Curso', 'Créditos', 'acciones'];
     }else if (this.title === 'Inscripciones'){
-      this.displayedColumns = ['id', 'idCurso', 'idAlumno', 'acciones'];
+      this.displayedColumns = ['id', 'idCurso', 'Curso2', 'idAlumno', 'nombre completo2','acciones'];
     }
   }
 

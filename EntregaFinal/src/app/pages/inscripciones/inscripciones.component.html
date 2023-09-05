@@ -1,44 +1,32 @@
 <div>
     <div class="screen">
         <form class="mb-7 form" [formGroup]="enrollmentModel" *ngIf="this.showForm;">
-            <div class="mb-3">
-                <label for="inputEnrollmentCourse" class="form-label">Curso</label>
-                <input formControlName="courseId" min="1" max="9999" type="number" class="form-control"
-                    [ngClass]="{'is-valid': enrollmentModel.controls['courseId'].touched && !enrollmentModel.controls['courseId'].invalid, 'is-invalid': enrollmentModel.controls['courseId'].touched && enrollmentModel.controls['courseId'].invalid}"
-                    id="inputEnrollmentCourse">
-                <div class="valid-feedback">
-                    ¡Se ve bien!
-                </div>
-                <div class="invalid-feedback">
-                    {{getFieldError("courseId")}}
-                </div>
+            <div class="mb-4">
+                <mat-form-field>
+                    <mat-label>Curso Id</mat-label>
+                    <input formControlName="courseId" matInput>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Curso</mat-label>
+                    <mat-select formControlName="course" id="inputEnrollmentCourse">
+                        <mat-option *ngFor="let course of (coursesList$ | async)"
+                            value={{course.curso}}>{{course.curso}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
             </div>
-            <div class="mb-3">
-                <label for="inputEnrollmentStudent" class="form-label">Alumno</label>
-                <input formControlName="userId" min="1" max="9999" type="number" class="form-control"
-                    [ngClass]="{'is-valid': enrollmentModel.controls['userId'].touched && !enrollmentModel.controls['userId'].invalid, 'is-invalid': enrollmentModel.controls['userId'].touched && enrollmentModel.controls['userId'].invalid}"
-                    id="inputEnrollmentStudent">
-                <div class="valid-feedback">
-                    ¡Se ve bien!
-                </div>
-                <div class="invalid-feedback">
-                    {{getFieldError("userId")}}
-                </div>
+            <div class="mb-4">
+                <mat-form-field>
+                    <mat-label>Alumno Id</mat-label>
+                    <input formControlName="userId" matInput>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Alumno</mat-label>
+                    <mat-select formControlName="user" id="inputEnrollmentStudent">
+                        <mat-option *ngFor="let user of (usersList$ | async)" value={{user?.nombres}}>{{user |
+                            fullname: '1'}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
             </div>
-            <!-- <div class="mb-3 col-3">
-                <label for="inputAge" class="form-label">Edad</label>
-                <input formControlName="edad" min="0" max="150" type="number" class="form-control"
-                    [ngClass]="{'is-valid': userModel.controls['edad'].touched && !userModel.controls['edad'].invalid, 'is-invalid': userModel.controls['edad'].touched && userModel.controls['edad'].invalid}"
-                    id="inputAge">
-                <div class="valid-feedback">
-                    ¡Se ve bien!
-                </div>
-            </div> -->
-            <!-- <div class="mb-3 col-5" *ngIf="userModel.controls['edad'].touched && userModel.controls['edad'].invalid"
-                class="invalid">
-                {{this.userModel.controls.edad.errors && (this.userModel.controls.edad.errors | keyvalue |
-                errorMessagesControl)}}
-            </div> -->
             <div *ngIf="editionNote.length > 0;" class="form-text">
                 {{this.editionNote}}
             </div>
@@ -51,14 +39,14 @@
         </form>
         <div class="mb-5 userTable">
             <div class="addButton" *ngIf="!showForm;">
-                <button [disabled]="userRol !== 'admin'" type="submit" (click)="this.showForm = !this.showForm"
+                <button [disabled]="userRol !== 'admin'" type="submit" (click)="handleShowForm($event)"
                     class="btn btn-success">Agregar</button>
             </div>
             <div *ngIf="(isLoading$ | async); else coursesTable">
                 Cargando lista...
             </div>
             <ng-template #coursesTable>
-                <app-tabla title="Inscripciones" [dataSource]="(enrollmentList | async ) || []"
+                <app-tabla title="Inscripciones" [dataSource]="(enrollmentList$ | async ) || []"
                     (updateEnrollment)="handleUpdateEnrollment($event)"
                     (deleteEnrollment)="handleDeleteEnrollment($event)">
                 </app-tabla>

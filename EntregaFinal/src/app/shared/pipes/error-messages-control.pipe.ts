@@ -7,8 +7,6 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class ErrorMessagesControlPipe implements PipeTransform {
 
   transform(errors: KeyValue<string, any>[], ...args: unknown[]): unknown {
-    // console.log('Error recibido: ', value)
-    // const errors = value;
     let errorsLabel: string [] = [''];
 
     errors.forEach((error) => {

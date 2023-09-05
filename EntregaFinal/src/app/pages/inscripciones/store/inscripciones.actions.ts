@@ -17,6 +17,11 @@ export const InscripcionesActions = createActionGroup({
     'Create Inscripcion': props<{enrollment: enrollments}>(),
     'Create Inscripcion Success': props<{enrollmentList: enrollments[]}>(),
     'Create Inscripcion Failure': props<{error: HttpErrorResponse}>(),
-    'delete': props<{enrollmentToDelete: enrollments}>()
+    'Update Inscripcion': props<{enrollment: enrollments}>(),
+    'Update Inscripcion Success': props<{enrollmentList: enrollments[]}>(),
+    'Update Inscripcion Failure': props<{error: HttpErrorResponse}>(),
+    'Delete Inscripcion': props<{enrollment: enrollments}>(),
+    'Delete Inscripcion Success': props<{enrollmentList: enrollments[]}>(),
+    'Delete Inscripcion Failure': props<{error: HttpErrorResponse}>(),
   }
 });

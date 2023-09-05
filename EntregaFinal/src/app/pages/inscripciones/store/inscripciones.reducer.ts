@@ -89,14 +89,40 @@ export const reducer = createReducer(
       error: action.error
     }
   }),
-  on(InscripcionesActions.delete, (currentState) => {
-        
-        return {
-            ...currentState,
-            enrollmentList: [...currentState.enrollmentList]
-        }
-    })
-
+  on(InscripcionesActions.updateInscripcion, state => {
+    return {
+       ...state,
+    }
+  }),
+  on(InscripcionesActions.updateInscripcionSuccess, (state, action) => {
+    return {
+      ...state,
+      enrollmentList: action.enrollmentList
+    }
+  }),
+  on(InscripcionesActions.updateInscripcionFailure, (state, action) => {
+    return {
+      ...state,
+      error: action.error
+    }
+  }),
+  on(InscripcionesActions.deleteInscripcion, state => {
+    return {
+       ...state,
+    }
+  }),
+  on(InscripcionesActions.deleteInscripcionSuccess, (state, action) => {
+    return {
+      ...state,
+      enrollmentList: action.enrollmentList
+    }
+  }),
+  on(InscripcionesActions.deleteInscripcionFailure, (state, action) => {
+    return {
+      ...state,
+      error: action.error
+    }
+  }),
 );
 
 export const inscripcionesFeature = createFeature({

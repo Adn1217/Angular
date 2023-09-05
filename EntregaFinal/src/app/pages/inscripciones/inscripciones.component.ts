@@ -59,20 +59,7 @@ export class InscripcionesComponent implements OnInit, OnDestroy {
   
   constructor(private formBuilder: FormBuilder, private enrollmentService: InscripcionesService, private notifier: NotifierService, private store: Store, private userService: UserService, private router: Router){
     this.isLoading$ = this.enrollmentService.isLoading$;
-    this.store.dispatch(InscripcionesActions.loadInscripciones())
-    // this.enrollmentList = this.enrollmentService.getEnrollments().pipe(takeUntil(this.destroyed)) // TakeUntil no es necesario con pipe async.
-    // this.userList = this.userListObserver;
-    // this.enrollmentList.subscribe({
-    //   next: (enrollments) => {
-    //     console.log('Inscripciones: ', enrollments);
-    //   }
-    // })
-
-    // this.store.select(selectEnrollmentList).pipe(take(1)).subscribe({
-    //   next: (enrollmentList) => {
-    //     console.log('EnrollmentList: ', enrollmentList)
-    //   }
-    // })
+    // this.store.dispatch(InscripcionesActions.loadInscripciones())
     this.userChanges = this.enrollmentModel.controls.user.valueChanges.subscribe({
       next: (userSelected) => {
         this.userIdChange(userSelected);
@@ -133,7 +120,7 @@ export class InscripcionesComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // this.store.dispatch(InscripcionesActions.loadInscripciones())
+    this.store.dispatch(InscripcionesActions.loadInscripciones())
   }
 
   ngOnDestroy(): void {
@@ -188,30 +175,6 @@ export class InscripcionesComponent implements OnInit, OnDestroy {
     this.store.dispatch(InscripcionesActions.loadCourses());
   }
 
-  getFieldControl(field: string): FormControl {
-    return this.enrollmentModel.get(field) as FormControl
-  }
-
-  getFieldError(field: string): string {
-    const fieldControl = this.getFieldControl(field);
-    const error = fieldControl.errors || {};
-    if(error["required"]){
-      return "El campo es necesario"
-    }else{
-      //  const min = error['min'] || {};
-      //  const max = error['max'] || {};
-      //  const lackCred =  min.actual - min.min;
-      //  const extraCred =  max.actual - max.max;
-      //  if (lackCred < 0){
-      //   return `El mínimo de créditos es ${minCreditNumber}`
-      // }else if (extraCred > 0){
-      //   return `El máximo de créditos es ${maxCreditNumber}`
-      // }else{
-        return `${JSON.stringify(error)}`
-      // }
-    }
-  }
-  
   handleSubmit(event: Event){
    
     // this.showFormChange.emit();
@@ -225,7 +188,7 @@ export class InscripcionesComponent implements OnInit, OnDestroy {
     }
 
     // this.enrollmentService.createEnrollment(newEnrollment);
-    this.store.dispatch(InscripcionesActions.createInscripcion({enrollment: newEnrollment}))
+    this.store.dispatch(InscripcionesActions.createInscripcion({enrollment: newEnrollment}));
     this.enrollmentModel.reset();
     // this.enrollmentList$ = this.store.select(selectEnrollmentListValue);
   }
@@ -241,8 +204,8 @@ export class InscripcionesComponent implements OnInit, OnDestroy {
     let confirmation = await confirmModal.fire();
     
     if(enrollmentToDelete && confirmation.isConfirmed){
-      this.enrollmentService.deleteEnrollment(enrollmentToDelete);
-      this.store.dispatch(inscripcionesActions.delete({enrollmentToDelete}))
+      // this.enrollmentService.deleteEnrollment(enrollmentToDelete);
+      this.store.dispatch(InscripcionesActions.deleteInscripcion({enrollment: enrollmentToDelete}));
       this.notifier.showSuccessToast(`Se ha eliminado la inscripción con id: ${enrollmentToDelete.id}`,'', 3000, false)
       console.log("Se elimina inscripción con id: ", enrollmentToDelete.id)
       }
@@ -274,13 +237,15 @@ export class InscripcionesComponent implements OnInit, OnDestroy {
         if(enrollmentToUpdate && this.enrollmentModel.status === 'VALID'){
 
           const updatedEnrollment = {
+            id: id,
             courseId: this.enrollmentModel.getRawValue().courseId || 0,
             userId: this.enrollmentModel.getRawValue().userId || 0,
           // profesor: this.courseModel.value.usuario || '',
           }
           console.log('Inscripcion actualizada: ', updatedEnrollment)
-          this.enrollmentService.updateEnrollment({id: id, ...updatedEnrollment});
+          // this.enrollmentService.updateEnrollment({id: id, ...updatedEnrollment});
 
+          this.store.dispatch(InscripcionesActions.updateInscripcion({enrollment: updatedEnrollment}))
           this.enrollmentModel.reset();
           this.editionNote = ''
 

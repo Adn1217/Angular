@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 
-import { catchError, concatMap, map } from 'rxjs/operators';
+import { catchError, concatMap, map, repeat } from 'rxjs/operators';
 import { Observable, EMPTY, of } from 'rxjs';
 import { InscripcionesActions } from './inscripciones.actions';
 import { InscripcionesService } from '../inscripciones.service';
@@ -34,7 +34,8 @@ export class InscripcionesEffects {
       concatMap(() => 
         this.userService.getUsers().pipe(
           map(data => InscripcionesActions.loadUsersSuccess({usersList: data})),
-          catchError(error => of(InscripcionesActions.loadUsersFailure({error})))
+          catchError(error => of(InscripcionesActions.loadUsersFailure({error}))),
+          repeat()
         )
       )
     )
@@ -46,7 +47,8 @@ export class InscripcionesEffects {
       concatMap(() => 
         this.courseService.getCourses().pipe(
           map(data => InscripcionesActions.loadCoursesSuccess({coursesList: data})),
-          catchError(error => of(InscripcionesActions.loadCoursesFailure({error})))
+          catchError(error => of(InscripcionesActions.loadCoursesFailure({error}))),
+          repeat()
         )
       )
     )
@@ -58,9 +60,36 @@ export class InscripcionesEffects {
       concatMap(({enrollment}) => 
         this.service.createEnrollment2(enrollment).pipe(
           map(data => InscripcionesActions.createInscripcionSuccess({enrollmentList: data})),
-          catchError(error => of(InscripcionesActions.createInscripcionFailure({error})))
+          catchError(error => of(InscripcionesActions.createInscripcionFailure({error}))),
+          repeat()
         )
       )
+    )
+  });
+  
+  updateInscripciones$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(InscripcionesActions.updateInscripcion),
+      concatMap(({enrollment}) => 
+        this.service.updateEnrollment2(enrollment).pipe(
+          map(data => InscripcionesActions.updateInscripcionSuccess({enrollmentList: data})),
+          catchError(error => of(InscripcionesActions.updateInscripcionFailure({error}))),
+          repeat()
+        )
+      )
+    )
+  });
+  
+  deleteInscripciones$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(InscripcionesActions.deleteInscripcion),
+      concatMap(({enrollment}) => 
+        this.service.deleteEnrollment2(enrollment).pipe(
+          map(data => InscripcionesActions.deleteInscripcionSuccess({enrollmentList: data})),
+          catchError(error => of(InscripcionesActions.deleteInscripcionFailure({error}))),
+        )
+      ),
+      repeat()
     )
   });
 

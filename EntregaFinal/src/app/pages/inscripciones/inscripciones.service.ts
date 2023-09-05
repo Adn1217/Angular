@@ -133,7 +133,7 @@ public isLoading$ = this._isLoading$.asObservable();
         error: (err) => {
           console.log('Ha ocurrido error: ', err);
           if(err instanceof HttpErrorResponse){
-            this._enrollments$.error(err);
+            this._enrollmentsWithCourseAndUsers$.error(err);
             if(err.status === 500){
               this.notifier.showError('',`Se ha presentado error ${err.status}. Error en el servidor.`);
             }else if(err.status === 404){
@@ -150,7 +150,7 @@ public isLoading$ = this._isLoading$.asObservable();
     }
 
     updateEnrollment(enrollmentToUpdate: enrollments): void {
-      console.log('Curso a Actualizar: ', enrollmentToUpdate);
+      console.log('Inscripción a Actualizar: ', enrollmentToUpdate);
       const {id, ...rest} = enrollmentToUpdate;
       this.client.put<enrollments>(env.baseApiUrl + `/enrollments/${id}`, enrollmentToUpdate).pipe(
         take(1)).subscribe({
@@ -167,6 +167,38 @@ public isLoading$ = this._isLoading$.asObservable();
         })
     };
     
+    updateEnrollment2(enrollmentToUpdate: enrollments ): Observable<enrollments[]> {
+      console.log('Inscripción a Actualizar: ', enrollmentToUpdate);
+      const {id, ...rest} = enrollmentToUpdate;
+      const reqHTTP$ = this.client.put<enrollments>(env.baseApiUrl + `/enrollments/${id}`, enrollmentToUpdate)
+      reqHTTP$.pipe(take(1)).subscribe({
+        next: (newEnrollment) => {
+          this.getEnrollmentsWithCourseAndUser().pipe(take(1)).subscribe({
+            next: (enrollmentList) => {
+              this._enrollmentsWithCourseAndUsers$.next([...enrollmentList]);
+            }
+          })
+        },
+        error: (err) => {
+          console.log('Ha ocurrido error: ', err);
+          if(err instanceof HttpErrorResponse){
+            this._enrollmentsWithCourseAndUsers$.error(err);
+            if(err.status === 500){
+              this.notifier.showError('',`Se ha presentado error ${err.status}. Error en el servidor.`);
+            }else if(err.status === 404){
+              this.notifier.showError('',`Se ha presentado error ${err.status}. No se encuentra el servicio solicitado.`);
+            }else{
+              this.notifier.showError('',`Se presenta error ${err.status} al consumir el servicio`);
+            }
+          }else{
+            this.notifier.showError('', 'Ha ocurrido un error al consultar inscripciones.');
+          }
+        }
+      })
+      return this.enrollmentsWithCourseAndUsers$;
+    }
+
+    
     deleteEnrollment(enrollmentToDelete: enrollments ): void {
       const {id, ...rest} = enrollmentToDelete;
       this.client.delete(env.baseApiUrl + `/enrollments/${id}`).pipe(take(1)).subscribe({
@@ -179,5 +211,36 @@ public isLoading$ = this._isLoading$.asObservable();
           console.log("Se ha presentado error : ", error)
         }
       });
+    }
+    
+    deleteEnrollment2(enrollmentToDelete: enrollments ): Observable<enrollments[]> {
+      console.log('Inscripción a Eliminar: ', enrollmentToDelete);
+      const {id, ...rest} = enrollmentToDelete;
+      const reqHTTP$ = this.client.delete(env.baseApiUrl + `/enrollments/${id}`)
+      reqHTTP$.subscribe({
+        next: (response) => {
+          this.getEnrollmentsWithCourseAndUser().pipe(take(1)).subscribe({
+            next: (enrollmentList) => {
+              this._enrollmentsWithCourseAndUsers$.next([...enrollmentList]);
+            }
+          })
+        },
+        error: (err) => {
+          console.log('Ha ocurrido error: ', err);
+          if(err instanceof HttpErrorResponse){
+            this._enrollmentsWithCourseAndUsers$.error(err);
+            if(err.status === 500){
+              this.notifier.showError('',`Se ha presentado error ${err.status}. Error en el servidor.`);
+            }else if(err.status === 404){
+              this.notifier.showError('',`Se ha presentado error ${err.status}. No se encuentra el servicio solicitado.`);
+            }else{
+              this.notifier.showError('',`Se presenta error ${err.status} al consumir el servicio`);
+            }
+          }else{
+            this.notifier.showError('', 'Ha ocurrido un error al consultar inscripciones.');
+          }
+        }
+      })
+      return this.enrollmentsWithCourseAndUsers$;
     }
 }

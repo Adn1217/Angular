@@ -29,8 +29,8 @@ export class IngresoComponent {
 
   constructor(private formBuilder: FormBuilder, private service: IngresoService, public router: Router, private store: Store){
     this.userModel = this.formBuilder.group({
-      email: ['adn1217@hotmail.com', [Validators.required, Validators.email]],
-      password: ['12345678', [Validators.required, Validators.minLength(minCharLength)]]
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(minCharLength)]]
     })
   }
 

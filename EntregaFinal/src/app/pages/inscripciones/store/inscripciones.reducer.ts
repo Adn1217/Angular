@@ -80,7 +80,7 @@ export const reducer = createReducer(
   on(InscripcionesActions.createInscripcionSuccess, (state, action) => {
     return {
       ...state,
-      enrollmentList: action.enrollmentList
+      enrollmentList: [...state.enrollmentList, action.enrollment]
     }
   }),
   on(InscripcionesActions.createInscripcionFailure, (state, action) => {
@@ -97,7 +97,7 @@ export const reducer = createReducer(
   on(InscripcionesActions.updateInscripcionSuccess, (state, action) => {
     return {
       ...state,
-      enrollmentList: action.enrollmentList
+      enrollmentList: [...state.enrollmentList, action.enrollment]
     }
   }),
   on(InscripcionesActions.updateInscripcionFailure, (state, action) => {
@@ -114,7 +114,7 @@ export const reducer = createReducer(
   on(InscripcionesActions.deleteInscripcionSuccess, (state, action) => {
     return {
       ...state,
-      enrollmentList: action.enrollmentList
+      enrollmentList: [...state.enrollmentList, action.enrollment]
     }
   }),
   on(InscripcionesActions.deleteInscripcionFailure, (state, action) => {

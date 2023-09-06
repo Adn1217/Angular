@@ -125,7 +125,7 @@ export class CursosComponent {
       curso: this.courseModel.value.curso || '',
       creditos: this.courseModel.value.creditos || 0,
     }
-
+    console.log('Nuevo curso: ', newCourse);
     this.courseService.createCourse(newCourse);
     this.courseModel.reset();
   }

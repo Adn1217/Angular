@@ -64,13 +64,29 @@ public isLoading$ = this._isLoading$.asObservable();
     }
 
     createCourse(course: courses ): void {
-      this.client.post<courses>(env.baseApiUrl + '/courses', course).pipe(
+      this.client.post<courses>(env.baseApiUrl + '/courses', course)
+      .pipe(
         mergeMap((createdCourse) => this.courses$.pipe(
           take(1),
           map((coursesList) => [...coursesList, createdCourse])))
-      ).subscribe({
+      )
+      .subscribe({
         next: (courseList) => {
           this._courses$.next([...courseList]);
+        },
+        error: (err) => {
+          console.log('Ha ocurrido error: ', err);
+          if(err instanceof HttpErrorResponse){
+            if(err.status === 500){
+              this.notifier.showError('',`Se ha presentado error ${err.status}. Error en el servidor.`);
+            }else if(err.status === 404){
+              this.notifier.showError('',`Se ha presentado error ${err.status}. No se encuentra el servicio solicitado.`);
+            }else{
+              this.notifier.showError('',`Se presenta error ${err.status} al consumir el servicio`);
+            }
+          }else{
+            this.notifier.showError('', 'Ha ocurrido un error al consultar inscripciones.');
+          }
         }
       })
     }

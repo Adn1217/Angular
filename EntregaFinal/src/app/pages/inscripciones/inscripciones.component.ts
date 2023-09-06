@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators  } from '@angular/forms';
 import { courses, enrollments, enrollmentsWithCourseAndUser, userRol, users } from 'src/app/usuarios/modelos';
-import { Observable, takeUntil, Subject, Subscription, BehaviorSubject, take } from 'rxjs';
+import { Observable, takeUntil, Subject, Subscription, BehaviorSubject, take, skip } from 'rxjs';
 import { NotifierService } from 'src/app/core/services/notifier.service';
 import { InscripcionesService } from './inscripciones.service';
 import { Store } from '@ngrx/store';
@@ -74,10 +74,10 @@ export class InscripcionesComponent implements OnInit, OnDestroy {
     this.enrollmentList$.pipe(takeUntil(this.destroyed)).subscribe()
     
     this.usersList$ = this.store.select(selectUsersListValue);
-    this.usersList$.pipe(take(1)).subscribe()
+    this.usersList$.pipe(skip(1), take(1)).subscribe()
     
     this.coursesList$ = this.store.select(selectCoursesListValue);
-    this.coursesList$.pipe(take(1)).subscribe()
+    this.coursesList$.pipe(skip(1), take(1)).subscribe()
     
     this.store.select(selectAuthUserValue).pipe(take(1)).subscribe({
       next: (authUser) => {
@@ -160,7 +160,6 @@ export class InscripcionesComponent implements OnInit, OnDestroy {
   handleSubmit(event: Event){
    
     this.showForm = !this.showForm;
-    console.log('Modelo: ', this.enrollmentModel.value)
     const newEnrollment = {
       id: new Date().getTime(),
       courseId: this.enrollmentModel.getRawValue().courseId || 0,
@@ -192,7 +191,7 @@ export class InscripcionesComponent implements OnInit, OnDestroy {
 
       this.store.dispatch(InscripcionesActions.loadUsers());
       this.store.dispatch(InscripcionesActions.loadCourses());
-      console.log('Inscripción: ', originalEnrollment);
+      // console.log('Inscripción: ', originalEnrollment);
       const {id, ...rest} = originalEnrollment;
       const enrollmentUpdatedInForm = {...rest, user: originalEnrollment.user.nombres, course: originalEnrollment.course.curso};
       this.editionNote = 'Recuerde, pare editar seleccionar nuevamente el lápiz.'

@@ -148,23 +148,43 @@
       "id": 1693611206284,
       "curso": "Fisica Electricidad",
       "creditos": 3
+    },
+    {
+      "id": 1693966152041,
+      "curso": "Física Mecanica",
+      "creditos": 3
+    },
+    {
+      "id": 1693966235438,
+      "curso": "Dinámica",
+      "creditos": 4
+    },
+    {
+      "id": 1693966428312,
+      "curso": "Comunicaciones",
+      "creditos": 3
+    },
+    {
+      "id": 1693967790265,
+      "curso": "Ética",
+      "creditos": 2
+    },
+    {
+      "id": 1693966255538,
+      "curso": "Dinámica",
+      "creditos": 4
     }
   ],
   "enrollments": [
     {
-      "id": 3,
-      "courseId": 1,
-      "userId": 1693794786589
-    },
-    {
-      "id": 1693874594972,
-      "courseId": 5,
+      "id": 1693971134558,
+      "courseId": 2,
       "userId": 3
     },
     {
-      "id": 1693898210858,
-      "courseId": 3,
-      "userId": 3
+      "id": 1693971705043,
+      "courseId": 2,
+      "userId": 1
     }
   ]
 }

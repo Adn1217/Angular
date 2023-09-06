@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject, Observable, take, mergeMap, map } from 'rxjs'
 import { users, teachers, enrollments, enrollmentsWithCourseAndUser } from 'src/app/usuarios/modelos';
-import { HttpClient } from '@angular/common/http';
+import { HttpBackend, HttpClient } from '@angular/common/http';
 import { NotifierService } from 'src/app/core/services/notifier.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { env } from 'src/app/envs/env';
@@ -87,9 +87,15 @@ public isLoading$ = this._isLoading$.asObservable();
       return this.enrollment$;
     }
 
-    createEnrollment(enrollment: enrollments ): Observable<enrollments[]> {
+    createEnrollment(enrollment: enrollments ): Observable<enrollments> {
+      console.log('Body', enrollment);
       const reqHTTP$ = this.client.post<enrollments>(env.baseApiUrl + '/enrollments', enrollment)
-      reqHTTP$.pipe(take(1)).subscribe({
+      reqHTTP$.pipe(
+        // mergeMap((createdEnrollment) => this.enrollments$.pipe(
+        // take(1),
+        // map((enrollmentList) => [...enrollmentList, createdEnrollment])))
+      )
+      .subscribe({
         next: () => {
           this.getEnrollmentsWithCourseAndUser().pipe(take(1)).subscribe({
             next: (enrollmentList) => {
@@ -113,10 +119,10 @@ public isLoading$ = this._isLoading$.asObservable();
           }
         }
       })
-      return this.enrollmentsWithCourseAndUsers$;
+      return reqHTTP$
     }
 
-    updateEnrollment(enrollmentToUpdate: enrollments ): Observable<enrollments[]> {
+    updateEnrollment(enrollmentToUpdate: enrollments ): Observable<enrollments> {
       const {id, ...rest} = enrollmentToUpdate;
       const reqHTTP$ = this.client.put<enrollments>(env.baseApiUrl + `/enrollments/${id}`, enrollmentToUpdate)
       reqHTTP$.pipe(take(1)).subscribe({
@@ -142,11 +148,11 @@ public isLoading$ = this._isLoading$.asObservable();
           }
         }
       })
-      return this.enrollmentsWithCourseAndUsers$;
+      return reqHTTP$;
     }
 
     
-    deleteEnrollment(enrollmentToDelete: enrollments ): Observable<enrollments[]> {
+    deleteEnrollment(enrollmentToDelete: enrollments ): Observable<any> {
       const {id, ...rest} = enrollmentToDelete;
       const reqHTTP$ = this.client.delete(env.baseApiUrl + `/enrollments/${id}`)
       reqHTTP$.subscribe({
@@ -172,6 +178,6 @@ public isLoading$ = this._isLoading$.asObservable();
           }
         }
       })
-      return this.enrollmentsWithCourseAndUsers$;
+      return reqHTTP$
     }
 }

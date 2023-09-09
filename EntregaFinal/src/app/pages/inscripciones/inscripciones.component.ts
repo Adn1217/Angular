@@ -60,7 +60,6 @@ export class InscripcionesComponent implements OnInit, OnDestroy {
   
   constructor(private formBuilder: FormBuilder, private enrollmentService: InscripcionesService, private notifier: NotifierService, private store: Store, private userService: UserService, private router: Router, private actions$: Actions){
     this.isLoading$ = this.enrollmentService.isLoading$;
-    // this.store.dispatch(InscripcionesActions.loadInscripciones())
     this.userChanges = this.enrollmentModel.controls.user.valueChanges.subscribe({
       next: (userSelected) => {
         this.userIdChange(userSelected);
@@ -79,18 +78,6 @@ export class InscripcionesComponent implements OnInit, OnDestroy {
     
     this.coursesList$ = this.store.select(selectCoursesListValue);
     this.coursesList$.pipe(take(1)).subscribe()
-
-    this.actions$.subscribe((action) => {
-      if(!action.type.includes('Success')){
-        console.log(`------------------------------`);
-        console.log(`Acción '${action.type}' disparada: \n`, action);
-      }else if (action.type.includes('Failure')){
-        console.error(`Acción '${action.type}' disparada: \n`, action);
-      }else{
-        console.log(`Acción '${action.type}' disparada: \n`, action);
-      }
-    });
-   
 
   }
 

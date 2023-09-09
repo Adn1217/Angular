@@ -175,25 +175,11 @@
       "creditos": 4
     }
   ],
-<<<<<<< HEAD
-  "enrollments": []
-=======
   "enrollments": [
     {
-      "id": 1694046694711,
-      "courseId": 2,
-      "userId": 2
-    },
-    {
-      "id": 1694216226043,
-      "courseId": 2,
-      "userId": 2
-    },
-    {
-      "id": 1694218158449,
-      "courseId": 2,
-      "userId": 2
+      "id": 1694218295291,
+      "courseId": 1,
+      "userId": 1
     }
   ]
->>>>>>> devRedux
 }

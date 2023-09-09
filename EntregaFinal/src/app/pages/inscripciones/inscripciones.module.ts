@@ -26,7 +26,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
     InscripcionesRoutingModule,
     UserModule,
     SharedModule,
-    EffectsModule.forFeature([InscripcionesEffects]),
+    // EffectsModule.forFeature([InscripcionesEffects]),
     StoreModule.forFeature(inscripcionesFeature),
     MatFormFieldModule,
     MatSelectModule

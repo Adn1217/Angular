@@ -78,7 +78,6 @@ export const reducer = createReducer(
     }
   }),
   on(InscripcionesActions.createInscripcionSuccess, (state, action) => {
-    console.log('enrollment en InscripcionSucess', action.enrollment)
     return {
       ...state,
       enrollmentList: [...state.enrollmentList],
@@ -86,7 +85,6 @@ export const reducer = createReducer(
     }
   }),
   on(InscripcionesActions.createInscripcionFailure, (state, action) => {
-    console.log('enrollment en InscripcionFailure', action.error)
     return {
       ...state,
       error: action.error
@@ -98,7 +96,6 @@ export const reducer = createReducer(
     }
   }),
   on(InscripcionesActions.updateInscripcionSuccess, (state, action) => {
-    console.log(action)
     return {
       ...state,
       enrollmentList: [...state.enrollmentList],

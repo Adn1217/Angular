@@ -183,7 +183,6 @@ export class InscripcionesComponent implements OnInit, OnDestroy {
     if(enrollmentToDelete && confirmation.isConfirmed){
       this.store.dispatch(InscripcionesActions.deleteInscripcion({enrollment: enrollmentToDelete}));
       this.notifier.showSuccessToast(`Se ha eliminado la inscripción con id: ${enrollmentToDelete.id}`,'', 3000, false)
-      console.log("Se elimina inscripción con id: ", enrollmentToDelete.id)
       }
   }
 

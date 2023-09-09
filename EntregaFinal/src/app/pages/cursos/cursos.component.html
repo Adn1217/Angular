@@ -3,7 +3,7 @@
         <form class="mb-7 form" [formGroup]="courseModel" *ngIf="this.showForm;">
             <div class="mb-3">
                 <label for="inputName" class="form-label">Curso</label>
-                <input formControlName="curso" type="text" class="form-control" id="inputCourse"
+                <input id="inputName" formControlName="curso" type="text" class="form-control" id="inputCourse"
                     [ngClass]="{'is-valid': courseModel.controls['curso'].touched && !courseModel.controls['curso'].invalid, 'is-invalid': courseModel.controls['curso'].touched && courseModel.controls['curso'].invalid}"
                     aria-describedby="nameHelp">
                 <div class="valid-feedback">
@@ -15,7 +15,7 @@
             </div>
             <div class="mb-3">
                 <label for="inputLastname" class="form-label">Creditos</label>
-                <input formControlName="creditos" min="1" max="20" type="number" class="form-control"
+                <input id="inputLastname" formControlName="creditos" min="1" max="20" type="number" class="form-control"
                     [ngClass]="{'is-valid': courseModel.controls['creditos'].touched && !courseModel.controls['creditos'].invalid, 'is-invalid': courseModel.controls['creditos'].touched && courseModel.controls['creditos'].invalid}"
                     id="inputCredit">
                 <div class="valid-feedback">
@@ -25,20 +25,6 @@
                     {{getFieldError("creditos")}}
                 </div>
             </div>
-            <!-- <div class="mb-3 col-3">
-                <label for="inputAge" class="form-label">Edad</label>
-                <input formControlName="edad" min="0" max="150" type="number" class="form-control"
-                    [ngClass]="{'is-valid': userModel.controls['edad'].touched && !userModel.controls['edad'].invalid, 'is-invalid': userModel.controls['edad'].touched && userModel.controls['edad'].invalid}"
-                    id="inputAge">
-                <div class="valid-feedback">
-                    ¡Se ve bien!
-                </div>
-            </div> -->
-            <!-- <div class="mb-3 col-5" *ngIf="userModel.controls['edad'].touched && userModel.controls['edad'].invalid"
-                class="invalid">
-                {{this.userModel.controls.edad.errors && (this.userModel.controls.edad.errors | keyvalue |
-                errorMessagesControl)}}
-            </div> -->
             <div *ngIf="editionNote.length > 0;" class="form-text">
                 {{this.editionNote}}
             </div>

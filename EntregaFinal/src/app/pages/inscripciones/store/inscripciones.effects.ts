@@ -81,6 +81,13 @@ export class InscripcionesEffects {
     )
   });
   
+  updateInscripcionesSucess$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(InscripcionesActions.updateInscripcionSuccess),
+      map(() => this.store.dispatch(InscripcionesActions.loadInscripciones()))
+    );
+  }, {dispatch: false});
+  
   deleteInscripciones$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(InscripcionesActions.deleteInscripcion),

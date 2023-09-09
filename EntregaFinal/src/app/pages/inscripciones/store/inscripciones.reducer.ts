@@ -78,12 +78,15 @@ export const reducer = createReducer(
     }
   }),
   on(InscripcionesActions.createInscripcionSuccess, (state, action) => {
+    console.log('enrollment en InscripcionSucess', action.enrollment)
     return {
       ...state,
-      enrollmentList: [...state.enrollmentList, action.enrollment]
+      enrollmentList: [...state.enrollmentList],
+      error: null
     }
   }),
   on(InscripcionesActions.createInscripcionFailure, (state, action) => {
+    console.log('enrollment en InscripcionFailure', action.error)
     return {
       ...state,
       error: action.error
@@ -95,9 +98,11 @@ export const reducer = createReducer(
     }
   }),
   on(InscripcionesActions.updateInscripcionSuccess, (state, action) => {
+    console.log(action)
     return {
       ...state,
-      enrollmentList: [...state.enrollmentList, action.enrollment]
+      enrollmentList: [...state.enrollmentList],
+      error: null
     }
   }),
   on(InscripcionesActions.updateInscripcionFailure, (state, action) => {
@@ -114,7 +119,8 @@ export const reducer = createReducer(
   on(InscripcionesActions.deleteInscripcionSuccess, (state, action) => {
     return {
       ...state,
-      enrollmentList: [...state.enrollmentList, action.enrollment]
+      enrollmentList: [...state.enrollmentList],
+      error: null
     }
   }),
   on(InscripcionesActions.deleteInscripcionFailure, (state, action) => {

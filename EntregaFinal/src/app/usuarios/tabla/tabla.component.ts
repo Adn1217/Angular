@@ -117,6 +117,8 @@ export class TablaComponent implements OnChanges {
       this.displayedColumns = ['id', 'Curso', 'Créditos', 'acciones'];
     }else if (this.title === 'Inscripciones'){
       this.displayedColumns = ['id', 'idCurso', 'Curso2', 'idAlumno', 'nombre completo2','acciones'];
+    }else if (this.title === 'Administradores'){
+      this.displayedColumns = ['id', 'nombre completo', 'edad', 'correo', 'rol', 'acciones'];
     }
   }
 

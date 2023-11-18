@@ -1,1 +1,18 @@
-<p>Esta sección es exclusiva para usuarios administradores</p>
+<div>
+    <p>Esta sección es exclusiva para usuarios administradores.</p>
+    <div class="screen">
+        <div class="mb-3 userTable">
+            <div class="addButton" *ngIf="!showForm;">
+                <button type="submit" [disabled]="userRol !== 'admin'" (click)="this.showForm = !this.showForm"
+                    class="btn btn-success">Agregar</button>
+            </div>
+            <div *ngIf="isLoading$ | async; else usersTable">
+                Cargando lista...
+            </div>
+            <ng-template #usersTable>
+                <app-tabla title="Administradores" [dataSource]="(completeListObserver | async ) || []"
+                    (updateUser)="handleUpdateUser($event)" (deleteUser)="handleDeleteUser($event)"></app-tabla>
+            </ng-template>
+        </div>
+    </div>
+</div>

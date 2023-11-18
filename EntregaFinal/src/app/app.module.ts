@@ -12,6 +12,7 @@ import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
 import { appReducer } from './store';
+import { InscripcionesEffects } from './pages/inscripciones/store/inscripciones.effects';
 @NgModule({
   declarations: [
     AppComponent,
@@ -26,7 +27,7 @@ import { appReducer } from './store';
     HttpClientModule,
     StoreModule.forRoot(appReducer, {}),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
-    EffectsModule.forRoot([]),
+    EffectsModule.forRoot([InscripcionesEffects]),
   ],
   providers: [],
   bootstrap: [AppComponent]

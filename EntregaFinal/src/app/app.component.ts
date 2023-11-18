@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title: string = 'Entrega Final';
+  title: string = 'Gestión de usuarios';
   ingreso: boolean = true;
   sideBarOpen = false;
   showForm = false;

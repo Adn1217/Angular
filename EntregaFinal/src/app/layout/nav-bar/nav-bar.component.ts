@@ -32,11 +32,6 @@ export class NavBarComponent {
 
   constructor(private userService: IngresoService){
     this.authUser = this.userService.authUser$;
-    // this.authUser.subscribe({
-    //   next: (authUser) => {
-    //     console.log('authUser: ', authUser);
-    //   }
-    // });
     this.userService.authUser$.pipe(take(1)).subscribe(user => {
       if(user && user.correo){
         this.authUserEmail = user.correo

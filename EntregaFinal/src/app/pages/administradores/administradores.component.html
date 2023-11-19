@@ -10,8 +10,9 @@
                 Cargando lista...
             </div>
             <ng-template #usersTable>
-                <app-tabla title="Administradores" [dataSource]="(completeListObserver | async ) || []"
-                    (updateUser)="handleUpdateUser($event)" (deleteUser)="handleDeleteUser($event)"></app-tabla>
+                <app-tabla title="Administradores" [dataSource]="
+                (completeListObserver$ | async )  || []" (updateUser)="handleUpdateUser($event)"
+                    (deleteUser)="handleDeleteUser($event)"></app-tabla>
             </ng-template>
         </div>
     </div>

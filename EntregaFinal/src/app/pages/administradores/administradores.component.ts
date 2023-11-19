@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable, Subject, Subscription, merge, take, takeUntil } from 'rxjs';
+import { Observable, Subject, Subscription, concat, map, merge, mergeMap, take, takeUntil } from 'rxjs';
 import { NotifierService } from 'src/app/core/services/notifier.service';
 import { authActions } from 'src/app/store/actions/auth.actions';
 import { selectAuthUserValue } from 'src/app/store/selectors/auth.selectors';
@@ -35,10 +35,11 @@ export class AdministradoresComponent {
       password: ['', [Validators.required, Validators.minLength(minCharPwdLength)]],
       })
 
-  completeListObserver: Observable<users[] | teachers[]>
-  userListObserver: Observable<users[]>;
-  userListSubscription?: Subscription;
-  teacherListObserver: Observable<users[]>;
+  completeList: Array<users | teachers> = []
+  completeListObserver$: Observable<users[] | teachers[]>;
+  userListObserver$: Observable<users[]>;
+  completeListSubscription?: Subscription;
+  teacherListObserver$: Observable<teachers[]>;
   teacherListSubscription?: Subscription;
   destroyed = new Subject<boolean>(); 
   isLoading$: Observable<boolean>;
@@ -55,9 +56,26 @@ export class AdministradoresComponent {
   constructor(private formBuilder: FormBuilder, private userService: UserService, private notifier: NotifierService, private store: Store, private router: Router){
 
     this.isLoading$ = this.userService.isLoading$;
-    this.userListObserver = userService.getUsers().pipe(takeUntil(this.destroyed));
-    this.teacherListObserver = userService.getTeachers().pipe(takeUntil(this.destroyed));
-    this.completeListObserver = merge(this.userListObserver, this.teacherListObserver); // Reemplaza la subscripcion al usar pipe async.
+    this.userListObserver$ = userService.getUsers().pipe(take(1));
+    this.teacherListObserver$ = userService.getTeachers().pipe(take(1));
+    this.completeListObserver$ = merge(this.userListObserver$, this.teacherListObserver$).pipe(
+      take(2),
+      map((newList) => {
+        console.log('New List: ', newList)
+        this.completeList = [...this.completeList, ...newList];
+        return this.completeList;
+      } )
+      )
+    this.completeListObserver$.subscribe({
+      next: (userList) => {
+        console.log('Lista completa: ', userList);
+      },
+      complete: () => {
+        console.log('Complete');
+        this.completeList = [];
+      }
+    })
+
 
     this.store.select(selectAuthUserValue).pipe(take(1)).subscribe({
       next: (authUser) => {
@@ -174,7 +192,7 @@ export class AdministradoresComponent {
       this.userModel.setValue(userUpdatedInForm);
     }else{
       let userToUpdate: users | undefined;
-      this.completeListObserver.subscribe({
+      this.completeListObserver$.subscribe({
         next: (users) => {
           userToUpdate = users.find((user) => user.id === id);
         }

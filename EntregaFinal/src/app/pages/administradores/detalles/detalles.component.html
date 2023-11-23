@@ -1,0 +1,5 @@
+<h1>Detalle de usuario {{(adminDetails$ | async)?.nombres}} {{(adminDetails$ | async)?.apellidos}}</h1>
+<pre><code>{{(adminDetails$ | async) | json}}</code></pre>
+<button routerLink="admins" mat-icon-button color="secondary">
+    <mat-icon>arrow_back</mat-icon>
+</button>

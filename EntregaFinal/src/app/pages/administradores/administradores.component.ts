@@ -11,13 +11,14 @@ import { UserService } from 'src/app/usuarios/user.service';
 
 const minCharPwdLength: number = 8;
 const minCharUserLength: number = 5;
-interface RegisterModel {
+interface AdminModel {
   nombres: FormControl<string| null>;
   apellidos: FormControl<string | null>;
   usuario: FormControl<string | null>;
   edad: FormControl<number | null>;
   correo: FormControl<string | null>;
   password: FormControl<string | null>;
+  role: FormControl<userRol>;
 }
 @Component({
   selector: 'app-administradores',
@@ -26,14 +27,15 @@ interface RegisterModel {
 })
 export class AdministradoresComponent {
   
-  userModel : FormGroup<RegisterModel> = this.formBuilder.group({
-      nombres: ['', [Validators.required]],
-      apellidos: ['', [Validators.required]],
-      usuario: ['', [Validators.required, Validators.minLength(minCharUserLength)]],
-      edad: [0, [Validators.required]],
-      correo: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(minCharPwdLength)]],
-      })
+  userModel : FormGroup<AdminModel> = this.formBuilder.group({
+    nombres: ['', [Validators.required]],
+    apellidos: ['', [Validators.required]],
+    usuario: ['', [Validators.required, Validators.minLength(minCharUserLength)]],
+    edad: [0, [Validators.required]],
+    correo: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required, Validators.minLength(minCharPwdLength)]],
+    role: ['user' as userRol, [Validators.required]],
+    })
 
   completeList: Array<users | teachers> = []
   completeListObserver$: Observable<users[] | teachers[]>;
@@ -60,7 +62,7 @@ export class AdministradoresComponent {
     this.teacherListObserver$ = userService.getTeachers().pipe(take(1));
     this.completeListObserver$ = merge(this.userListObserver$, this.teacherListObserver$).pipe(
       take(2),
-      map((newList) => {
+      map((newList) => { // TODO: Ajustar para correcta actualización al modificar información (update o delete).
         console.log('New List: ', newList)
         this.completeList = [...this.completeList, ...newList];
         return this.completeList;
@@ -180,7 +182,7 @@ export class AdministradoresComponent {
 
   handleUpdateUser(originalUser: users){
 
-    const {id, role, ...rest} = originalUser;
+    const {id, ...rest} = originalUser;
     const userUpdatedInForm = {...rest};
     this.editionNote = 'Recuerde, pare editar seleccionar nuevamente el lápiz.'
 
@@ -205,7 +207,7 @@ export class AdministradoresComponent {
           apellidos: this.userModel.value.apellidos || '',
           usuario: this.userModel.value.usuario || '',
           edad: this.userModel.value.edad || 18,
-          correo: this.userModel.value.correo || '',
+          correo: this.userModel.value.correo || '  ',
           password: this.userModel.value.password || '',
           role: 'user' as const
         }

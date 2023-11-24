@@ -161,7 +161,7 @@ export class AdministradoresComponent {
       edad: this.userModel.value.edad || 18,
       correo: this.userModel.value.correo || '',
       password: this.userModel.value.password || '',
-      role: 'user' as const
+      role: this.userModel.value.role || 'user' as const
     }
 
     this.userService.createUser(newUser);
@@ -194,7 +194,7 @@ export class AdministradoresComponent {
       this.userModel.setValue(userUpdatedInForm);
     }else{
       let userToUpdate: users | undefined;
-      this.completeListObserver$.subscribe({
+      this.completeListObserver$.subscribe({ // TODO: Agregar lista de profesores.
         next: (users) => {
           userToUpdate = users.find((user) => user.id === id);
         }
@@ -209,7 +209,7 @@ export class AdministradoresComponent {
           edad: this.userModel.value.edad || 18,
           correo: this.userModel.value.correo || '  ',
           password: this.userModel.value.password || '',
-          role: 'user' as const
+          role: this.userModel.value.role || 'user' as const
         }
 
         this.userService.updateUser({id: id, ...updatedUser});

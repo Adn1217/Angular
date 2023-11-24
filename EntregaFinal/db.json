@@ -25,10 +25,10 @@
       "nombres": "Rupertico Adolfo",
       "apellidos": "Herrera Gonzalez",
       "usuario": "ruper12",
-      "edad": 32,
+      "edad": 33,
       "correo": "raherreraG@gmail.com",
       "password": "12345678",
-      "role": "admin"
+      "role": "user"
     },
     {
       "id": 1693702085020,

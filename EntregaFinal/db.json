@@ -89,13 +89,13 @@
       "apellidos": "Ruz Ruiz",
       "usuario": "libardoRuzRuiz",
       "edad": 60,
-      "nivelAcademico": "Especialización",
+      "correo": "lrruiz@gmail.com",
+      "password": "12345678",
+      "role": "admin",
       "materias": [
         "Algebra"
       ],
-      "correo": "lrruiz@gmail.com",
-      "password": "12345678",
-      "role": "user"
+      "nivelAcademico": "Especialización"
     },
     {
       "id": 1693609310231,
@@ -103,13 +103,13 @@
       "apellidos": "Bermejo Salinas",
       "usuario": "basalinas",
       "edad": 44,
-      "nivelAcademico": "Maestría",
+      "correo": "jaberm@gmail.com",
+      "password": "222222232",
+      "role": "admin",
       "materias": [
         "Etica"
       ],
-      "correo": "jaberm@gmail.com",
-      "password": "222222232",
-      "role": "user"
+      "nivelAcademico": "Maestría"
     }
   ],
   "admins": [],

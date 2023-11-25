@@ -16,6 +16,8 @@ interface AdminModel {
   apellidos: FormControl<string | null>;
   usuario: FormControl<string | null>;
   edad: FormControl<number | null>;
+  nivelAcademico?: FormControl<string | null >;
+  materias?: FormControl<string[] | null >;
   correo: FormControl<string | null>;
   password: FormControl<string | null>;
   role: FormControl<userRol>;
@@ -32,10 +34,12 @@ export class AdministradoresComponent {
     apellidos: ['', [Validators.required]],
     usuario: ['', [Validators.required, Validators.minLength(minCharUserLength)]],
     edad: [0, [Validators.required]],
+    nivelAcademico: new FormControl(null),
+    materias: new FormControl(null),
     correo: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(minCharPwdLength)]],
     role: ['user' as userRol, [Validators.required]],
-    })
+    }) as FormGroup<AdminModel> // Cast para poder inicializar campos opcionales.
 
   completeList: Array<users | teachers> = []
   completeListObserver$: Observable<users[] | teachers[]>;
@@ -149,10 +153,14 @@ export class AdministradoresComponent {
     }
   }
 
+  toggleShowForm(){
+    this.showForm = !this.showForm;
+  }
+
   handleSubmit(event: Event){
    
     // this.showFormChange.emit();
-    this.showForm = !this.showForm;
+    this.toggleShowForm();
     const newUser = {
       id: new Date().getTime(),
       nombres: this.userModel.value.nombres || '',
@@ -180,11 +188,13 @@ export class AdministradoresComponent {
       }
   }
 
-  handleUpdateUser(originalUser: users){
+  handleUpdateUser(originalUser: users | teachers){
 
-    const {id, ...rest} = originalUser;
-    const userUpdatedInForm = {...rest};
-    this.editionNote = 'Recuerde, pare editar seleccionar nuevamente el lápiz.'
+    const { id, ...rest } = originalUser
+    const userUpdatedInForm = rest;
+    let isTeacher: boolean = false
+
+    this.editionNote = 'Recuerde, para editar seleccionar nuevamente el lápiz.'
 
     if(!this.showForm){
       this.userModel.setValue(userUpdatedInForm);
@@ -193,16 +203,26 @@ export class AdministradoresComponent {
     }else if (this.showForm && this.userModel.status === 'INVALID'){
       this.userModel.setValue(userUpdatedInForm);
     }else{
-      let userToUpdate: users | undefined;
-      this.completeListObserver$.subscribe({ // TODO: Agregar lista de profesores.
-        next: (users) => {
-          userToUpdate = users.find((user) => user.id === id);
-        }
-      })
+      let userToUpdate: users | teachers | undefined;
+      console.log('userUpdatedInForm: ', userUpdatedInForm)
+      if ('nivelAcademico' in userUpdatedInForm){
+        isTeacher = true;
+        this.teacherListObserver$.subscribe({
+          next: (users) => {
+            userToUpdate = users.find((user) => user.id === id);
+          }
+        })
+      }else{
+        this.userListObserver$.subscribe({ 
+          next: (users) => {
+            userToUpdate = users.find((user) => user.id === id);
+          }
+        })
+      }
       // const userToUpdate = this.userList.find((user) => user.id === id);
       if(userToUpdate && this.userModel.status === 'VALID'){
 
-        const updatedUser = {
+        let updatedUser = {
           nombres: this.userModel.value.nombres || '',
           apellidos: this.userModel.value.apellidos || '',
           usuario: this.userModel.value.usuario || '',
@@ -212,6 +232,15 @@ export class AdministradoresComponent {
           role: this.userModel.value.role || 'user' as const
         }
 
+        if(isTeacher){
+          updatedUser = {...updatedUser, 
+            ...{ 
+              materias: this.userModel.value.materias,
+              nivelAcademico: this.userModel.value.nivelAcademico 
+            }
+          }
+        }
+        console.log('updatedUser: ', {id: id, ...updatedUser})
         this.userService.updateUser({id: id, ...updatedUser});
  
         this.userModel.reset();
@@ -220,6 +249,8 @@ export class AdministradoresComponent {
         // this.showFormChange.emit();
         this.notifier.showSuccess('',`Se ha actualizado el usuario con id: ${userToUpdate.id}`)
         // alert(`Se ha actualizado el usuario con id: ${userToUpdate.id}`)
+      }else if (!userToUpdate){
+        this.notifier.showError('',`No se ha encontrado el usuario con id: ${id}`)
       }else{
         this.userModel.markAllAsTouched;
       }

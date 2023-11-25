@@ -55,6 +55,34 @@
                 errorMessagesControl)}}
                 <!-- {{getFieldError("edad")}} -->
             </div>
+            <div class="mb-3" *ngIf="userModel.controls['nivelAcademico']">
+                <label for="inputAcademicLevel" class="form-label">Nivel Académico</label>
+                <input formControlName="nivelAcademico" type="text" class="form-control"
+                    [ngClass]="{'is-valid': userModel.controls['nivelAcademico'].touched && !userModel.controls['nivelAcademico'].invalid, 'is-invalid': userModel.controls['nivelAcademico'].touched && userModel.controls['nivelAcademico'].invalid}"
+                    id="inputAcademicLevel" required>
+                <div class="valid-feedback">
+                    ¡Se ve bien!
+                </div>
+                <div class="invalid-feedback">
+                    {{this.userModel.controls.usuario.errors && (this.userModel.controls.usuario.errors | keyvalue |
+                    errorMessagesControl)}}
+                </div>
+
+            </div>
+            <div class="mb-3" *ngIf="userModel.controls['nivelAcademico'] && userModel.controls['materias']">
+                <label for="inputMaterias" class="form-label">Materia</label>
+                <input formControlName="materias" type="text" class="form-control"
+                    [ngClass]="{'is-valid': userModel.controls['materias'].touched && !userModel.controls['materias'].invalid, 'is-invalid': userModel.controls['materias'].touched && userModel.controls['nivelAcademico'].invalid}"
+                    id="inputMaterias" required>
+                <div class="valid-feedback">
+                    ¡Se ve bien!
+                </div>
+                <div class="invalid-feedback">
+                    {{this.userModel.controls.usuario.errors && (this.userModel.controls.usuario.errors | keyvalue |
+                    errorMessagesControl)}}
+                </div>
+
+            </div>
             <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Email address</label>
                 <input formControlName="correo" type="email" class="form-control"
@@ -91,7 +119,7 @@
                 <button (click)="handleSubmit($event)" type="submit"
                     [ngClass]="{'disabled': !userModel.controls.password.touched || userModel.status === 'INVALID'}"
                     class="btn btn-primary">Registrar</button>
-                <button routerLink="/login" class="btn btn-secondary">Login</button>
+                <button (click)="toggleShowForm()" class="btn btn-secondary">Cancelar</button>
             </div>
         </form>
         <div class="mb-3 userTable">

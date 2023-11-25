@@ -18,7 +18,7 @@ export class DetallesComponent {
     this.adminId = this.activatedRoute.snapshot.params['id'];
     this.adminDetails$ = this.userService.getTeacherById(this.adminId);
     this.adminDetails$.subscribe({
-      next: (teacherDetails) => { // TODO: No funciona. Ajustar con Merge.
+      next: (teacherDetails) => { // TODO: No funciona. Ajustar con Merge, debe identificar usuarios también.
         if(!teacherDetails){
           this.adminDetails$ = this.userService.getUserById(this.adminId);
         }

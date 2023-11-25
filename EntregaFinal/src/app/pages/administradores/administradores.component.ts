@@ -22,6 +22,8 @@ interface AdminModel {
   password: FormControl<string | null>;
   role: FormControl<userRol>;
 }
+
+type userTypes = 'user' | 'teacher'
 @Component({
   selector: 'app-administradores',
   templateUrl: './administradores.component.html',
@@ -58,6 +60,8 @@ export class AdministradoresComponent {
 
   // @Input()
   showForm: boolean = false;
+  showTypeUserSelector: boolean = false;
+  typeUserSelection: userTypes = 'user'
   
   constructor(private formBuilder: FormBuilder, private userService: UserService, private notifier: NotifierService, private store: Store, private router: Router){
 
@@ -155,13 +159,24 @@ export class AdministradoresComponent {
 
   toggleShowForm(){
     this.showForm = !this.showForm;
+    this.showTypeUserSelector = false;
+  }
+
+  handleAddButton(){
+    this.toggleShowForm();
+    this.showTypeUserSelector = true;
+  }
+
+  handleUserTypeSelection(value: string){
+    this.typeUserSelection = value as userTypes;
+    console.log('Tipo de usuario seleccionado: ', this.typeUserSelection);
   }
 
   handleSubmit(event: Event){
    
     // this.showFormChange.emit();
     this.toggleShowForm();
-    const newUser = {
+    let newUser = {
       id: new Date().getTime(),
       nombres: this.userModel.value.nombres || '',
       apellidos: this.userModel.value.apellidos || '',
@@ -172,9 +187,23 @@ export class AdministradoresComponent {
       role: this.userModel.value.role || 'user' as const
     }
 
+    if(this.typeUserSelection === 'teacher'){
+      newUser = {...newUser, 
+        ...{
+          nivelAcademico: this.userModel.value.nivelAcademico || '',
+          materias: this.userModel.value.materias || ['']
+        }
+      }
+    }
+    console.log('newUser ', newUser);
     this.userService.createUser(newUser);
     this.userModel.reset();
     // console.log(this.userModel.controls);
+  }
+
+  handleCancel(){
+    this.toggleShowForm();
+    this.userModel.reset();
   }
   
   async handleDeleteUser(userToDelete: users ){
@@ -197,11 +226,17 @@ export class AdministradoresComponent {
     this.editionNote = 'Recuerde, para editar seleccionar nuevamente el lápiz.'
 
     if(!this.showForm){
-      this.userModel.setValue(userUpdatedInForm);
+      this.userModel.setValue({
+        nivelAcademico: null, 
+        materias: null,
+        ...userUpdatedInForm});
       this.showForm = !this.showForm;
       // this.showFormChange.emit();
     }else if (this.showForm && this.userModel.status === 'INVALID'){
-      this.userModel.setValue(userUpdatedInForm);
+      this.userModel.setValue({
+        nivelAcademico: null, 
+        materias: null,
+        ...userUpdatedInForm});
     }else{
       let userToUpdate: users | teachers | undefined;
       console.log('userUpdatedInForm: ', userUpdatedInForm)

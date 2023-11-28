@@ -14,7 +14,7 @@ import { selectAuthUserValue } from 'src/app/store/selectors/auth.selectors';
 
 export class TablaComponent implements OnChanges {
 
-  constructor(private router: Router, private store: Store){
+  constructor(private store: Store){
 
     this.store.select(selectAuthUserValue).subscribe({
       next: (authUser) => {

@@ -2,7 +2,7 @@
   "users": [
     {
       "id": 1,
-      "nombres": "Adrian Alberto1",
+      "nombres": "Adrian Alberto",
       "apellidos": "Fernández Cabrera",
       "usuario": "adn1217",
       "edad": 32,
@@ -25,29 +25,39 @@
       "nombres": "Rupertico Adolfo",
       "apellidos": "Herrera Gonzalez",
       "usuario": "ruper12",
-      "edad": 32,
+      "edad": 33,
       "correo": "raherreraG@gmail.com",
       "password": "12345678",
-      "role": "admin"
+      "role": "user"
     },
     {
       "id": 1693702085020,
-      "nombres": "Adrian Alberto",
-      "apellidos": "Fernández Castro",
+      "nombres": "Keyner Antonio",
+      "apellidos": "Fuentes Fontalvo",
       "usuario": "adn1217",
       "edad": 22,
-      "correo": "adn1218@hotmail.com",
+      "correo": "adn1217@hotmail.com",
       "password": "11111111",
       "role": "user"
     },
     {
       "id": 1693794786589,
-      "nombres": "Adrian Alberto222",
+      "nombres": "Adrian Alberto",
       "apellidos": "Fernández Castro",
       "usuario": "adn1217",
-      "edad": 22,
+      "edad": 23,
       "correo": "adn1219@hotmail.com",
       "password": "11111111",
+      "role": "user"
+    },
+    {
+      "id": 1700950786402,
+      "nombres": "Esmeregildo",
+      "apellidos": "Segrera fuentes",
+      "usuario": "esmese",
+      "edad": 67,
+      "correo": "esme.segrera@hotmail.com",
+      "password": "12345678",
       "role": "user"
     }
   ],
@@ -88,14 +98,14 @@
       "nombres": "Libardo Antonio",
       "apellidos": "Ruz Ruiz",
       "usuario": "libardoRuzRuiz",
-      "edad": 60,
-      "nivelAcademico": "Especialización",
+      "edad": 65,
+      "correo": "lrruiz@gmail.com",
+      "password": "12345678",
+      "role": "admin",
       "materias": [
         "Algebra"
       ],
-      "correo": "lrruiz@gmail.com",
-      "password": "12345678",
-      "role": "user"
+      "nivelAcademico": "Especialización"
     },
     {
       "id": 1693609310231,
@@ -103,13 +113,25 @@
       "apellidos": "Bermejo Salinas",
       "usuario": "basalinas",
       "edad": 44,
-      "nivelAcademico": "Maestría",
+      "correo": "jaberm@gmail.com",
+      "password": "222222232",
+      "role": "admin",
       "materias": [
         "Etica"
       ],
-      "correo": "jaberm@gmail.com",
-      "password": "222222232",
-      "role": "user"
+      "nivelAcademico": "Maestría"
+    },
+    {
+      "id": 1700950716505,
+      "nombres": "Jairo",
+      "apellidos": "Cardona",
+      "usuario": "jcardona",
+      "edad": 45,
+      "correo": "j.cardona83@uninorte.edu.co",
+      "password": "12345678",
+      "role": "admin",
+      "nivelAcademico": "Maestría",
+      "materias": "Lógica Digital"
     }
   ],
   "admins": [],

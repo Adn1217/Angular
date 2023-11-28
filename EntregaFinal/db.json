@@ -2,7 +2,7 @@
   "users": [
     {
       "id": 1,
-      "nombres": "Adrian Alberto1",
+      "nombres": "Adrian Alberto",
       "apellidos": "Fernández Cabrera",
       "usuario": "adn1217",
       "edad": 32,
@@ -42,10 +42,10 @@
     },
     {
       "id": 1693794786589,
-      "nombres": "Adrian Alberto222",
+      "nombres": "Adrian Alberto",
       "apellidos": "Fernández Castro",
       "usuario": "adn1217",
-      "edad": 22,
+      "edad": 23,
       "correo": "adn1219@hotmail.com",
       "password": "11111111",
       "role": "user"
@@ -98,7 +98,7 @@
       "nombres": "Libardo Antonio",
       "apellidos": "Ruz Ruiz",
       "usuario": "libardoRuzRuiz",
-      "edad": 60,
+      "edad": 65,
       "correo": "lrruiz@gmail.com",
       "password": "12345678",
       "role": "admin",

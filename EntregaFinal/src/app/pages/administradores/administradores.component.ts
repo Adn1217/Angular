@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable, Subject, Subscription, concat, map, merge, mergeMap, take, takeUntil } from 'rxjs';
+import { Observable, Subject, Subscription, combineLatest, concat, forkJoin, map, merge, mergeMap, skip, take, takeUntil } from 'rxjs';
 import { NotifierService } from 'src/app/core/services/notifier.service';
 import { authActions } from 'src/app/store/actions/auth.actions';
 import { selectAuthUserValue } from 'src/app/store/selectors/auth.selectors';
@@ -44,7 +44,7 @@ export class AdministradoresComponent {
     }) as FormGroup<AdminModel> // Cast para poder inicializar campos opcionales.
 
   completeList: Array<users | teachers> = []
-  completeListObserver$: Observable<users[] | teachers[]>;
+  completeListObserver$: Observable<(users | teachers)[]>;
   userListObserver$: Observable<users[]>;
   completeListSubscription?: Subscription;
   teacherListObserver$: Observable<teachers[]>;
@@ -68,20 +68,19 @@ export class AdministradoresComponent {
     this.isLoading$ = this.userService.isLoading$;
     this.userListObserver$ = userService.getUsers().pipe(take(1));
     this.teacherListObserver$ = userService.getTeachers().pipe(take(1));
-    this.completeListObserver$ = merge(this.userListObserver$, this.teacherListObserver$).pipe(
-      take(2),
-      map((newList) => { // TODO: Ajustar para correcta actualización al modificar información (update o delete).
-        console.log('New List: ', newList)
-        this.completeList = [...this.completeList, ...newList];
-        return this.completeList;
+    this.completeListObserver$ = forkJoin(this.userListObserver$, this.teacherListObserver$).pipe(
+      map((newList) => {
+        // console.log('New List: ', newList)
+        return [...newList[0],...newList[1]]
       } )
       )
     this.completeListObserver$.subscribe({
       next: (userList) => {
-        console.log('Lista completa: ', userList);
+        // console.log('Lista completa: ', userList);
+        this.completeList = [];
       },
       complete: () => {
-        console.log('Complete');
+        // console.log('Complete');
         this.completeList = [];
       }
     })

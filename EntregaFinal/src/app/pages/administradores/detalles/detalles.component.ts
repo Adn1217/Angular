@@ -13,16 +13,17 @@ export class DetallesComponent {
 
   adminDetails$?: Observable<users | teachers | undefined>
   adminId: string
+  userType: string
 
   constructor(private userService: UserService, private activatedRoute: ActivatedRoute ){
     this.adminId = this.activatedRoute.snapshot.params['id'];
-    this.adminDetails$ = this.userService.getTeacherById(this.adminId);
-    this.adminDetails$.subscribe({
-      next: (teacherDetails) => { // TODO: No funciona. Ajustar con Merge, debe identificar usuarios también.
-        if(!teacherDetails){
-          this.adminDetails$ = this.userService.getUserById(this.adminId);
-        }
-      }
-    })
+    this.userType = this.activatedRoute.snapshot.queryParams['userType'];
+    // console.log(`userType: ${this.userType} - adminId: ${this.adminId}`)
+    
+    if (this.userType === 'teacher'){
+      this.adminDetails$ = this.userService.getTeacherById(this.adminId);
+    }else if (this.userType === 'user'){
+      this.adminDetails$ = this.userService.getUserById(this.adminId);
+    }
   }
 }

@@ -143,7 +143,7 @@ export class ProfesoresComponent implements OnDestroy {
     // this.showFormChange.emit();
     this.showForm = !this.showForm;
     const newTeacher = {
-      id: new Date().getTime(),
+      id: new Date().getTime().toString(),
       nombres: this.userModel.value.nombres || '',
       apellidos: this.userModel.value.apellidos || '',
       usuario: this.userModel.value.usuario || '',

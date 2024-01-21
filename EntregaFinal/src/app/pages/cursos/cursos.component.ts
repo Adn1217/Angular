@@ -121,7 +121,7 @@ export class CursosComponent {
    
     this.showForm = !this.showForm;
     const newCourse = {
-      id: new Date().getTime(),
+      id: new Date().getTime().toString(),
       curso: this.courseModel.value.curso || '',
       creditos: this.courseModel.value.creditos || 0,
     }

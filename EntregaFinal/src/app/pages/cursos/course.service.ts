@@ -56,7 +56,7 @@ public isLoading$ = this._isLoading$.asObservable();
     getCourseById(id: string): Observable<courses | undefined> {
       this.client.get<courses[]>(env.baseApiUrl + '/courses').pipe(take(1)).subscribe({
         next: (courses) => {
-          let course = courses.find((course) => course.id === Number(id));
+          let course = courses.find((course) => course.id === id);
           this._course$.next(course);
         }
       })

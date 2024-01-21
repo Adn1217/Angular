@@ -176,7 +176,7 @@ export class AdministradoresComponent {
     // this.showFormChange.emit();
     this.toggleShowForm();
     let newUser = {
-      id: new Date().getTime(),
+      id: new Date().getTime().toString(),
       nombres: this.userModel.value.nombres || '',
       apellidos: this.userModel.value.apellidos || '',
       usuario: this.userModel.value.usuario || '',

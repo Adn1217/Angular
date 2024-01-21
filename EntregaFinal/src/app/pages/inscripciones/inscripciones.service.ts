@@ -61,7 +61,7 @@ public isLoading$ = this._isLoading$.asObservable();
     getEnrollmentById(id: string): Observable<enrollments | undefined> {
       this.client.get<enrollments[]>(env.baseApiUrl + '/users').pipe(take(1)).subscribe({
         next: (enrollments) => {
-          let enrollment = enrollments.find((enrollment) => enrollment.id === Number(id));
+          let enrollment = enrollments.find((enrollment) => enrollment.id === id);
           this._enrollment$.next(enrollment);
         }
       })

@@ -28,6 +28,8 @@ export class TablaComponent implements OnChanges {
   displayedColumns: string[] = ['id', 'nombre completo', 'edad', 'correo', 'rol', 'acciones'];
 
   userRol: userRol = null
+  color: string = "primary";
+  selectedUserId: string | null = null;
 
 
   @Input()
@@ -71,6 +73,8 @@ export class TablaComponent implements OnChanges {
   }
   
   handleUpdate(entity: users | teachers | courses | enrollmentsWithCourseAndUser ){
+    this.color = 'accent';
+    this.selectedUserId = entity.id;
     if('courseId' in entity){
       this.handleUpdateEnrollment(entity);
     }else if ('curso' in entity){

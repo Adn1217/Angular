@@ -200,7 +200,7 @@ export class RegistroComponent implements OnDestroy {
           edad: this.userModel.value.edad || 18,
           correo: this.userModel.value.correo || '',
           password: this.userModel.value.password || '',
-          role: 'user' as const
+          role: role || 'user' as const,
         }
 
         this.userService.updateUser({id: id, ...updatedUser});

@@ -130,8 +130,19 @@ public isLoading$ = this._isLoading$.asObservable();
 
     createUser(user: users | teachers): void {
       const {id, ...rest} = user;
+      
       if('nivelAcademico' in user){
-        this.client.post<teachers>(env.baseApiUrl + '/teachers', rest).pipe(
+        let teacher = <teachers>rest
+        if(teacher.materias[0].includes(',')){
+          teacher.materias = teacher.materias[0].split(',');
+          teacher.materias = teacher.materias.map((materia) => materia.trim()).filter((materia) => materia.length > 0);
+          if(!teacher.materias.length || (teacher.materias.length === 1 && teacher.materias[0].length === 0)) {
+            this.notifier.showError('', `No se han ingresado materias válidas.`); 
+            throw new Error(`No se han ingresado materias válidas.`,{cause: 'Campo Materia debe tener un valor válido.' })
+          }
+          // console.log('Teacher: ', teacher);
+        }
+        this.client.post<teachers>(env.baseApiUrl + '/teachers', teacher).pipe(
           mergeMap((createdTeacher) => this.teachers$.pipe(
             take(1),
             map((teachersList) => [...teachersList, createdTeacher])))
@@ -163,8 +174,20 @@ public isLoading$ = this._isLoading$.asObservable();
 
     updateUser(userToUpdate: users | teachers): void {
       const {id, ...rest} = userToUpdate;
+      console.log('userToUpdate', userToUpdate);
       if('nivelAcademico' in userToUpdate){
-        this.client.put<teachers>(env.baseApiUrl + `/teachers/${id}`, rest).pipe(
+        let teacher = <teachers>rest
+        if(teacher.materias[0].includes(',')){
+          teacher.materias = teacher.materias[0].split(',');
+          teacher.materias = teacher.materias.map((materia) => materia.trim()).filter((materia) => materia.length > 0);
+          // console.log('Materias: ', teacher.materias);
+          if(!teacher.materias.length || (teacher.materias.length === 1 && teacher.materias[0].length === 0)){
+            this.notifier.showError('', `No se han ingresado materias válidas.`); 
+            throw new Error(`No se han ingresado materias válidas.`,{cause: 'Campo Materia debe tener un valor válido.' })
+          } 
+          // console.log('Teacher: ', teacher);
+        }
+        this.client.put<teachers>(env.baseApiUrl + `/teachers/${id}`, teacher).pipe(
           take(1)).subscribe({
             next: (updatedTeacher) => {
               if(updatedTeacher.id){
@@ -174,11 +197,11 @@ public isLoading$ = this._isLoading$.asObservable();
               }
             },
             error: (error) => {
-              this.notifier.showError('', 'Se ha presentado error en el servicio: ' + error);
+              this.notifier.showError('', 'Se ha presentado error en el servicio: ' + JSON.stringify(error.error));
             }
           })
       }else{
-        console.log('payload: ', rest);
+        // console.log('payload: ', rest);
         this.client.put<users>(env.baseApiUrl + `/users/${id}`, rest).pipe(
           take(1)).subscribe({
             next: (updatedUser) => {
@@ -201,7 +224,7 @@ public isLoading$ = this._isLoading$.asObservable();
         this.client.delete(env.baseApiUrl + `/teachers/${id}`).pipe(take(1)).subscribe({
           next: (response) => {
             this.getTeachers();
-            this.notifier.showSuccessToast('', 'Se ha eliminado correctamente al profesor.', 2000)
+            this.notifier.showSuccessToast('', 'Se ha eliminado correctamente al profesor.', 2000);
           },
           error: (error) => {
             this.notifier.showError('', 'Se ha presentado error al intentar eliminar la información. \n ' + JSON.stringify(error.error));

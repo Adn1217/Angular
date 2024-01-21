@@ -131,10 +131,14 @@ export class RegistroComponent implements OnDestroy {
     }
   }
 
+  toggleShowForm(){
+    this.showForm = !this.showForm;
+  }
+  
   handleSubmit(event: Event){
    
     // this.showFormChange.emit();
-    this.showForm = !this.showForm;
+    this.toggleShowForm();
     const newUser = {
       id: new Date().getTime(),
       nombres: this.userModel.value.nombres || '',
@@ -149,6 +153,11 @@ export class RegistroComponent implements OnDestroy {
     this.userService.createUser(newUser);
     this.userModel.reset();
     // console.log(this.userModel.controls);
+  }
+  
+  handleCancel(){
+    this.toggleShowForm();
+    this.userModel.reset();
   }
   
   async handleDeleteUser(userToDelete: users ){
@@ -170,7 +179,7 @@ export class RegistroComponent implements OnDestroy {
 
     if(!this.showForm){
       this.userModel.setValue(userUpdatedInForm);
-      this.showForm = !this.showForm;
+      this.toggleShowForm();
       // this.showFormChange.emit();
     }else if (this.showForm && this.userModel.status === 'INVALID'){
       this.userModel.setValue(userUpdatedInForm);
@@ -198,7 +207,7 @@ export class RegistroComponent implements OnDestroy {
  
         this.userModel.reset();
         this.editionNote = '';
-        this.showForm = !this.showForm;
+        this.toggleShowForm();
         // this.showFormChange.emit();
         this.notifier.showSuccess('',`Se ha actualizado el usuario con id: ${userToUpdate.id}`)
         // alert(`Se ha actualizado el usuario con id: ${userToUpdate.id}`)

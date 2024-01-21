@@ -11,16 +11,6 @@
       "role": "admin"
     },
     {
-      "id": 2,
-      "nombres": "Alejandra Paola",
-      "apellidos": "Fernández Castro",
-      "usuario": "alu2110",
-      "edad": 31,
-      "correo": "alufndz_@gmail.com",
-      "password": "12345678",
-      "role": "user"
-    },
-    {
       "id": 3,
       "nombres": "Rupertico Adolfo",
       "apellidos": "Herrera Gonzalez",
@@ -36,7 +26,7 @@
       "apellidos": "Fuentes Fontalvo",
       "usuario": "adn1217",
       "edad": 22,
-      "correo": "adn1217@hotmail.com",
+      "correo": "adn1218@hotmail.com",
       "password": "11111111",
       "role": "user"
     },
@@ -190,7 +180,18 @@
       "id": 1693967790265,
       "curso": "Ética",
       "creditos": 2
+    },
+    {
+      "id": 1693966255538,
+      "curso": "Dinámica",
+      "creditos": 4
     }
   ],
-  "enrollments": []
+  "enrollments": [
+    {
+      "id": 1705621531699,
+      "courseId": 2,
+      "userId": 1693702085020
+    }
+  ]
 }

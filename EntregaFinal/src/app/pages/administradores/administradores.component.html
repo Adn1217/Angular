@@ -56,7 +56,7 @@
                         ¡Se ve bien!
                     </div>
                 </div>
-                <div class="mb-3 col-5" *ngIf="userModel.controls['edad'].touched && userModel.controls['edad'].invalid"
+                <div class="mb-3 col-6" *ngIf="userModel.controls['edad'].touched && userModel.controls['edad'].invalid"
                     class="invalid">
                     {{this.userModel.controls.edad.errors && (this.userModel.controls.edad.errors | keyvalue |
                     errorMessagesControl)}}

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject, Observable, take, mergeMap, map } from 'rxjs'
 import { users, teachers, courses } from 'src/app/usuarios/modelos';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { NotifierService } from 'src/app/core/services/notifier.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { env } from 'src/app/envs/env';
@@ -54,7 +54,7 @@ public isLoading$ = this._isLoading$.asObservable();
     }
 
     getCourseById(id: string): Observable<courses | undefined> {
-      this.client.get<courses[]>(env.baseApiUrl + '/users').pipe(take(1)).subscribe({
+      this.client.get<courses[]>(env.baseApiUrl + '/courses').pipe(take(1)).subscribe({
         next: (courses) => {
           let course = courses.find((course) => course.id === Number(id));
           this._course$.next(course);
@@ -64,7 +64,8 @@ public isLoading$ = this._isLoading$.asObservable();
     }
 
     createCourse(course: courses ): void {
-      this.client.post<courses>(env.baseApiUrl + '/courses', course)
+      const {id, ...rest} = course;
+      this.client.post<courses>(env.baseApiUrl + '/courses', rest)
       .pipe(
         mergeMap((createdCourse) => this.courses$.pipe(
           take(1),
@@ -78,22 +79,22 @@ public isLoading$ = this._isLoading$.asObservable();
           console.log('Ha ocurrido error: ', err);
           if(err instanceof HttpErrorResponse){
             if(err.status === 500){
-              this.notifier.showError('',`Se ha presentado error ${err.status}. Error en el servidor.`);
+              this.notifier.showError('',`Se ha presentado error ${err.status}. Error en el servidor. \n ${JSON.stringify(err.error)}`);
             }else if(err.status === 404){
-              this.notifier.showError('',`Se ha presentado error ${err.status}. No se encuentra el servicio solicitado.`);
+              this.notifier.showError('',`Se ha presentado error ${err.status}. No se encuentra el servicio solicitado. \n ${JSON.stringify(err.error)}`);
             }else{
-              this.notifier.showError('',`Se presenta error ${err.status} al consumir el servicio`);
+              this.notifier.showError('',`Se presenta error ${err.status} al consumir el servicio. \n ${JSON.stringify(err.error)}`);
             }
           }else{
-            this.notifier.showError('', 'Ha ocurrido un error al consultar inscripciones.');
+            this.notifier.showError('', `Ha ocurrido un error al consultar inscripciones. \n ${JSON.stringify(err.error)}`);
           }
         }
       })
     }
 
-    updateUser(courseToUpdate: courses): void {
+    updateCourse(courseToUpdate: courses): void {
       const {id, ...rest} = courseToUpdate;
-      this.client.put<courses>(env.baseApiUrl + `/courses/${id}`, courseToUpdate).pipe(
+      this.client.put<courses>(env.baseApiUrl + `/courses/${id}`, rest).pipe(
         take(1)).subscribe({
           next: (updatedCourse) => {
             if(updatedCourse.id){
@@ -103,7 +104,7 @@ public isLoading$ = this._isLoading$.asObservable();
             }
           },
           error: (error) => {
-            this.notifier.showError('', 'Se ha presenta error en el servicio: ' + error);
+            this.notifier.showError('', 'Se ha presentado error en el servicio: ' + JSON.stringify(error.error));
           }
         })
     };

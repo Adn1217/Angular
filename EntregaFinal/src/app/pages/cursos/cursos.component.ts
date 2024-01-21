@@ -170,13 +170,13 @@ export class CursosComponent {
             curso: this.courseModel.value.curso || '',
             creditos: this.courseModel.value.creditos || 0,
           }
-          this.courseService.updateUser({id: id, ...updatedCourse});
+          this.courseService.updateCourse({id: id, ...updatedCourse});
 
           this.courseModel.reset();
           this.editionNote = ''
 
           this.showForm = !this.showForm;
-          this.notifier.showSuccess('',`Se ha actualizado el profesor con id: ${courseToUpdate.id}`)
+          this.notifier.showSuccess('',`Se ha actualizado el curso con id: ${courseToUpdate.id}`)
         }else{
           this.courseModel.markAllAsTouched;
         }

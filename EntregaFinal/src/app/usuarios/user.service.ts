@@ -129,24 +129,33 @@ public isLoading$ = this._isLoading$.asObservable();
     }
 
     createUser(user: users | teachers): void {
+      const {id, ...rest} = user;
       if('nivelAcademico' in user){
-        this.client.post<teachers>(env.baseApiUrl + '/teachers', user).pipe(
+        this.client.post<teachers>(env.baseApiUrl + '/teachers', rest).pipe(
           mergeMap((createdTeacher) => this.teachers$.pipe(
             take(1),
             map((teachersList) => [...teachersList, createdTeacher])))
         ).subscribe({
           next: (teacherList) => {
             this._teachers$.next([...teacherList]);
+            this.notifier.showSuccess('', 'Se ha creado correctamente al profesor.');
+          },
+          error: (error) => {
+            this.notifier.showError('', 'Se ha presentado error en el servicio: ' + JSON.stringify(error.error));
           }
         })
       }else{
-        this.client.post<users>(env.baseApiUrl + '/users', user).pipe(
+        this.client.post<users>(env.baseApiUrl + '/users', rest).pipe(
           mergeMap((createdUser) => this.users$.pipe(
             take(1),
             map((usersList) => [...usersList, createdUser])))
         ).subscribe({
           next: (userList) => {
             this._users$.next([...userList]);
+            this.notifier.showSuccess('', 'Se ha creado correctamente al profesor.');
+          },
+          error: (error) => {
+            this.notifier.showError('', 'Se ha presentado error en el servicio: ' + JSON.stringify(error.error));
           }
         })
       }
@@ -155,7 +164,7 @@ public isLoading$ = this._isLoading$.asObservable();
     updateUser(userToUpdate: users | teachers): void {
       const {id, ...rest} = userToUpdate;
       if('nivelAcademico' in userToUpdate){
-        this.client.put<teachers>(env.baseApiUrl + `/teachers/${id}`, userToUpdate).pipe(
+        this.client.put<teachers>(env.baseApiUrl + `/teachers/${id}`, rest).pipe(
           take(1)).subscribe({
             next: (updatedTeacher) => {
               if(updatedTeacher.id){
@@ -165,11 +174,12 @@ public isLoading$ = this._isLoading$.asObservable();
               }
             },
             error: (error) => {
-              this.notifier.showError('', 'Se ha presenta error en el servicio: ' + error);
+              this.notifier.showError('', 'Se ha presentado error en el servicio: ' + error);
             }
           })
       }else{
-        this.client.put<users>(env.baseApiUrl + `/users/${id}`, userToUpdate).pipe(
+        console.log('payload: ', rest);
+        this.client.put<users>(env.baseApiUrl + `/users/${id}`, rest).pipe(
           take(1)).subscribe({
             next: (updatedUser) => {
               if(updatedUser.id){
@@ -179,7 +189,7 @@ public isLoading$ = this._isLoading$.asObservable();
               }
             },
             error: (error) => {
-              this.notifier.showError('', 'Se ha presenta error en el servicio: ' + error);
+              this.notifier.showError('', 'Se ha presentado error en el servicio: ' + JSON.stringify(error.error));
             }
           })
       }
@@ -194,15 +204,15 @@ public isLoading$ = this._isLoading$.asObservable();
             this.notifier.showSuccessToast('', 'Se ha eliminado correctamente al profesor.', 2000)
           },
           error: (error) => {
-            this.notifier.showError('', 'Se ha presentado error al intentar eliminar la información.');
-            console.log("Se ha presentado error : ", error)
+            this.notifier.showError('', 'Se ha presentado error al intentar eliminar la información. \n ' + JSON.stringify(error.error));
+            // console.log("Se ha presentado error : ", JSON.stringify(error.error))
           }
         });
       }else{
         this.client.delete<users>(env.baseApiUrl + `/users/${id}`).pipe(take(1)).subscribe({
           next: (response) => {
             this.getUsers();
-            this.notifier.showSuccessToast('', 'Se ha eliminado correctamente al usuario.', 2000)
+            this.notifier.showSuccessToast('', 'Se ha eliminado correctamente al estudiante.', 2000)
             },
           error: (error) => {
             this.notifier.showError('', 'Se ha presentado error al intentar eliminar la información.');

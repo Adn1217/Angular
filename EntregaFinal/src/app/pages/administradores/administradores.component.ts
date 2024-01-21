@@ -168,7 +168,7 @@ export class AdministradoresComponent {
 
   handleUserTypeSelection(value: string){
     this.typeUserSelection = value as userTypes;
-    console.log('Tipo de usuario seleccionado: ', this.typeUserSelection);
+    // console.log('Tipo de usuario seleccionado: ', this.typeUserSelection);
   }
 
   handleSubmit(event: Event){
@@ -194,7 +194,7 @@ export class AdministradoresComponent {
         }
       }
     }
-    console.log('newUser ', newUser);
+    // console.log('newUser ', newUser);
     this.userService.createUser(newUser);
     this.userModel.reset();
     // console.log(this.userModel.controls);
@@ -238,7 +238,7 @@ export class AdministradoresComponent {
         ...userUpdatedInForm});
     }else{
       let userToUpdate: users | teachers | undefined;
-      console.log('userUpdatedInForm: ', userUpdatedInForm)
+      // console.log('userUpdatedInForm: ', userUpdatedInForm)
       if ('nivelAcademico' in userUpdatedInForm){
         isTeacher = true;
         this.teacherListObserver$.subscribe({
@@ -274,7 +274,7 @@ export class AdministradoresComponent {
             }
           }
         }
-        console.log('updatedUser: ', {id: id, ...updatedUser})
+        // console.log('updatedUser: ', {id: id, ...updatedUser})
         this.userService.updateUser({id: id, ...updatedUser});
  
         this.userModel.reset();

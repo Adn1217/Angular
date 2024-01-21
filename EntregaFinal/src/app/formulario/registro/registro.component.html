@@ -86,7 +86,8 @@
                 <button (click)="handleSubmit($event)" type="submit"
                     [ngClass]="{'disabled': !userModel.controls.password.touched || userModel.status === 'INVALID'}"
                     class="btn btn-primary">Registrar</button>
-                <button routerLink="/login" class="btn btn-secondary">Login</button>
+                <button (click)="handleCancel()" class="btn btn-secondary">Cancelar</button>
+                <!-- <button routerLink="/login" class="btn btn-secondary">Login</button> -->
             </div>
         </form>
         <div class="mb-3 userTable">

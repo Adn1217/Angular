@@ -38,9 +38,9 @@ button {
 .invalid {
     color: #dc3545;
     width: 100%;
-    /* margin-top: 0.25rem; */
-    font-size:
-     0.875rem;
+    font-size: 0.875rem;
+    margin-bottom: 2%;
+
 }
 .screen {
     display: flex;
@@ -50,12 +50,4 @@ button {
     margin-right: auto;
     /* justify-content: space-between; */
     /* justify-content: space-evenly */
-}
-
-.model {
-    width: 40%
-}
-
-.editNote {
-    font-size: 12px;
 }

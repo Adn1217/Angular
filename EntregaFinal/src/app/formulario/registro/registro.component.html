@@ -100,7 +100,8 @@
             </div>
             <ng-template #usersTable>
                 <app-tabla title="Estudiantes" [dataSource]="(userListObserver | async ) || []"
-                    (updateUser)="handleUpdateUser($event)" (deleteUser)="handleDeleteUser($event)"></app-tabla>
+                    [(selectedId)]="this.selectedId" (updateUser)="handleUpdateUser($event)"
+                    (deleteUser)="handleDeleteUser($event)"></app-tabla>
             </ng-template>
         </div>
     </div>

@@ -49,7 +49,7 @@
                 Cargando lista...
             </div>
             <ng-template #coursesTable>
-                <app-tabla title="Cursos" [dataSource]="(courseList | async ) || []"
+                <app-tabla title="Cursos" [dataSource]="(courseList | async ) || []" [(selectedId)]="this.selectedId"
                     (updateCourse)="handleUpdateCourse($event)" (deleteCourse)="handleDeleteCourse($event)">
                 </app-tabla>
             </ng-template>

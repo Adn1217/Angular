@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators  } from '@angular/forms';
-import { courses, userRol } from 'src/app/usuarios/modelos';
+import { courseUpdate, courses, userRol } from 'src/app/usuarios/modelos';
 import { Observable, takeUntil, Subject, Subscription, BehaviorSubject, take, skip } from 'rxjs';
 import { NotifierService } from 'src/app/core/services/notifier.service';
 import { Router } from '@angular/router';
@@ -37,7 +37,9 @@ export class CursosComponent {
   showDetails: boolean = false;
   isLoading$: Observable<boolean>;
   editionNote: string = '';
-  userRol: userRol = null
+  userRol: userRol = null;
+
+  selectedId: string | null = null;
 
   @Input()
   ingreso: boolean = false;
@@ -132,8 +134,9 @@ export class CursosComponent {
 
   handleCancel(event: Event){
     this.courseModel.reset();
-    this.editionNote = ''
+    this.editionNote = '';
     this.showForm = false;
+    this.selectedId = null;
   }
 
   async handleDeleteCourse(courseToDelete: courses ){

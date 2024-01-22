@@ -6,6 +6,7 @@ import { CursosRoutingModule } from './cursos-routing-module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { UserModule } from 'src/app/usuarios/usuarios.module';
+import { LayoutModule } from 'src/app/layout/layout.module';
 
 
 

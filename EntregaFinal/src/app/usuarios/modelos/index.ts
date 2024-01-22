@@ -40,3 +40,8 @@ export interface enrollmentsWithCourseAndUser extends enrollments {
     course: courses;
     user: users;
   }
+
+export interface courseUpdate {
+  course: courses;
+  selectedId: string | null;
+}

@@ -52,6 +52,8 @@ export class InscripcionesComponent implements OnInit, OnDestroy {
   courseChanges: Subscription;
   userRol: userRol = null;
 
+  selectedId: string | null = null;
+
   @Input()
   ingreso: boolean = false;
 
@@ -172,8 +174,9 @@ export class InscripcionesComponent implements OnInit, OnDestroy {
 
   handleCancel(event: Event){
     this.enrollmentModel.reset();
-    this.editionNote = ''
+    this.editionNote = '';
     this.showForm = false;
+    this.selectedId = null;
   }
 
   async handleDeleteEnrollment(enrollmentToDelete: enrollmentsWithCourseAndUser ){

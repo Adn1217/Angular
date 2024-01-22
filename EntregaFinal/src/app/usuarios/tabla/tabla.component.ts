@@ -1,5 +1,5 @@
 import {Component, Input, Output, EventEmitter, OnChanges} from '@angular/core';
-import { users, teachers, courses, enrollments, userRol, enrollmentsWithCourseAndUser } from '../modelos';
+import { users, teachers, courses, enrollments, userRol, enrollmentsWithCourseAndUser, courseUpdate } from '../modelos';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectAuthUserValue } from 'src/app/store/selectors/auth.selectors';
@@ -29,8 +29,9 @@ export class TablaComponent implements OnChanges {
 
   userRol: userRol = null
   color: string = "primary";
-  selectedUserId: string | null = null;
 
+  @Input()
+  selectedId: string | null = null;
 
   @Input()
   showDetails: boolean = false;
@@ -40,6 +41,9 @@ export class TablaComponent implements OnChanges {
 
   @Input()
   title: string = '';
+
+  @Output()
+  selectedIdChange = new EventEmitter<string | null>();
 
   @Output()
   deleteUser = new EventEmitter<users | teachers>();
@@ -74,7 +78,8 @@ export class TablaComponent implements OnChanges {
   
   handleUpdate(entity: users | teachers | courses | enrollmentsWithCourseAndUser ){
     this.color = 'accent';
-    this.selectedUserId = entity.id;
+    this.selectedIdChange.emit(entity.id);
+    // this.selectedId = entity.id;
     if('courseId' in entity){
       this.handleUpdateEnrollment(entity);
     }else if ('curso' in entity){

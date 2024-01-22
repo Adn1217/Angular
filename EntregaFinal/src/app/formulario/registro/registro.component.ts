@@ -47,7 +47,9 @@ export class RegistroComponent implements OnDestroy {
   isLoading$: Observable<boolean>;
   editionNote = ''
   
-  userRol: userRol = null
+  userRol: userRol = null;
+
+  selectedId: string | null = null;
 
   @Input()
   ingreso: boolean = false;
@@ -158,6 +160,7 @@ export class RegistroComponent implements OnDestroy {
   handleCancel(){
     this.toggleShowForm();
     this.userModel.reset();
+    this.selectedId = null;
   }
   
   async handleDeleteUser(userToDelete: users ){

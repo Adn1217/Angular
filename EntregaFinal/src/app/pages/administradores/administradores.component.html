@@ -142,8 +142,8 @@
             </div>
             <ng-template #usersTable>
                 <app-tabla title="Administradores" [dataSource]="
-                (completeListObserver$ | async )  || []" (updateUser)="handleUpdateUser($event)"
-                    (deleteUser)="handleDeleteUser($event)"></app-tabla>
+                (completeListObserver$ | async )  || []" [(selectedId)]="this.selectedId"
+                    (updateUser)="handleUpdateUser($event)" (deleteUser)="handleDeleteUser($event)"></app-tabla>
             </ng-template>
         </div>
     </div>

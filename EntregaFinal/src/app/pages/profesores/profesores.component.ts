@@ -51,7 +51,9 @@ export class ProfesoresComponent implements OnDestroy {
   destroyed = new Subject<boolean>(); 
   isLoading$: Observable<boolean>;
   editionNote: string = '';
-  userRol: userRol = null
+  userRol: userRol = null;
+
+  selectedId: string | null = null;
 
   @Input()
   ingreso: boolean = false;
@@ -163,6 +165,7 @@ export class ProfesoresComponent implements OnDestroy {
     this.userModel.reset();
     this.editionNote = ''
     this.showForm = false;
+    this.selectedId = null;
   }
 
   async handleDeleteUser(userToDelete: users | teachers ){

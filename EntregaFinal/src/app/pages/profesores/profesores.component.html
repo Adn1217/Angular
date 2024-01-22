@@ -124,7 +124,7 @@
                 Cargando lista...
             </div>
             <ng-template #teachersTable>
-                <app-tabla title="Profesores" [dataSource]="(userList | async ) || []"
+                <app-tabla title="Profesores" [dataSource]="(userList | async ) || []" [(selectedId)]="this.selectedId"
                     (updateUser)="handleUpdateUser($event)" (deleteUser)="handleDeleteUser($event)">
                 </app-tabla>
             </ng-template>

@@ -61,7 +61,9 @@ export class AdministradoresComponent {
   // @Input()
   showForm: boolean = false;
   showTypeUserSelector: boolean = false;
-  typeUserSelection: userTypes = 'user'
+  typeUserSelection: userTypes = 'user';
+
+  selectedId: string | null = null;
   
   constructor(private formBuilder: FormBuilder, private userService: UserService, private notifier: NotifierService, private store: Store, private router: Router){
 
@@ -203,6 +205,7 @@ export class AdministradoresComponent {
   handleCancel(){
     this.toggleShowForm();
     this.userModel.reset();
+    this.selectedId = null;
   }
   
   async handleDeleteUser(userToDelete: users ){

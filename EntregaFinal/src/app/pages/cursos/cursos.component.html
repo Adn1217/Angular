@@ -2,10 +2,10 @@
     <div class="screen">
         <form class="mb-7 form" [formGroup]="courseModel" *ngIf="this.showForm;">
             <div class="mb-3">
-                <label for="inputName" class="form-label">Curso</label>
-                <input id="inputName" formControlName="curso" type="text" class="form-control" id="inputCourse"
+                <label for="inputCourse" class="form-label">Curso</label>
+                <input id="inputCourse" formControlName="curso" type="text" class="form-control" id="inputCourse"
                     [ngClass]="{'is-valid': courseModel.controls['curso'].touched && !courseModel.controls['curso'].invalid, 'is-invalid': courseModel.controls['curso'].touched && courseModel.controls['curso'].invalid}"
-                    aria-describedby="nameHelp">
+                    aria-describedby="courseHelp">
                 <div class="valid-feedback">
                     ¡Se ve bien!
                 </div>
@@ -13,17 +13,22 @@
                     {{getFieldError("curso")}}
                 </div>
             </div>
-            <div class="mb-3">
-                <label for="inputLastname" class="form-label">Creditos</label>
-                <input id="inputLastname" formControlName="creditos" min="1" max="20" type="number" class="form-control"
-                    [ngClass]="{'is-valid': courseModel.controls['creditos'].touched && !courseModel.controls['creditos'].invalid, 'is-invalid': courseModel.controls['creditos'].touched && courseModel.controls['creditos'].invalid}"
-                    id="inputCredit">
+            <div class="mb-3 col-5">
+                <label for="inputCredit" class="form-label">Creditos</label>
+                <input id="inputCredit" formControlName="creditos" min="1" max="20" type="number" class="form-control"
+                    [ngClass]="{'is-valid': courseModel.controls['creditos'].touched && !courseModel.controls['creditos'].invalid, 'is-invalid': courseModel.controls['creditos'].touched && courseModel.controls['creditos'].invalid}">
                 <div class="valid-feedback">
                     ¡Se ve bien!
                 </div>
-                <div class="invalid-feedback">
+                <!-- <div class="invalid-feedback">
                     {{getFieldError("creditos")}}
-                </div>
+                </div> -->
+            </div>
+            <div class="mb-3 col-6"
+                *ngIf="courseModel.controls['creditos'].touched && courseModel.controls['creditos'].invalid"
+                class="invalid">
+                {{this.courseModel.controls.creditos.errors && (this.courseModel.controls.creditos.errors | keyvalue |
+                errorMessagesControl)}}
             </div>
             <div *ngIf="editionNote.length > 0;" class="form-text">
                 {{this.editionNote}}
@@ -44,7 +49,7 @@
                 Cargando lista...
             </div>
             <ng-template #coursesTable>
-                <app-tabla title="Cursos" [dataSource]="(courseList | async ) || []"
+                <app-tabla title="Cursos" [dataSource]="(courseList | async ) || []" [(selectedId)]="this.selectedId"
                     (updateCourse)="handleUpdateCourse($event)" (deleteCourse)="handleDeleteCourse($event)">
                 </app-tabla>
             </ng-template>

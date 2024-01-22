@@ -16,8 +16,8 @@ import { Router } from '@angular/router';
 import { Actions } from '@ngrx/effects';
 
 interface EnrollmentModel {
-  courseId: FormControl<number| null>;
-  userId: FormControl<number | null>;
+  courseId: FormControl<string| null>;
+  userId: FormControl<string | null>;
   user: FormControl<string | null>;
   course: FormControl<string | null>;
   // profesor: FormControl<string | null>;
@@ -31,8 +31,8 @@ interface EnrollmentModel {
 export class InscripcionesComponent implements OnInit, OnDestroy {
 
   enrollmentModel : FormGroup<EnrollmentModel> = this.formBuilder.group({
-      courseId: [{value:0, disabled:true}, [Validators.required]],
-      userId: [{value: 0, disabled: true}, [Validators.required]],
+      courseId: [{value:'', disabled:true}, [Validators.required]],
+      userId: [{value: '', disabled: true}, [Validators.required]],
       course: ['', [Validators.required]],
       user: ['', [Validators.required]]
       // profesor: ['', [Validators.required, Validators.minLength(minCharUserLength)]],
@@ -51,6 +51,8 @@ export class InscripcionesComponent implements OnInit, OnDestroy {
   userChanges: Subscription;
   courseChanges: Subscription;
   userRol: userRol = null;
+
+  selectedId: string | null = null;
 
   @Input()
   ingreso: boolean = false;
@@ -124,7 +126,7 @@ export class InscripcionesComponent implements OnInit, OnDestroy {
   showFormChange = new EventEmitter();
 
   userIdChange(userSelected: string | null){
-    let id: number | undefined = 0;
+    let id: string | undefined = '';
     this.usersList$.pipe(take(1)).subscribe({
       next: (userList) => {
         userList.map((user) => {
@@ -138,7 +140,7 @@ export class InscripcionesComponent implements OnInit, OnDestroy {
   }
   
   courseIdChange(courseSelected: string | null){
-    let id: number | undefined = 0;
+    let id: string | undefined = '';
     this.coursesList$.pipe(take(1)).subscribe({
       next: (courseList) => {
         courseList.map((course) => {
@@ -161,9 +163,9 @@ export class InscripcionesComponent implements OnInit, OnDestroy {
    
     this.showForm = !this.showForm;
     const newEnrollment = {
-      id: new Date().getTime(),
-      courseId: this.enrollmentModel.getRawValue().courseId || 0,
-      userId: this.enrollmentModel.getRawValue().userId || 0,
+      id: new Date().getTime().toString(),
+      courseId: this.enrollmentModel.getRawValue().courseId || '',
+      userId: this.enrollmentModel.getRawValue().userId || '',
     }
 
     this.store.dispatch(InscripcionesActions.createInscripcion({enrollment: newEnrollment}));
@@ -172,8 +174,9 @@ export class InscripcionesComponent implements OnInit, OnDestroy {
 
   handleCancel(event: Event){
     this.enrollmentModel.reset();
-    this.editionNote = ''
+    this.editionNote = '';
     this.showForm = false;
+    this.selectedId = null;
   }
 
   async handleDeleteEnrollment(enrollmentToDelete: enrollmentsWithCourseAndUser ){
@@ -211,8 +214,8 @@ export class InscripcionesComponent implements OnInit, OnDestroy {
 
           const updatedEnrollment = {
             id: id,
-            courseId: this.enrollmentModel.getRawValue().courseId || 0,
-            userId: this.enrollmentModel.getRawValue().userId || 0,
+            courseId: this.enrollmentModel.getRawValue().courseId || '',
+            userId: this.enrollmentModel.getRawValue().userId || '',
           }
 
           this.store.dispatch(InscripcionesActions.updateInscripcion({enrollment: updatedEnrollment}))

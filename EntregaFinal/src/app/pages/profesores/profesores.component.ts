@@ -51,7 +51,9 @@ export class ProfesoresComponent implements OnDestroy {
   destroyed = new Subject<boolean>(); 
   isLoading$: Observable<boolean>;
   editionNote: string = '';
-  userRol: userRol = null
+  userRol: userRol = null;
+
+  selectedId: string | null = null;
 
   @Input()
   ingreso: boolean = false;
@@ -143,13 +145,13 @@ export class ProfesoresComponent implements OnDestroy {
     // this.showFormChange.emit();
     this.showForm = !this.showForm;
     const newTeacher = {
-      id: new Date().getTime(),
+      id: new Date().getTime().toString(),
       nombres: this.userModel.value.nombres || '',
       apellidos: this.userModel.value.apellidos || '',
       usuario: this.userModel.value.usuario || '',
       edad: this.userModel.value.edad || 18,
       nivelAcademico: this.userModel.value.nivelAcademico || '',
-      materias: this.userModel.value.materias || [''],
+      materias: [this.userModel.value.materias] || [''],
       correo: this.userModel.value.correo || '',
       password: this.userModel.value.password || '',
       role: 'user' as const
@@ -163,6 +165,7 @@ export class ProfesoresComponent implements OnDestroy {
     this.userModel.reset();
     this.editionNote = ''
     this.showForm = false;
+    this.selectedId = null;
   }
 
   async handleDeleteUser(userToDelete: users | teachers ){
@@ -206,10 +209,10 @@ export class ProfesoresComponent implements OnDestroy {
             usuario: this.userModel.value.usuario || '',
             edad: this.userModel.value.edad || 18,
             nivelAcademico: this.userModel.value.nivelAcademico || '',
-            materias: this.userModel.value.materias || [''],
+            materias: [this.userModel.value.materias] || [''],
             correo: this.userModel.value.correo || '',
             password: this.userModel.value.password || '',
-            role: 'user' as const
+            role: role || 'user' as const,
           }
           this.userService.updateUser({id: id, ...updatedUser});
 

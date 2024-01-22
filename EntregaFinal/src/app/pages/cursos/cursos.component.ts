@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators  } from '@angular/forms';
-import { courses, userRol } from 'src/app/usuarios/modelos';
+import { courseUpdate, courses, userRol } from 'src/app/usuarios/modelos';
 import { Observable, takeUntil, Subject, Subscription, BehaviorSubject, take, skip } from 'rxjs';
 import { NotifierService } from 'src/app/core/services/notifier.service';
 import { Router } from '@angular/router';
@@ -37,7 +37,9 @@ export class CursosComponent {
   showDetails: boolean = false;
   isLoading$: Observable<boolean>;
   editionNote: string = '';
-  userRol: userRol = null
+  userRol: userRol = null;
+
+  selectedId: string | null = null;
 
   @Input()
   ingreso: boolean = false;
@@ -121,7 +123,7 @@ export class CursosComponent {
    
     this.showForm = !this.showForm;
     const newCourse = {
-      id: new Date().getTime(),
+      id: new Date().getTime().toString(),
       curso: this.courseModel.value.curso || '',
       creditos: this.courseModel.value.creditos || 0,
     }
@@ -132,8 +134,9 @@ export class CursosComponent {
 
   handleCancel(event: Event){
     this.courseModel.reset();
-    this.editionNote = ''
+    this.editionNote = '';
     this.showForm = false;
+    this.selectedId = null;
   }
 
   async handleDeleteCourse(courseToDelete: courses ){
@@ -170,13 +173,13 @@ export class CursosComponent {
             curso: this.courseModel.value.curso || '',
             creditos: this.courseModel.value.creditos || 0,
           }
-          this.courseService.updateUser({id: id, ...updatedCourse});
+          this.courseService.updateCourse({id: id, ...updatedCourse});
 
           this.courseModel.reset();
           this.editionNote = ''
 
           this.showForm = !this.showForm;
-          this.notifier.showSuccess('',`Se ha actualizado el profesor con id: ${courseToUpdate.id}`)
+          this.notifier.showSuccess('',`Se ha actualizado el curso con id: ${courseToUpdate.id}`)
         }else{
           this.courseModel.markAllAsTouched;
         }

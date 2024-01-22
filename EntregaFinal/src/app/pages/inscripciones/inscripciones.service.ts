@@ -33,8 +33,9 @@ public isLoading$ = this._isLoading$.asObservable();
     
     getEnrollmentsWithCourseAndUser(): Observable<enrollmentsWithCourseAndUser[]>{
       this._isLoading$.next(true);
-        const reqHTTP$ = this.client.get<enrollmentsWithCourseAndUser[]>(env.baseApiUrl + '/enrollments?_expand=user&_expand=course')
-        
+        // const reqHTTP$ = this.client.get<enrollmentsWithCourseAndUser[]>(env.baseApiUrl + '/enrollments?_expand=user&_expand=course')
+        const reqHTTP$ = this.client.get<enrollmentsWithCourseAndUser[]>(env.baseApiUrl + '/enrollments?_expand=true')
+      
         reqHTTP$.subscribe({
           next: (enrollments) => {
             this._isLoading$.next(false);
@@ -60,7 +61,7 @@ public isLoading$ = this._isLoading$.asObservable();
     getEnrollmentById(id: string): Observable<enrollments | undefined> {
       this.client.get<enrollments[]>(env.baseApiUrl + '/users').pipe(take(1)).subscribe({
         next: (enrollments) => {
-          let enrollment = enrollments.find((enrollment) => enrollment.id === Number(id));
+          let enrollment = enrollments.find((enrollment) => enrollment.id === id);
           this._enrollment$.next(enrollment);
         }
       })
@@ -68,6 +69,8 @@ public isLoading$ = this._isLoading$.asObservable();
     }
 
     createEnrollment(enrollment: enrollments ): Observable<enrollments> {
+
+      // const {id, ...rest} = enrollment;
       const reqHTTP1$ = this.client.post<enrollments>(env.baseApiUrl + '/enrollments', enrollment, {
         headers: {
           'Content-Type': 'application/json'
@@ -78,7 +81,7 @@ public isLoading$ = this._isLoading$.asObservable();
 
     updateEnrollment(enrollmentToUpdate: enrollments ): Observable<enrollments> {
       const {id, ...rest} = enrollmentToUpdate;
-      const reqHTTP$ = this.client.put<enrollments>(env.baseApiUrl + `/enrollments/${id}`, enrollmentToUpdate)
+      const reqHTTP$ = this.client.put<enrollments>(env.baseApiUrl + `/enrollments/${id}`, rest)
       return reqHTTP$;
     }
 

@@ -47,7 +47,7 @@
             </div>
             <ng-template #coursesTable>
                 <app-tabla title="Inscripciones" [dataSource]="(enrollmentList$ | async ) || []"
-                    (updateEnrollment)="handleUpdateEnrollment($event)"
+                    [(selectedId)]="this.selectedId" (updateEnrollment)="handleUpdateEnrollment($event)"
                     (deleteEnrollment)="handleDeleteEnrollment($event)">
                 </app-tabla>
             </ng-template>

@@ -61,7 +61,9 @@ export class AdministradoresComponent {
   // @Input()
   showForm: boolean = false;
   showTypeUserSelector: boolean = false;
-  typeUserSelection: userTypes = 'user'
+  typeUserSelection: userTypes = 'user';
+
+  selectedId: string | null = null;
   
   constructor(private formBuilder: FormBuilder, private userService: UserService, private notifier: NotifierService, private store: Store, private router: Router){
 
@@ -168,7 +170,7 @@ export class AdministradoresComponent {
 
   handleUserTypeSelection(value: string){
     this.typeUserSelection = value as userTypes;
-    console.log('Tipo de usuario seleccionado: ', this.typeUserSelection);
+    // console.log('Tipo de usuario seleccionado: ', this.typeUserSelection);
   }
 
   handleSubmit(event: Event){
@@ -176,7 +178,7 @@ export class AdministradoresComponent {
     // this.showFormChange.emit();
     this.toggleShowForm();
     let newUser = {
-      id: new Date().getTime(),
+      id: new Date().getTime().toString(),
       nombres: this.userModel.value.nombres || '',
       apellidos: this.userModel.value.apellidos || '',
       usuario: this.userModel.value.usuario || '',
@@ -194,7 +196,7 @@ export class AdministradoresComponent {
         }
       }
     }
-    console.log('newUser ', newUser);
+    // console.log('newUser ', newUser);
     this.userService.createUser(newUser);
     this.userModel.reset();
     // console.log(this.userModel.controls);
@@ -203,6 +205,7 @@ export class AdministradoresComponent {
   handleCancel(){
     this.toggleShowForm();
     this.userModel.reset();
+    this.selectedId = null;
   }
   
   async handleDeleteUser(userToDelete: users ){
@@ -238,7 +241,7 @@ export class AdministradoresComponent {
         ...userUpdatedInForm});
     }else{
       let userToUpdate: users | teachers | undefined;
-      console.log('userUpdatedInForm: ', userUpdatedInForm)
+      // console.log('userUpdatedInForm: ', userUpdatedInForm)
       if ('nivelAcademico' in userUpdatedInForm){
         isTeacher = true;
         this.teacherListObserver$.subscribe({
@@ -274,7 +277,7 @@ export class AdministradoresComponent {
             }
           }
         }
-        console.log('updatedUser: ', {id: id, ...updatedUser})
+        // console.log('updatedUser: ', {id: id, ...updatedUser})
         this.userService.updateUser({id: id, ...updatedUser});
  
         this.userModel.reset();

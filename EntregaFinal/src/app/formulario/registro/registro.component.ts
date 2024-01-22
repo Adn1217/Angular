@@ -47,7 +47,9 @@ export class RegistroComponent implements OnDestroy {
   isLoading$: Observable<boolean>;
   editionNote = ''
   
-  userRol: userRol = null
+  userRol: userRol = null;
+
+  selectedId: string | null = null;
 
   @Input()
   ingreso: boolean = false;
@@ -131,12 +133,16 @@ export class RegistroComponent implements OnDestroy {
     }
   }
 
+  toggleShowForm(){
+    this.showForm = !this.showForm;
+  }
+  
   handleSubmit(event: Event){
    
     // this.showFormChange.emit();
-    this.showForm = !this.showForm;
+    this.toggleShowForm();
     const newUser = {
-      id: new Date().getTime(),
+      id: new Date().getTime().toString(),
       nombres: this.userModel.value.nombres || '',
       apellidos: this.userModel.value.apellidos || '',
       usuario: this.userModel.value.usuario || '',
@@ -149,6 +155,12 @@ export class RegistroComponent implements OnDestroy {
     this.userService.createUser(newUser);
     this.userModel.reset();
     // console.log(this.userModel.controls);
+  }
+  
+  handleCancel(){
+    this.toggleShowForm();
+    this.userModel.reset();
+    this.selectedId = null;
   }
   
   async handleDeleteUser(userToDelete: users ){
@@ -170,7 +182,7 @@ export class RegistroComponent implements OnDestroy {
 
     if(!this.showForm){
       this.userModel.setValue(userUpdatedInForm);
-      this.showForm = !this.showForm;
+      this.toggleShowForm();
       // this.showFormChange.emit();
     }else if (this.showForm && this.userModel.status === 'INVALID'){
       this.userModel.setValue(userUpdatedInForm);
@@ -191,14 +203,14 @@ export class RegistroComponent implements OnDestroy {
           edad: this.userModel.value.edad || 18,
           correo: this.userModel.value.correo || '',
           password: this.userModel.value.password || '',
-          role: 'user' as const
+          role: role || 'user' as const,
         }
 
         this.userService.updateUser({id: id, ...updatedUser});
  
         this.userModel.reset();
         this.editionNote = '';
-        this.showForm = !this.showForm;
+        this.toggleShowForm();
         // this.showFormChange.emit();
         this.notifier.showSuccess('',`Se ha actualizado el usuario con id: ${userToUpdate.id}`)
         // alert(`Se ha actualizado el usuario con id: ${userToUpdate.id}`)

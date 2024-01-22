@@ -33,7 +33,7 @@ describe('userService', () => {
     it('Get User method has to return an array of Users', (done) => {
         const  mockListOfUsers: users[] = [
             {
-              "id": 1,
+              "id": '1',
               "nombres": "Adrian Alberto1",
               "apellidos": "Fernández Cabrera",
               "usuario": "adn1217",
@@ -43,7 +43,7 @@ describe('userService', () => {
               "role": "user"
             },
             {
-              "id": 2,
+              "id": '2',
               "nombres": "Alejandra Paola",
               "apellidos": "Fernández Castro",
               "usuario": "alu2110",
@@ -77,7 +77,7 @@ describe('userService', () => {
     
     it('isTeacher method returns true for a teacher and false for a student', () => {
         const  mockTeacher: teachers = {
-            "id": 1,
+            "id": '1',
             "nombres": "Sebastián Andrés2",
             "apellidos": "Castañeda Rosales",
             "usuario": "scastaneda",
@@ -94,7 +94,7 @@ describe('userService', () => {
           };
         
         const mockUser: users = {
-            "id": 2,
+            "id": '2',
             "nombres": "Alejandra Paola",
             "apellidos": "Fernández Castro",
             "usuario": "alu2110",
@@ -114,7 +114,7 @@ describe('userService', () => {
     it('Get Teachers method has to return an array of Teachers', () => {
         const  mockListOfTeachers: teachers[] = [
             {
-              "id": 1,
+              "id": '1',
               "nombres": "Sebastián Andrés2",
               "apellidos": "Castañeda Rosales",
               "usuario": "scastaneda",
@@ -130,7 +130,7 @@ describe('userService', () => {
               "role": "user"
             },
             {
-              "id": 2,
+              "id": '2',
               "nombres": "Eric Danilo",
               "apellidos": "Vallejo Fontanarrosa",
               "usuario": "alu2110",
@@ -168,7 +168,7 @@ describe('userService', () => {
     it('Get teacherById method has to return a Teacher or undefined', () => {
         const  mockTeacher: teachers = 
             {
-              "id": 1,
+              "id": '1',
               "nombres": "Sebastián Andrés2",
               "apellidos": "Castañeda Rosales",
               "usuario": "scastaneda",
@@ -214,7 +214,7 @@ describe('userService', () => {
     
     it('Get userById method has to return an user or undefined', () => {
         const mockUser: users = {
-            "id": 2,
+            "id": '2',
             "nombres": "Alejandra Paola",
             "apellidos": "Fernández Castro",
             "usuario": "alu2110",

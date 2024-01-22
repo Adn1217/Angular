@@ -87,7 +87,8 @@
                     routerLink="registerDetail/{{user.id}}" mat-icon-button color="secondary">
                     <mat-icon>info</mat-icon>
                 </button>
-                <button [disabled]="userRol !== 'admin'" (click)="handleUpdate(user)" mat-icon-button color="primary">
+                <button [disabled]="userRol !== 'admin'" (click)="handleUpdate(user)" mat-icon-button
+                    [color]="user.id === this.selectedId ? this.color : 'primary'">
                     <mat-icon>edit</mat-icon>
                 </button>
                 <button [disabled]="userRol !== 'admin'" (click)="handleDelete(user)" mat-icon-button color="warn">

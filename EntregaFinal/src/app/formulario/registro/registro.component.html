@@ -86,7 +86,8 @@
                 <button (click)="handleSubmit($event)" type="submit"
                     [ngClass]="{'disabled': !userModel.controls.password.touched || userModel.status === 'INVALID'}"
                     class="btn btn-primary">Registrar</button>
-                <button routerLink="/login" class="btn btn-secondary">Login</button>
+                <button (click)="handleCancel()" class="btn btn-secondary">Cancelar</button>
+                <!-- <button routerLink="/login" class="btn btn-secondary">Login</button> -->
             </div>
         </form>
         <div class="mb-3 userTable">
@@ -99,7 +100,8 @@
             </div>
             <ng-template #usersTable>
                 <app-tabla title="Estudiantes" [dataSource]="(userListObserver | async ) || []"
-                    (updateUser)="handleUpdateUser($event)" (deleteUser)="handleDeleteUser($event)"></app-tabla>
+                    [(selectedId)]="this.selectedId" (updateUser)="handleUpdateUser($event)"
+                    (deleteUser)="handleDeleteUser($event)"></app-tabla>
             </ng-template>
         </div>
     </div>

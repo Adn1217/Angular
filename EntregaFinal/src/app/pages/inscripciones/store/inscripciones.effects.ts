@@ -9,10 +9,14 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { UserService } from 'src/app/usuarios/user.service';
 import { CourseService } from '../../cursos/course.service';
 import { Store } from '@ngrx/store';
+import { NotifierService } from 'src/app/core/services/notifier.service';
 
 @Injectable()
 export class InscripcionesEffects {
 
+  constructor(private actions$: Actions, private service: InscripcionesService, private userService: UserService, private courseService: CourseService, private store: Store, private notifier: NotifierService) {
+
+  }
 
   loadInscripciones$ = createEffect(() => {
     return this.actions$.pipe(
@@ -20,7 +24,7 @@ export class InscripcionesEffects {
       concatMap(() => 
         this.service.getEnrollmentsWithCourseAndUser().pipe(
           map(data => InscripcionesActions.loadInscripcionesSuccess({enrollmentList: data})),
-          catchError(error => of(this.handleError(error)))
+          catchError(error => of(this.handleError(error, 'loadInscripcionesFailure')))
         )
       )
     )
@@ -55,8 +59,12 @@ export class InscripcionesEffects {
       ofType(InscripcionesActions.createInscripcion),
       concatMap(({enrollment}) => 
         this.service.createEnrollment(enrollment).pipe(
-          map(data => InscripcionesActions.createInscripcionSuccess({enrollment: data})),
-          catchError(error => of(InscripcionesActions.createInscripcionFailure({error})))
+          map(data => InscripcionesActions.createInscripcionSuccess({enrollment: data})
+          ),
+          catchError(error =>  
+            of(this.handleError(error, "createInscripcionesFailure"))
+            // of(InscripcionesActions.createInscripcionFailure({error}))
+          ),
         )
       )
     )
@@ -65,7 +73,10 @@ export class InscripcionesEffects {
   createInscripcionesSucess$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(InscripcionesActions.createInscripcionSuccess),
-      map(() => this.store.dispatch(InscripcionesActions.loadInscripciones()))
+      map(() => {
+        this.store.dispatch(InscripcionesActions.loadInscripciones())
+        this.notifier.showSuccess('', 'Se ha creado la inscrpción exitosamente.')
+      })
     );
   }, {dispatch: false});
   
@@ -107,11 +118,23 @@ export class InscripcionesEffects {
     );
   }, {dispatch: false});
 
-  handleError(error: HttpErrorResponse){
+  handleError(error: HttpErrorResponse, type: string){ // TODO: Enhance.
     console.log('Se ha presentado el siguente error: ', error);
-    return InscripcionesActions.loadInscripcionesFailure({error});
-  }
-  constructor(private actions$: Actions, private service: InscripcionesService, private userService: UserService, private courseService: CourseService, private store: Store) {
+    switch (type){
+      case "loadloadInscripcionesFailure": {
+        this.notifier.showError('', `Ha ocurrido un error al consultar las inscripciones ${JSON.stringify(error.message)} \n ${JSON.stringify(error.error)}`)
+        return InscripcionesActions.loadInscripcionesFailure({error});
+      }
+      case "createInscripcionesFailure": {
+        this.notifier.showError('', `Ha ocurrido un error guardar la inscripción ${JSON.stringify(error.message)} \n ${JSON.stringify(error.error)}`)
+        return InscripcionesActions.createInscripcionFailure({error})
+      }
+      default: {
+        return InscripcionesActions.loadInscripcionesFailure({error});
+      } 
+    }
+
+      
 
   }
 }

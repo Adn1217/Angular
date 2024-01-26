@@ -24,9 +24,17 @@ export class ErrorMessagesControlPipe implements PipeTransform {
         const minValue = error['value'];
         const lackValue = minValue.actual - minValue.min;
         if (lackValue < 0){
-          errorsLabel.push("La edad mínima es cero.")
+          errorsLabel.push("Valor mínimo es cero.")
         }
-      }else {
+      }else if (error['key'] === 'max'){
+        const maxValue = error['value'];
+        const excessValue = maxValue.actual - maxValue.max;
+        if (excessValue > 0){
+          errorsLabel.push(`Valor máximo es ${maxValue.max}`)
+        }
+      }else if (error['key']) {
+          errorsLabel.push(JSON.stringify(error))
+      }else{
           errorsLabel.push("¡Se ve bien!");
         }
       })

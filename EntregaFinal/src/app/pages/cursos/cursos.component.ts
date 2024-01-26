@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators  } from '@angular/forms';
-import { courseUpdate, courses, userRol } from 'src/app/usuarios/modelos';
+import { courses, userRol } from 'src/app/usuarios/modelos';
 import { Observable, takeUntil, Subject, Subscription, BehaviorSubject, take, skip } from 'rxjs';
 import { NotifierService } from 'src/app/core/services/notifier.service';
 import { Router } from '@angular/router';
@@ -11,8 +11,6 @@ import { UserService } from 'src/app/usuarios/user.service';
 import { authActions } from 'src/app/store/actions/auth.actions';
 
 
-const minCreditNumber: number = 1;
-const maxCreditNumber: number = 20;
 interface CourseModel {
   curso: FormControl<string| null>;
   creditos: FormControl<number | null>;
@@ -38,6 +36,9 @@ export class CursosComponent {
   isLoading$: Observable<boolean>;
   editionNote: string = '';
   userRol: userRol = null;
+
+  minCreditNumber: number = 1;
+  maxCreditNumber: number = 21;
 
   selectedId: string | null = null;
 
@@ -95,11 +96,11 @@ export class CursosComponent {
     this.changeView.emit(event);
   }
 
-  getFieldControl(field: string): FormControl {
+  getFieldControl(field: string): FormControl { //TODO: Verificar si se sigue usando.
     return this.courseModel.get(field) as FormControl
   }
 
-  getFieldError(field: string): string {
+  getFieldError(field: string): string { //TODO: Verificar si se sigue usando.
     const fieldControl = this.getFieldControl(field);
     const error = fieldControl.errors || {};
     if(error["required"]){
@@ -110,9 +111,9 @@ export class CursosComponent {
        const lackCred =  min.actual - min.min;
        const extraCred =  max.actual - max.max;
        if (lackCred < 0){
-        return `El mínimo de créditos es ${minCreditNumber}`
+        return `El mínimo de créditos es ${this.minCreditNumber}`
       }else if (extraCred > 0){
-        return `El máximo de créditos es ${maxCreditNumber}`
+        return `El máximo de créditos es ${this.maxCreditNumber}`
       }else{
         return `${JSON.stringify(error)}`
       }

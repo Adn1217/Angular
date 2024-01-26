@@ -15,7 +15,8 @@
             </div>
             <div class="mb-3 col-5">
                 <label for="inputCredit" class="form-label">Creditos</label>
-                <input id="inputCredit" formControlName="creditos" min="1" max="20" type="number" class="form-control"
+                <input id="inputCredit" formControlName="creditos" [min]="this.minCreditNumber"
+                    [max]="this.maxCreditNumber" type="number" class="form-control"
                     [ngClass]="{'is-valid': courseModel.controls['creditos'].touched && !courseModel.controls['creditos'].invalid, 'is-invalid': courseModel.controls['creditos'].touched && courseModel.controls['creditos'].invalid}">
                 <div class="valid-feedback">
                     ¡Se ve bien!

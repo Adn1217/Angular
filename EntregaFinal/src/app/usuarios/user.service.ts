@@ -174,7 +174,7 @@ public isLoading$ = this._isLoading$.asObservable();
 
     updateUser(userToUpdate: users | teachers): void {
       const {id, ...rest} = userToUpdate;
-      console.log('userToUpdate', userToUpdate);
+      // console.log('userToUpdate', userToUpdate);
       if('nivelAcademico' in userToUpdate){
         let teacher = <teachers>rest
         if(teacher.materias[0].includes(',')){

@@ -73,7 +73,9 @@ public isLoading$ = this._isLoading$.asObservable();
       )
       .subscribe({
         next: (courseList) => {
+          // console.log('Lista de Cusos: ', JSON.stringify(courseList));
           this._courses$.next([...courseList]);
+          this.notifier.showSuccess('', 'Se ha creado el curso exitosamente.')
         },
         error: (err) => {
           console.log('Ha ocurrido error: ', err);
@@ -99,6 +101,7 @@ public isLoading$ = this._isLoading$.asObservable();
           next: (updatedCourse) => {
             if(updatedCourse.id){
               this.getCourses();
+              this.notifier.showSuccessToast('', 'Se ha actualizado correctamente el curso.', 2000)
             }else{
               this.notifier.showError('','No fue posible actualizar la información');
             }
@@ -117,7 +120,8 @@ public isLoading$ = this._isLoading$.asObservable();
           this.notifier.showSuccessToast('', 'Se ha eliminado correctamente el curso.', 2000)
         },
         error: (error) => {
-          this.notifier.showError('', 'Se ha presentado error al intentar eliminar la información.');
+          this.notifier.showError('', `Se ha presentado error al intentar eliminar la información. \n ${JSON.stringify(error.error)}`);
+          console.log(`Se ha presentado error al intentar eliminar la información. \n ${JSON.stringify(error)}`)
         }
       });
     }

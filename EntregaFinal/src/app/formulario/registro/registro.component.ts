@@ -41,7 +41,7 @@ export class RegistroComponent implements OnDestroy {
   
   userList: Observable<users[]>
 
-  userListObserver: Observable<users[]>;
+  userListObserver$: Observable<users[]>;
   userListSubscription?: Subscription;
   destroyed = new Subject<boolean>(); 
   isLoading$: Observable<boolean>;
@@ -60,8 +60,8 @@ export class RegistroComponent implements OnDestroy {
   constructor(private formBuilder: FormBuilder, private userService: UserService, private notifier: NotifierService, private store: Store, private router: Router){
 
     this.isLoading$ = this.userService.isLoading$;
-    this.userListObserver = userService.getUsers().pipe(takeUntil(this.destroyed));
-    this.userList = this.userListObserver; // Reemplaza la subscripcion al usar pipe async.
+    this.userListObserver$ = userService.getUsers().pipe(takeUntil(this.destroyed));
+    this.userList = this.userListObserver$; // Reemplaza la subscripcion al usar pipe async.
 
     this.store.select(selectAuthUserValue).pipe(take(1)).subscribe({
       next: (authUser) => {

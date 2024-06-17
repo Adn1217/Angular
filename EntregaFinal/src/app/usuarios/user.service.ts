@@ -116,9 +116,9 @@ public isLoading$ = this._isLoading$.asObservable();
     }
     
     getUserByEmail(email: string): Observable<users | undefined> {
-      this.client.get<users[]>(env.baseApiUrl + `/users?correo=${email}`).pipe(take(1)).subscribe({
+      this.client.get<users>(env.baseApiUrl + `/users?correo=${email}`).pipe(take(1)).subscribe({
         next: (registeredUser) => {
-          this._authUser$.next(registeredUser[0]);
+          this._authUser$.next(registeredUser);
         },
         error: (error) => {
           this._authUser$.next(undefined);

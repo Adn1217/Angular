@@ -68,24 +68,30 @@ export class AdministradoresComponent {
   constructor(private formBuilder: FormBuilder, private userService: UserService, private notifier: NotifierService, private store: Store, private router: Router){
 
     this.isLoading$ = this.userService.isLoading$;
-    this.userListObserver$ = userService.getUsers().pipe(take(1));
-    this.teacherListObserver$ = userService.getTeachers().pipe(take(1));
-    this.completeListObserver$ = forkJoin(this.userListObserver$, this.teacherListObserver$).pipe(
+    this.userListObserver$ = userService.getUsers().pipe(takeUntil(this.destroyed));
+    this.teacherListObserver$ = userService.getTeachers().pipe(takeUntil(this.destroyed));
+    // this.completeListObserver$ = forkJoin<[users[], teachers[]]>([this.userListObserver$, this.teacherListObserver$]).pipe(
+    //   map((newList) => {
+    //     // console.log('New List: ', newList)
+    //     return [...newList[0],...newList[1]]
+    //   } )
+    //   ) // NO actualiza para creación de nuevos usuarios/profesores.
+
+    this.completeListObserver$ = combineLatest([this.userListObserver$, this.teacherListObserver$]).pipe(
       map((newList) => {
-        // console.log('New List: ', newList)
-        return [...newList[0],...newList[1]]
-      } )
-      )
-    this.completeListObserver$.subscribe({
-      next: (userList) => {
-        // console.log('Lista completa: ', userList);
-        this.completeList = [];
-      },
-      complete: () => {
-        // console.log('Complete');
-        this.completeList = [];
-      }
-    })
+      // console.log('New List: ', newList)
+      return [...newList[0],...newList[1]]
+      } ));
+    // this.completeListObserver$.subscribe({
+    //   next: (userList) => {
+    //     // console.log('Lista completa: ', userList);
+    //     this.completeList = [];
+    //   },
+    //   complete: () => {
+    //     // console.log('Complete');
+    //     this.completeList = [];
+    //   }
+    // })
 
 
     this.store.select(selectAuthUserValue).pipe(take(1)).subscribe({
@@ -192,7 +198,7 @@ export class AdministradoresComponent {
       newUser = {...newUser, 
         ...{
           nivelAcademico: this.userModel.value.nivelAcademico || '',
-          materias: this.userModel.value.materias || ['']
+          materias: [this.userModel.value.materias] || ['']
         }
       }
     }
@@ -272,8 +278,8 @@ export class AdministradoresComponent {
         if(isTeacher){
           updatedUser = {...updatedUser, 
             ...{ 
-              materias: this.userModel.value.materias,
-              nivelAcademico: this.userModel.value.nivelAcademico 
+              nivelAcademico: this.userModel.value.nivelAcademico, 
+              materias: [this.userModel.value.materias]
             }
           }
         }

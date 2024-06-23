@@ -61,7 +61,8 @@
                     ¡Se ve bien!
                 </div>
                 <div class="invalid-feedback">
-                    {{this.userModel.controls.usuario.errors && (this.userModel.controls.usuario.errors | keyvalue |
+                    {{this.userModel.controls.nivelAcademico.errors && (this.userModel.controls.nivelAcademico.errors |
+                    keyvalue |
                     errorMessagesControl)}}
                 </div>
 
@@ -69,13 +70,13 @@
             <div class="mb-3">
                 <label for="inputMaterias" class="form-label">Materia</label>
                 <input formControlName="materias" type="text" class="form-control"
-                    [ngClass]="{'is-valid': userModel.controls['materias'].touched && !userModel.controls['materias'].invalid, 'is-invalid': userModel.controls['materias'].touched && userModel.controls['nivelAcademico'].invalid}"
+                    [ngClass]="{'is-valid': userModel.controls['materias'].touched && !userModel.controls['materias'].invalid, 'is-invalid': userModel.controls['materias'].touched && userModel.controls['materias'].invalid}"
                     id="inputMaterias">
                 <div class="valid-feedback">
                     ¡Se ve bien!
                 </div>
                 <div class="invalid-feedback">
-                    {{this.userModel.controls.usuario.errors && (this.userModel.controls.usuario.errors | keyvalue |
+                    {{this.userModel.controls.materias.errors && (this.userModel.controls.materias.errors | keyvalue |
                     errorMessagesControl)}}
                 </div>
 

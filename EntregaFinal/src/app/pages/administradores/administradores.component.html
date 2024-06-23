@@ -63,7 +63,7 @@
                     <!-- {{getFieldError("edad")}} -->
                 </div>
                 <div class="mb-3"
-                    *ngIf="userModel.controls['nivelAcademico']?.value || this.typeUserSelection === 'teacher' ">
+                    *ngIf="(userModel.controls['nivelAcademico']?.value || this.typeUserSelection === 'teacher')">
                     <label for="inputAcademicLevel" class="form-label">Nivel Académico</label>
                     <input formControlName="nivelAcademico" type="text" class="form-control"
                         [ngClass]="{'is-valid': userModel.controls['nivelAcademico']!.touched && !userModel.controls['nivelAcademico']!.invalid, 'is-invalid': userModel.controls['nivelAcademico']!.touched && userModel.controls['nivelAcademico']!.invalid}"
@@ -72,23 +72,22 @@
                         ¡Se ve bien!
                     </div>
                     <div class="invalid-feedback">
-                        {{this.userModel.controls.usuario.errors && (this.userModel.controls.usuario.errors | keyvalue |
-                        errorMessagesControl)}}
+                        {{this.userModel.controls.nivelAcademico.errors &&
+                        (this.userModel.controls.nivelAcademico.errors | keyvalue | errorMessagesControl)}}
                     </div>
 
                 </div>
                 <div class="mb-3"
-                    *ngIf="(userModel.controls['nivelAcademico']?.value && userModel.controls['materias']?.value) || this.typeUserSelection === 'teacher'">
-                    <label for="inputMaterias" class="form-label">Materia</label>
+                    *ngIf="(userModel.controls['materias']?.value || this.typeUserSelection === 'teacher')">
+                    <label for="inputMaterias" class="form-label">Materias</label>
                     <input formControlName="materias" type="text" class="form-control"
-                        [ngClass]="{'is-valid': userModel.controls['materias']!.touched && !userModel.controls['materias']!.invalid, 'is-invalid': userModel.controls['materias']!.touched && userModel.controls['nivelAcademico']!.invalid}"
+                        [ngClass]="{'is-valid': userModel.controls['materias']!.touched && !userModel.controls['materias']!.invalid, 'is-invalid': userModel.controls['materias']!.touched && userModel.controls['materias']!.invalid}"
                         id="inputMaterias" required>
                     <div class="valid-feedback">
                         ¡Se ve bien!
                     </div>
                     <div class="invalid-feedback">
-                        {{this.userModel.controls.usuario.errors && (this.userModel.controls.usuario.errors | keyvalue |
-                        errorMessagesControl)}}
+                        {{getFieldError("materias")}}
                     </div>
 
                 </div>

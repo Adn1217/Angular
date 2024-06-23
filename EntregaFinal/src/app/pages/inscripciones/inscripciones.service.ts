@@ -70,8 +70,9 @@ public isLoading$ = this._isLoading$.asObservable();
 
     createEnrollment(enrollment: enrollments ): Observable<enrollments> {
 
-      // const {id, ...rest} = enrollment;
-      const reqHTTP1$ = this.client.post<enrollments>(env.baseApiUrl + '/enrollments', enrollment, {
+      const {id, ...rest} = enrollment;
+      const newEnrollment = rest;
+      const reqHTTP1$ = this.client.post<enrollments>(env.baseApiUrl + '/enrollments', newEnrollment, {
         headers: {
           'Content-Type': 'application/json'
         }

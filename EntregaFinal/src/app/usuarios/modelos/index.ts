@@ -18,9 +18,9 @@ export interface teachers {
     usuario: string;
     edad: number;
     nivelAcademico: string
+    materias: string[];
     correo: string;
     password: string;
-    materias: string[];
     role: userRol 
   }
 

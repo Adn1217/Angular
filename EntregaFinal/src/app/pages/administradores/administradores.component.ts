@@ -16,8 +16,8 @@ interface AdminModel {
   apellidos: FormControl<string | null>;
   usuario: FormControl<string | null>;
   edad: FormControl<number | null>;
-  nivelAcademico?: FormControl<string | null >;
-  materias?: FormControl<string[] | null >;
+  nivelAcademico: FormControl<string | null >;
+  materias: FormControl<string[] | null >;
   correo: FormControl<string | null>;
   password: FormControl<string | null>;
   role: FormControl<userRol>;
@@ -36,8 +36,8 @@ export class AdministradoresComponent {
     apellidos: ['', [Validators.required]],
     usuario: ['', [Validators.required, Validators.minLength(minCharUserLength)]],
     edad: [0, [Validators.required]],
-    nivelAcademico: new FormControl(null),
-    materias: new FormControl(null),
+    nivelAcademico: [null, [Validators.required]],
+    materias: [null, [Validators.required]],
     correo: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(minCharPwdLength)]],
     role: ['user' as userRol, [Validators.required]],
@@ -68,24 +68,30 @@ export class AdministradoresComponent {
   constructor(private formBuilder: FormBuilder, private userService: UserService, private notifier: NotifierService, private store: Store, private router: Router){
 
     this.isLoading$ = this.userService.isLoading$;
-    this.userListObserver$ = userService.getUsers().pipe(take(1));
-    this.teacherListObserver$ = userService.getTeachers().pipe(take(1));
-    this.completeListObserver$ = forkJoin(this.userListObserver$, this.teacherListObserver$).pipe(
+    this.userListObserver$ = userService.getUsers().pipe(takeUntil(this.destroyed));
+    this.teacherListObserver$ = userService.getTeachers().pipe(takeUntil(this.destroyed));
+    // this.completeListObserver$ = forkJoin<[users[], teachers[]]>([this.userListObserver$, this.teacherListObserver$]).pipe(
+    //   map((newList) => {
+    //     // console.log('New List: ', newList)
+    //     return [...newList[0],...newList[1]]
+    //   } )
+    //   ) // NO actualiza para creación de nuevos usuarios/profesores.
+
+    this.completeListObserver$ = combineLatest([this.userListObserver$, this.teacherListObserver$]).pipe(
       map((newList) => {
-        // console.log('New List: ', newList)
-        return [...newList[0],...newList[1]]
-      } )
-      )
-    this.completeListObserver$.subscribe({
-      next: (userList) => {
-        // console.log('Lista completa: ', userList);
-        this.completeList = [];
-      },
-      complete: () => {
-        // console.log('Complete');
-        this.completeList = [];
-      }
-    })
+      // console.log('New List: ', newList)
+      return [...newList[0],...newList[1]]
+      } ));
+    // this.completeListObserver$.subscribe({
+    //   next: (userList) => {
+    //     // console.log('Lista completa: ', userList);
+    //     this.completeList = [];
+    //   },
+    //   complete: () => {
+    //     // console.log('Complete');
+    //     this.completeList = [];
+    //   }
+    // })
 
 
     this.store.select(selectAuthUserValue).pipe(take(1)).subscribe({
@@ -100,7 +106,7 @@ export class AdministradoresComponent {
             const regUser = this.userService.getUserById(authUserJSON.id);
             regUser.subscribe({
               next: (regUser) => {
-                console.log('Usuario regUser: ', regUser);
+                // console.log('Usuario regUser: ', regUser);
                 if(regUser){
                   this.store.dispatch(authActions.setAuthUser({authUser: regUser}))
                 }else{
@@ -192,18 +198,20 @@ export class AdministradoresComponent {
       newUser = {...newUser, 
         ...{
           nivelAcademico: this.userModel.value.nivelAcademico || '',
-          materias: this.userModel.value.materias || ['']
+          materias: [this.userModel.value.materias] || ['']
         }
       }
     }
     // console.log('newUser ', newUser);
     this.userService.createUser(newUser);
     this.userModel.reset();
+    this.typeUserSelection = 'user' as userTypes;
     // console.log(this.userModel.controls);
   }
 
   handleCancel(){
     this.toggleShowForm();
+    this.typeUserSelection = 'user';
     this.userModel.reset();
     this.selectedId = null;
   }
@@ -226,7 +234,13 @@ export class AdministradoresComponent {
     let isTeacher: boolean = false
 
     this.editionNote = 'Recuerde, para editar seleccionar nuevamente el lápiz.'
-
+    
+    if ('nivelAcademico' in userUpdatedInForm){
+        isTeacher = true;
+        this.typeUserSelection = 'teacher' as userTypes;
+    }else{
+        this.typeUserSelection = 'user' as userTypes;
+    }
     if(!this.showForm){
       this.userModel.setValue({
         nivelAcademico: null, 
@@ -244,12 +258,14 @@ export class AdministradoresComponent {
       // console.log('userUpdatedInForm: ', userUpdatedInForm)
       if ('nivelAcademico' in userUpdatedInForm){
         isTeacher = true;
+        // this.typeUserSelection = 'teacher' as userTypes;
         this.teacherListObserver$.subscribe({
           next: (users) => {
             userToUpdate = users.find((user) => user.id === id);
           }
         })
       }else{
+        // this.typeUserSelection = 'user' as userTypes;
         this.userListObserver$.subscribe({ 
           next: (users) => {
             userToUpdate = users.find((user) => user.id === id);
@@ -272,14 +288,15 @@ export class AdministradoresComponent {
         if(isTeacher){
           updatedUser = {...updatedUser, 
             ...{ 
-              materias: this.userModel.value.materias,
-              nivelAcademico: this.userModel.value.nivelAcademico 
+              nivelAcademico: this.userModel.value.nivelAcademico, 
+              materias: [this.userModel.value.materias]
             }
           }
         }
         // console.log('updatedUser: ', {id: id, ...updatedUser})
         this.userService.updateUser({id: id, ...updatedUser});
  
+        this.typeUserSelection = 'user' as userTypes;
         this.userModel.reset();
         this.editionNote = '';
         this.showForm = !this.showForm;

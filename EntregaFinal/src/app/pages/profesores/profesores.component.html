@@ -61,7 +61,8 @@
                     ¡Se ve bien!
                 </div>
                 <div class="invalid-feedback">
-                    {{this.userModel.controls.usuario.errors && (this.userModel.controls.usuario.errors | keyvalue |
+                    {{this.userModel.controls.nivelAcademico.errors && (this.userModel.controls.nivelAcademico.errors |
+                    keyvalue |
                     errorMessagesControl)}}
                 </div>
 
@@ -69,13 +70,13 @@
             <div class="mb-3">
                 <label for="inputMaterias" class="form-label">Materia</label>
                 <input formControlName="materias" type="text" class="form-control"
-                    [ngClass]="{'is-valid': userModel.controls['materias'].touched && !userModel.controls['materias'].invalid, 'is-invalid': userModel.controls['materias'].touched && userModel.controls['nivelAcademico'].invalid}"
+                    [ngClass]="{'is-valid': userModel.controls['materias'].touched && !userModel.controls['materias'].invalid, 'is-invalid': userModel.controls['materias'].touched && userModel.controls['materias'].invalid}"
                     id="inputMaterias">
                 <div class="valid-feedback">
                     ¡Se ve bien!
                 </div>
                 <div class="invalid-feedback">
-                    {{this.userModel.controls.usuario.errors && (this.userModel.controls.usuario.errors | keyvalue |
+                    {{this.userModel.controls.materias.errors && (this.userModel.controls.materias.errors | keyvalue |
                     errorMessagesControl)}}
                 </div>
 
@@ -84,7 +85,7 @@
                 <label for="InputEmail1" class="form-label">Email address</label>
                 <input formControlName="correo" type="email" class="form-control"
                     [ngClass]="{'is-valid': userModel.controls['correo'].touched && !userModel.controls['correo'].invalid, 'is-invalid': userModel.controls['correo'].touched && userModel.controls['correo'].invalid}"
-                    id="InputEmail1" aria-describedby="emailHelp">
+                    id="InputEmail1" aria-describedby="emailHelp" autocomplete="username">
                 <div class="valid-feedback">
                     ¡Se ve bien!
                 </div>
@@ -97,7 +98,7 @@
                 <label for="inputPassword1" class="form-label">Password</label>
                 <input formControlName="password" type="password" class="form-control"
                     [ngClass]="{'is-valid': userModel.controls['password'].touched && !userModel.controls['password'].invalid, 'is-invalid': userModel.controls['password'].touched && userModel.controls['password'].invalid}"
-                    id="inputPassword1">
+                    id="inputPassword1" autocomplete="current-password">
                 <div class="valid-feedback">
                     ¡Se ve bien!
                 </div>

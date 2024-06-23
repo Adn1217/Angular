@@ -116,9 +116,9 @@ public isLoading$ = this._isLoading$.asObservable();
     }
     
     getUserByEmail(email: string): Observable<users | undefined> {
-      this.client.get<users[]>(env.baseApiUrl + `/users?correo=${email}`).pipe(take(1)).subscribe({
+      this.client.get<users>(env.baseApiUrl + `/users?correo=${email}`).pipe(take(1)).subscribe({
         next: (registeredUser) => {
-          this._authUser$.next(registeredUser[0]);
+          this._authUser$.next(registeredUser);
         },
         error: (error) => {
           this._authUser$.next(undefined);
@@ -174,7 +174,7 @@ public isLoading$ = this._isLoading$.asObservable();
 
     updateUser(userToUpdate: users | teachers): void {
       const {id, ...rest} = userToUpdate;
-      console.log('userToUpdate', userToUpdate);
+      // console.log('userToUpdate', userToUpdate);
       if('nivelAcademico' in userToUpdate){
         let teacher = <teachers>rest
         if(teacher.materias[0].includes(',')){
